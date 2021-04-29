@@ -1,0 +1,2 @@
+# WSCore
+WSCore
