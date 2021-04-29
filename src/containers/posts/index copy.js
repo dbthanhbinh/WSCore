@@ -1,6 +1,6 @@
 import { unwrapResult } from '@reduxjs/toolkit'
 import { Component } from 'react'
-import {Container, Grid, Image, Table} from 'semantic-ui-react'
+import { Icon, Table } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 
 import {getListArticles,setCurrentArticles} from '../../reduxStore/actions/article.actions'
@@ -9,8 +9,7 @@ import {
     getTypes, setCurrentTypes
 } from '../../reduxStore/contents/content.actions'
 import {initReduceIdName} from '../../commons'
-import ShowList from './showList'
-import CheckBoxList from '../../components/checkBoxList'
+import {currencyFormat} from '../../utilities/untils'
 
 class ShowArticle extends Component {
     constructor(props){
@@ -44,25 +43,37 @@ class ShowArticle extends Component {
     
     render(){
         const {currentArticles, currentProviders, currentTypes} = this.props
-        this.currentProviders = initReduceIdName(currentProviders, 'id', ['id', 'name', 'slug', 'thumb'])
-        this.currentTypes = initReduceIdName(currentTypes, 'id', ['id', 'name'])
+        console.log('=====5');
+        this.currentProviders = initReduceIdName(currentProviders || [], 'id', ['name', 'slug', 'thumb'])
+        this.currentTypes = initReduceIdName(currentTypes || [], 'id', ['name'])
 
         const listItem = currentArticles
+        let rowItem = listItem && listItem.map((item, i) => {
+            return <Table.Row key={item.id}>
+                <Table.Cell>{item.id}</Table.Cell>
+                <Table.Cell>{item.name}</Table.Cell>
+                <Table.Cell>{this.currentProviders[item.typeId]?.['name']}</Table.Cell>
+                <Table.Cell>{item.price && currencyFormat(item.price, 1)}</Table.Cell>
+                <Table.Cell>{this.currentTypes[item.providerId]?.['name']}</Table.Cell>
+                <Table.Cell>Buy</Table.Cell>
+            </Table.Row>
+        })
         return (
-            <Grid columns={2} divided>
-            <Grid.Row>
-              <Grid.Column width={4}>
-                <CheckBoxList items={this.currentTypes}/>
-              </Grid.Column>
-              <Grid.Column  width={12}>
-                <ShowList
-                    listItem={listItem}
-                    currentProviders={this.currentProviders}
-                    currentTypes={this.currentTypes}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+            <Table celled>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>STT</Table.HeaderCell>
+                        <Table.HeaderCell>Name</Table.HeaderCell>
+                        <Table.HeaderCell>Type</Table.HeaderCell>
+                        <Table.HeaderCell>Price</Table.HeaderCell>
+                        <Table.HeaderCell>provider</Table.HeaderCell>
+                        <Table.HeaderCell>Buy</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {rowItem}
+                </Table.Body>
+            </Table>
         )
     }    
 }

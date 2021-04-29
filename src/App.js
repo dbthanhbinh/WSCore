@@ -1,20 +1,11 @@
-import './App.css';
-import {Container} from 'semantic-ui-react'
-import ShowList from './containers/posts/showList'
+import './App.css'
+
+import MainArticle from './containers/posts'
 
 function App() {
   return (
     <div className="app-main">
-      <Container fluid>
-        <header className="app-header">
-          <p>Edit <code>src/App.js</code> and save to reload.</p>
-          <ShowList />
-         
-        </header>
-        <footer className="app-footer">
-          <p> Copyright @2021 and save to reload. </p>
-        </footer>
-      </Container>
+        <MainArticle />
     </div>
   );
 }
