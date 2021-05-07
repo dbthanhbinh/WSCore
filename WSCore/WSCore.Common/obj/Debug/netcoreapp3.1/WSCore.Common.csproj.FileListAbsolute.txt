@@ -1,0 +1,9 @@
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Common\bin\Debug\netcoreapp3.1\WSCore.Common.deps.json
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Common\bin\Debug\netcoreapp3.1\WSCore.Common.dll
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Common\bin\Debug\netcoreapp3.1\WSCore.Common.pdb
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Common\obj\Debug\netcoreapp3.1\WSCore.Common.csprojAssemblyReference.cache
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Common\obj\Debug\netcoreapp3.1\WSCore.Common.AssemblyInfoInputs.cache
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Common\obj\Debug\netcoreapp3.1\WSCore.Common.AssemblyInfo.cs
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Common\obj\Debug\netcoreapp3.1\WSCore.Common.csproj.CoreCompileInputs.cache
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Common\obj\Debug\netcoreapp3.1\WSCore.Common.dll
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Common\obj\Debug\netcoreapp3.1\WSCore.Common.pdb

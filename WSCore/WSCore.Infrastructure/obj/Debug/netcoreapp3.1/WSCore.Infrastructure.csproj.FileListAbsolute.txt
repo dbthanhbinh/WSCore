@@ -1,0 +1,8 @@
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\bin\Debug\netcoreapp3.1\WSCore.Infrastructure.deps.json
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\bin\Debug\netcoreapp3.1\WSCore.Infrastructure.dll
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\bin\Debug\netcoreapp3.1\WSCore.Infrastructure.pdb
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.AssemblyInfoInputs.cache
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.AssemblyInfo.cs
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.csproj.CoreCompileInputs.cache
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.dll
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.pdb

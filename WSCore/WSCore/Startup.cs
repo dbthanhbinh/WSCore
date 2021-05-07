@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WSCore.Infrastructure.Repository;
+using WSCore.Infrastructure.UnitOfWork;
+using WSCore.Models;
 
 namespace WSCore
 {
@@ -21,6 +25,13 @@ namespace WSCore
         {
 
             services.AddControllersWithViews();
+
+            string ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<WSContext>(options =>
+            options.UseSqlServer(ConnectionString));
+
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<,>));
+            services.AddScoped<IUnitOfWork, UnitOfWork<WSContext>>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
