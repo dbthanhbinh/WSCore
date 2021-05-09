@@ -5,3 +5,7 @@ WSCore/.vs/WSCore/v16/.suo
 .suo/
 WSCore/WSCore.SimCard/bin
 WSCore/WSCore.Model/obj
+WSCore/WSCore.Common/bin
+WSCore/WSCore.Infrastructure/bin
+WSCore/WSCore.Infrastructure/obj
+WSCore/WSCore.Model/bin
