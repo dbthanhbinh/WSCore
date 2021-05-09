@@ -8,19 +8,19 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\binh.trinh\\.nuget\\packages\\": {}
+    "C:\\Users\\THANH\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
+      "projectUniqueName": "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
       "projectName": "WSCore.Model",
-      "projectPath": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
-      "packagesPath": "C:\\Users\\binh.trinh\\.nuget\\packages\\",
-      "outputPath": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Model\\obj\\",
+      "projectPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
+      "packagesPath": "C:\\Users\\THANH\\.nuget\\packages\\",
+      "outputPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\binh.trinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\THANH\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -32,7 +32,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -44,7 +43,6 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
-        "targetAlias": "netcoreapp3.1",
         "imports": [
           "net461",
           "net462",
@@ -60,7 +58,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
       }
     }
   }

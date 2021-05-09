@@ -6,3 +6,12 @@ E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Model\obj\Debug\netcoreapp
 E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Model\obj\Debug\netcoreapp3.1\WSCore.Model.csproj.CoreCompileInputs.cache
 E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Model\obj\Debug\netcoreapp3.1\WSCore.Model.dll
 E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Model\obj\Debug\netcoreapp3.1\WSCore.Model.pdb
+D:\BINH\netcore\WSCore\WSCore\WSCore.Model\bin\Debug\netcoreapp3.1\WSCore.Model.deps.json
+D:\BINH\netcore\WSCore\WSCore\WSCore.Model\bin\Debug\netcoreapp3.1\WSCore.Model.dll
+D:\BINH\netcore\WSCore\WSCore\WSCore.Model\bin\Debug\netcoreapp3.1\WSCore.Model.pdb
+D:\BINH\netcore\WSCore\WSCore\WSCore.Model\obj\Debug\netcoreapp3.1\WSCore.Model.csprojAssemblyReference.cache
+D:\BINH\netcore\WSCore\WSCore\WSCore.Model\obj\Debug\netcoreapp3.1\WSCore.Model.AssemblyInfoInputs.cache
+D:\BINH\netcore\WSCore\WSCore\WSCore.Model\obj\Debug\netcoreapp3.1\WSCore.Model.AssemblyInfo.cs
+D:\BINH\netcore\WSCore\WSCore\WSCore.Model\obj\Debug\netcoreapp3.1\WSCore.Model.csproj.CoreCompileInputs.cache
+D:\BINH\netcore\WSCore\WSCore\WSCore.Model\obj\Debug\netcoreapp3.1\WSCore.Model.dll
+D:\BINH\netcore\WSCore\WSCore\WSCore.Model\obj\Debug\netcoreapp3.1\WSCore.Model.pdb

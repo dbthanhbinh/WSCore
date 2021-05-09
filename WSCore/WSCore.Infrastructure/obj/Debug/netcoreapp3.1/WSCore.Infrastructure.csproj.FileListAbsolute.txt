@@ -6,3 +6,12 @@ E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\n
 E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.csproj.CoreCompileInputs.cache
 E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.dll
 E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.pdb
+D:\BINH\netcore\WSCore\WSCore\WSCore.Infrastructure\bin\Debug\netcoreapp3.1\WSCore.Infrastructure.deps.json
+D:\BINH\netcore\WSCore\WSCore\WSCore.Infrastructure\bin\Debug\netcoreapp3.1\WSCore.Infrastructure.dll
+D:\BINH\netcore\WSCore\WSCore\WSCore.Infrastructure\bin\Debug\netcoreapp3.1\WSCore.Infrastructure.pdb
+D:\BINH\netcore\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.csprojAssemblyReference.cache
+D:\BINH\netcore\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.AssemblyInfoInputs.cache
+D:\BINH\netcore\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.AssemblyInfo.cs
+D:\BINH\netcore\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.csproj.CoreCompileInputs.cache
+D:\BINH\netcore\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.dll
+D:\BINH\netcore\WSCore\WSCore\WSCore.Infrastructure\obj\Debug\netcoreapp3.1\WSCore.Infrastructure.pdb
