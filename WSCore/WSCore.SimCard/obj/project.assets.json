@@ -6707,11 +6707,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\BINH\\netcore\\WSCore\\WSCore.SimCard\\WSCore.SimCard.csproj",
+      "projectUniqueName": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.SimCard\\WSCore.SimCard.csproj",
       "projectName": "WSCore.SimCard",
-      "projectPath": "D:\\BINH\\netcore\\WSCore\\WSCore.SimCard\\WSCore.SimCard.csproj",
+      "projectPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.SimCard\\WSCore.SimCard.csproj",
       "packagesPath": "C:\\Users\\THANH\\.nuget\\packages\\",
-      "outputPath": "D:\\BINH\\netcore\\WSCore\\WSCore.SimCard\\obj\\",
+      "outputPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.SimCard\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\THANH\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -6727,14 +6727,14 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "D:\\BINH\\netcore\\WSCore\\WSCore.Common\\WSCore.Common.csproj": {
-              "projectPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Common\\WSCore.Common.csproj"
+            "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Common\\WSCore.Common.csproj": {
+              "projectPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Common\\WSCore.Common.csproj"
             },
-            "D:\\BINH\\netcore\\WSCore\\WSCore.Infrastructure\\WSCore.Infrastructure.csproj": {
-              "projectPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Infrastructure\\WSCore.Infrastructure.csproj"
+            "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Infrastructure\\WSCore.Infrastructure.csproj": {
+              "projectPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Infrastructure\\WSCore.Infrastructure.csproj"
             },
-            "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\WSCore.Model.csproj": {
-              "projectPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\WSCore.Model.csproj"
+            "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj": {
+              "projectPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj"
             }
           }
         }

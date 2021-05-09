@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\WSCore.Model.csproj": {}
+    "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj": {}
   },
   "projects": {
-    "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\WSCore.Model.csproj": {
+    "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
+        "projectUniqueName": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
         "projectName": "WSCore.Model",
-        "projectPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
+        "projectPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
         "packagesPath": "C:\\Users\\THANH\\.nuget\\packages\\",
-        "outputPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\obj\\",
+        "outputPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\THANH\\AppData\\Roaming\\NuGet\\NuGet.Config",

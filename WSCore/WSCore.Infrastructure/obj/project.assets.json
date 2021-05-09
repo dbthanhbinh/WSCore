@@ -533,11 +533,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\BINH\\netcore\\WSCore\\WSCore.Infrastructure\\WSCore.Infrastructure.csproj",
+      "projectUniqueName": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Infrastructure\\WSCore.Infrastructure.csproj",
       "projectName": "WSCore.Infrastructure",
-      "projectPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Infrastructure\\WSCore.Infrastructure.csproj",
+      "projectPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Infrastructure\\WSCore.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\THANH\\.nuget\\packages\\",
-      "outputPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Infrastructure\\obj\\",
+      "outputPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\THANH\\AppData\\Roaming\\NuGet\\NuGet.Config",

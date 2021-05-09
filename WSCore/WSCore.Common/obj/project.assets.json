@@ -3877,11 +3877,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\BINH\\netcore\\WSCore\\WSCore.Common\\WSCore.Common.csproj",
+      "projectUniqueName": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Common\\WSCore.Common.csproj",
       "projectName": "WSCore.Common",
-      "projectPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Common\\WSCore.Common.csproj",
+      "projectPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Common\\WSCore.Common.csproj",
       "packagesPath": "C:\\Users\\THANH\\.nuget\\packages\\",
-      "outputPath": "D:\\BINH\\netcore\\WSCore\\WSCore.Common\\obj\\",
+      "outputPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Common\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\THANH\\AppData\\Roaming\\NuGet\\NuGet.Config",

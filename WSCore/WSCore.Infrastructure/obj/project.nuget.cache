@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zQaJg2nl8kkGXdE4Pe4lXjSYrdYX3qtPNzoV5eImMz9dgnOBY+vQAnanYIPmtKB1PGgo91Wbxet5gs1A2sKJ/g==",
+  "dgSpecHash": "hpeCnZ3sPZL03EHLyactpdLajtZZe+igoafPBavzaFWmeWjy5fj2bNKTob70b0eaBJXTKF43XkIoQTkDHw21KA==",
   "success": true,
-  "projectFilePath": "D:\\BINH\\netcore\\WSCore\\WSCore.Infrastructure\\WSCore.Infrastructure.csproj",
+  "projectFilePath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Infrastructure\\WSCore.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\THANH\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.5\\microsoft.entityframeworkcore.5.0.5.nupkg.sha512",
     "C:\\Users\\THANH\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\5.0.5\\microsoft.entityframeworkcore.abstractions.5.0.5.nupkg.sha512",

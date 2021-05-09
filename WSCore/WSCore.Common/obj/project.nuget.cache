@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QXVCtpjcX9UXg3bAsO9CwfrAgiFCUjznXIB/N1h52Fdsjzle+9QvCAjK8YmmsapCKxs4vlvjtYH/+WzDHSzONA==",
+  "dgSpecHash": "nlvjzE6CVp3F3ksvuAsT3ppJrTX9w1hN3VTDRHV/lfQrVmYjztxdW4wFIExtfdeVqjWKj9vXMJiO4M8OWz361w==",
   "success": true,
-  "projectFilePath": "D:\\BINH\\netcore\\WSCore\\WSCore.Common\\WSCore.Common.csproj",
+  "projectFilePath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Common\\WSCore.Common.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\THANH\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\THANH\\.nuget\\packages\\microsoft.aspnetcore.authentication.core\\2.2.0\\microsoft.aspnetcore.authentication.core.2.2.0.nupkg.sha512",

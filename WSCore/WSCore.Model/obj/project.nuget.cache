@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dbwOb+6TqfcvVguk0rzYqEdOE35/KeFALZ2Bircn8FKYyTe3QikS6Kfa1xEixMZwl7kvfk+CJcD9kDn7sFEjPw==",
+  "dgSpecHash": "0P1bZpIpfGe28E6qbEAl2I5bfXZZVNSYS3IBoBMXd3aSrCEAFfkvgX8KM0TlvHV7jTHiqEPqg9L+cITt1L8tZQ==",
   "success": true,
-  "projectFilePath": "D:\\BINH\\netcore\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
+  "projectFilePath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
