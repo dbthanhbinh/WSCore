@@ -50,19 +50,19 @@ class ShowArticle extends Component {
         const listItem = currentArticles
         return (
             <Grid columns={2} divided>
-            <Grid.Row>
-              <Grid.Column width={4}>
-                <CheckBoxList items={this.currentTypes}/>
-              </Grid.Column>
-              <Grid.Column  width={12}>
-                <ShowList
-                    listItem={listItem}
-                    currentProviders={this.currentProviders}
-                    currentTypes={this.currentTypes}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+                <Grid.Row>
+                <Grid.Column width={4}>
+                    <CheckBoxList items={this.currentTypes}/>
+                </Grid.Column>
+                <Grid.Column  width={12}>
+                    <ShowList
+                        listItem={listItem}
+                        currentProviders={this.currentProviders}
+                        currentTypes={this.currentTypes}
+                    />
+                </Grid.Column>
+                </Grid.Row>
+            </Grid>
         )
     }    
 }

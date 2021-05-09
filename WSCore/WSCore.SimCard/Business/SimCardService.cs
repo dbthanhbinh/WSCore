@@ -41,12 +41,13 @@ namespace WSCore.SimCard.Business
             }
         }
 
-        #region Import
+        #region Import list form excel
         public void ImportFile()
         {
             try
             {
-                string strDoc = @"C:\Users\Public\Downloads\Book1.xlsx";
+                // string strDoc = @"C:\Users\Public\Downloads\Book1.xlsx";
+                string strDoc = @"WSCore.SimCard\AppData\Book1.xlsx";
                 //Lets open the existing excel file and read through its content . Open the excel using openxml sdk
                 using (SpreadsheetDocument doc = SpreadsheetDocument.Open(strDoc, false))
                 {
