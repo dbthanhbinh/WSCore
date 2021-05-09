@@ -1,2 +1,6 @@
-WSCore/WSCore.Common/obj/*
-WSCore/WSCore.SimCard/obj/*
+WSCore/WSCore.Common/obj
+WSCore/WSCore.SimCard/obj
+WSCore/.vs/WSCore/v16/.suo
+.vs/
+.suo/
+WSCore/WSCore.SimCard/bin

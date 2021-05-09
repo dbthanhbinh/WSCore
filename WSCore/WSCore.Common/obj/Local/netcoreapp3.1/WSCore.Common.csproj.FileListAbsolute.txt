@@ -7,3 +7,12 @@ D:\BINH\netcore\WSCore\WSCore.Common\obj\Local\netcoreapp3.1\WSCore.Common.dll
 D:\BINH\netcore\WSCore\WSCore.Common\obj\Local\netcoreapp3.1\WSCore.Common.pdb
 D:\BINH\netcore\WSCore\WSCore.Common\obj\Local\netcoreapp3.1\WSCore.Common.csprojAssemblyReference.cache
 D:\BINH\netcore\WSCore\WSCore.Common\obj\Local\netcoreapp3.1\WSCore.Common.csproj.CoreCompileInputs.cache
+D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Common\bin\Local\netcoreapp3.1\WSCore.Common.deps.json
+D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Common\bin\Local\netcoreapp3.1\WSCore.Common.dll
+D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Common\bin\Local\netcoreapp3.1\WSCore.Common.pdb
+D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Common\obj\Local\netcoreapp3.1\WSCore.Common.csprojAssemblyReference.cache
+D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Common\obj\Local\netcoreapp3.1\WSCore.Common.AssemblyInfoInputs.cache
+D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Common\obj\Local\netcoreapp3.1\WSCore.Common.AssemblyInfo.cs
+D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Common\obj\Local\netcoreapp3.1\WSCore.Common.csproj.CoreCompileInputs.cache
+D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Common\obj\Local\netcoreapp3.1\WSCore.Common.dll
+D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Common\obj\Local\netcoreapp3.1\WSCore.Common.pdb
