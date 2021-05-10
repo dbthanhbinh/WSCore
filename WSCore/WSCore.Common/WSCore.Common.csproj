@@ -9,8 +9,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WSCore.Infrastructure\WSCore.Infrastructure.csproj" />
-  </ItemGroup>
-
 </Project>

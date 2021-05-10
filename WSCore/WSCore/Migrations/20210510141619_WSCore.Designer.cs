@@ -10,7 +10,7 @@ using WSCore.Models;
 namespace WSCore.Migrations
 {
     [DbContext(typeof(WSContext))]
-    [Migration("20210510093211_WSCore")]
+    [Migration("20210510141619_WSCore")]
     partial class WSCore
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
