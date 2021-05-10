@@ -11,5 +11,8 @@ namespace WSCore.Models
 
         DbSet<Files> Files { set; get; }
         DbSet<Media> Medias { set; get; }
+        DbSet<Tag> Tags { set; get; }
+        DbSet<Category> Categories { set; get; }
+        DbSet<Article> Articles { set; get; }
     }
 }

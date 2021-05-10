@@ -17,7 +17,7 @@ namespace WSCore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SimCardController : ControllerBase
+    public class SimCardController : BaseController
     {
         private readonly IConfiguration _config;
         private readonly string ServiceName;
