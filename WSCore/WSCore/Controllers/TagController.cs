@@ -19,14 +19,20 @@ namespace WSCore.Controllers
             _tagService = tagService;
         }
 
-        #region
-        [HttpPost("create", Name = "AddTagLogicAsync")]
-        public async Task<ActionResult> AddTagLogicAsync(CreateTagBody createTag)
+        #region Create
+        [HttpPost("create", Name = "AddTagLogic")]
+        public async Task<ActionResult> AddTagLogic(TagRequest createTag)
         {
             var rs = await _tagService.AddTagLogicAsync(createTag);
             return Ok(rs);
         }
+        #endregion Create
 
-        #endregion
+        [HttpGet("getTagByAlias/{alias}", Name = "GetTagByAlias")]
+        public async Task<ActionResult> GetTagByAlias(string alias)
+        {
+            var rs = await _tagService.GetTagByAliasAsync(alias);
+            return Ok();
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace WSCore.Model
         [Key]
         public Guid Id { get; private set; } = Guid.NewGuid();
         [Required]
-        public string Status { get; set; }
+        public string Status { get; set; } = "publish";
         [Required]
         public Guid CreatedUser { get; set; }
         

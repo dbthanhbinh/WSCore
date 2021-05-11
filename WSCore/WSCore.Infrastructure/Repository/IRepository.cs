@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace WSCore.Infrastructure.Repository
@@ -8,5 +11,17 @@ namespace WSCore.Infrastructure.Repository
         Task AddAsync(T entity);
         void AddRange(List<T> ts);
         Task AddRangeAsync(List<T> ts);
+
+        IQueryable<T> GetEntities(Expression<Func<T, bool>> condition = null,
+        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        string includeProperties = "");
+
+        Task<IEnumerable<T>> GetByAsync(
+        Expression<Func<T, bool>> filter = null,
+        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        string includeProperties = "",
+        Expression<Func<T, T>> selectColumns = null,
+        int first = 0,
+        int offset = 0);
     }
 }

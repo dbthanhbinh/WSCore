@@ -7,5 +7,6 @@ namespace WSCore.Common.Business
 {
     public interface IBaseService<T> where T : class
     {
+        Task<string> BGetAlias();
     }
 }

@@ -7,10 +7,6 @@ namespace WSCore.Controllers.Base
 {
     public class TagRequest
     {
-    }
-
-    public class CreateTagBody
-    {
         public string Title { set; get; }
         public string Alias { set; get; }
     }

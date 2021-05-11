@@ -11,6 +11,7 @@ namespace WSCore.Services.TagService
     public interface ITagService : IBaseService<Tag>
     {
         Task<Tag> AddTagAsync(Tag tagEntity);
-        Task<Tag> AddTagLogicAsync(CreateTagBody createTag);
+        Task<Tag> AddTagLogicAsync(TagRequest createTag);
+        Task<string> GetTagByAliasAsync(string alias);
     }
 }

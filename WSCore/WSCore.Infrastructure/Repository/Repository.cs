@@ -32,5 +32,83 @@ namespace WSCore.Infrastructure.Repository
         {
             DbSet.AddRange(ts);
         }
+
+
+        public IQueryable<T> GetEntities(Expression<Func<T, bool>> condition = null,
+        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        string includeProperties = "")
+        {
+            IQueryable<T> query = DbSet;
+
+            if (condition != null)
+            {
+                query = query.Where(condition);
+            }
+
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return query;
+        }
+
+        public async virtual Task<IEnumerable<T>> GetByAsync(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>,IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = "",
+            Expression<Func<T,T>> selectColumns = null,
+            int first = 0,
+            int offset = 0
+        )
+        {
+            IQueryable<T> query = DbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (offset > 0)
+            {
+                query = query.Skip(offset);
+            }
+
+            if (first > 0)
+            {
+                query = query.Take(first);
+            }
+
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            if (orderBy != null)
+            {
+                if (selectColumns != null)
+                {
+                    return await orderBy(query).Select(selectColumns).ToListAsync();
+                }
+                return await orderBy(query).ToListAsync();
+            }
+            else
+            {
+                if (selectColumns != null)
+                {
+                    return await query.Select(selectColumns).ToListAsync();
+                }
+                return await query.ToListAsync();
+            }
+        }
     }
 }
