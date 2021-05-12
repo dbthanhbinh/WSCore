@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WSCore.Controllers.Base;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Model;
+using WSCore.Models.VM;
 
 namespace WSCore.Services.TagService
 {
@@ -31,11 +32,18 @@ namespace WSCore.Services.TagService
         {
             try
             {
+                // validation tag name Special character
+                // validation tag alias Special character
+
+                NameAndAliasVM rs = BGetNameAndAliasVM(createTag.Title, createTag.Alias);
+                string newAlias = BGetNewAliasAsync(rs.Alias, f => f.Alias.StartsWith(rs.Alias), s => s.Alias);
+
                 Tag newEntity = new Tag
                 {
-                    Title = createTag.Title,
-                    Alias = createTag.Alias
+                    Title = rs.Name,
+                    Alias = newAlias
                 };
+
                 await _uow.GetRepository<Tag>().AddAsync(newEntity);
                 _uow.SaveChanges();
                 return newEntity;
@@ -50,23 +58,8 @@ namespace WSCore.Services.TagService
 
         public async Task<string> GetTagByAliasAsync(string alias)
         {
-            var crUow = _uow.GetRepository<Tag>();
-            var crAlias = alias;
-            
-            var tag = crUow.GetEntities(f => f.Alias == crAlias).Select(s => s.Title).ToList();
-            if (tag == null)
-                return crAlias;
-
-            Random rd = new Random();
-            var doTag = "";
-            do
-            {
-                crAlias = alias + "-" + rd.Next(1, 10);
-                doTag = crUow.GetEntities(f => f.Alias == crAlias).Select(s => s.Title).FirstOrDefault();
-            }
-            while (doTag != null);
-
-            return crAlias;
+            var newAlias = BGetNewAliasAsync(alias, f => f.Alias.StartsWith(alias), s => s.Alias);
+            return newAlias;
         }
     }
 }
