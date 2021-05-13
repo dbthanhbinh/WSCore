@@ -20,10 +20,13 @@ namespace WSCore.Controllers
         }
 
         #region Create
-        [HttpPost("create", Name = "AddTagLogic")]
-        public async Task<ActionResult> AddTagLogic(TagRequest createTag)
+        [HttpPost("create", Name = "CreateTagLogic")]
+        public async Task<ActionResult> CreateTagLogic(TagRequest tagRequest)
         {
-            var rs = await _tagService.AddTagLogicAsync(createTag);
+            if (tagRequest == null)
+                return BadRequest();
+
+            var rs = await _tagService.AddTagLogicAsync(tagRequest);
             return Ok(rs);
         }
         #endregion Create

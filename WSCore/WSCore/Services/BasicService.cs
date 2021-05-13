@@ -94,9 +94,9 @@ namespace WSCore.Services
         {
             if(alias == null)
             {
-                alias = StringHelper.GenerateSlug(alias);
+                alias = StringHelper.GenerateSlug(name);
             }
-
+            alias = StringHelper.GenerateSlug(alias);
             NameAndAliasVM obj = new NameAndAliasVM { 
                 Name = name,
                 Alias = alias
