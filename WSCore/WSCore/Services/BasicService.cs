@@ -32,7 +32,7 @@ namespace WSCore.Services
         {
             try
             {
-                if(alias == null || condition == null || selectedFields == null)
+                if(string.IsNullOrEmpty(alias) || condition == null || selectedFields == null)
                 {
                     return "Error";
                 }
@@ -40,7 +40,7 @@ namespace WSCore.Services
                 var crUow = _uow.GetRepository<T>();
                 var newAlias = alias;
                 var currentList = crUow.GetEntities(condition).Select(selectedFields).ToList();
-                if (currentList == null)
+                if (currentList.Count < 1)
                     return newAlias;
 
                 Random rd = new Random();
@@ -92,7 +92,7 @@ namespace WSCore.Services
 
         protected NameAndAliasVM BGetNameAndAliasVM(string name, string alias)
         {
-            if(alias == null)
+            if(string.IsNullOrEmpty(alias) || string.IsNullOrWhiteSpace(alias))
             {
                 alias = StringHelper.GenerateSlug(name);
             }

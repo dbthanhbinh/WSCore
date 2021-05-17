@@ -34,6 +34,12 @@ namespace WSCore.Infrastructure.Repository
         }
 
 
+        #region Get
+        public async Task<T> GetByIdAsync(string id)
+        {
+            return await DbSet.FindAsync(id);
+        }
+
         public IQueryable<T> GetEntities(Expression<Func<T, bool>> condition = null,
         Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
         string includeProperties = "")
@@ -110,5 +116,14 @@ namespace WSCore.Infrastructure.Repository
                 return await query.ToListAsync();
             }
         }
+
+        #endregion Get
+
+        #region Delete
+        public void Delete(T entity)
+        {
+            DbSet.Remove(entity);
+        }
+        #endregion Delete
     }
 }

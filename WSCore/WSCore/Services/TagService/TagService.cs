@@ -13,6 +13,7 @@ namespace WSCore.Services.TagService
     {
         public TagService(IUnitOfWork uow) : base(uow){}
 
+        #region Create
         public async Task<Tag> AddTagAsync(Tag tagEntity)
         {
             try
@@ -41,7 +42,9 @@ namespace WSCore.Services.TagService
                 Tag newEntity = new Tag
                 {
                     Title = rs.Name,
-                    Alias = newAlias
+                    Alias = newAlias,
+                    CreatedUserId = "469cf3e1",
+                    LastSavedUserId = "469cf3e1"
                 };
 
                 await _uow.GetRepository<Tag>().AddAsync(newEntity);
@@ -54,12 +57,52 @@ namespace WSCore.Services.TagService
                 throw ex;
             }
         }
+        #endregion Create
 
+        #region Get
+        public async Task<Tag> GetTagByIdAsync(string id)
+        {
+            try
+            {
+                var dbContext = _uow.GetRepository<Tag>();
+                Tag tag = new Tag();
+                var rs = await dbContext.GetByIdAsync(id);
+                if (rs != null)
+                    tag = rs;
+                return tag;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
 
-        public async Task<string> GetTagByAliasAsync(string alias)
+        public string GetTagStartsWithAliasAsync(string alias)
         {
             var newAlias = BGetNewAliasAsync(alias, f => f.Alias.StartsWith(alias), s => s.Alias);
             return newAlias;
         }
+        #endregion Get
+
+        #region Delete
+        public async Task DeleteTagByIdAsync(string id)
+        {
+            try
+            {
+                var dbContext = _uow.GetRepository<Tag>();
+                Tag tag = null;
+                tag = await dbContext.GetByIdAsync(id);
+                if (tag != null)
+                    dbContext.Delete(tag);
+
+                _uow.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+        #endregion Delete
     }
 }

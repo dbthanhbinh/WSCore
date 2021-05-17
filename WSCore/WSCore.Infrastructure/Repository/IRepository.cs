@@ -12,6 +12,9 @@ namespace WSCore.Infrastructure.Repository
         void AddRange(List<T> ts);
         Task AddRangeAsync(List<T> ts);
 
+        #region Get
+        Task<T> GetByIdAsync(string id);
+
         IQueryable<T> GetEntities(Expression<Func<T, bool>> condition = null,
         Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
         string includeProperties = "");
@@ -23,5 +26,10 @@ namespace WSCore.Infrastructure.Repository
         Expression<Func<T, T>> selectColumns = null,
         int first = 0,
         int offset = 0);
+        #endregion Get
+
+        #region Delete
+        void Delete(T entity);
+        #endregion Delete
     }
 }

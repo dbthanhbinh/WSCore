@@ -12,6 +12,9 @@ namespace WSCore.Services.TagService
     {
         Task<Tag> AddTagAsync(Tag tagEntity);
         Task<Tag> AddTagLogicAsync(TagRequest createTag);
-        Task<string> GetTagByAliasAsync(string alias);
+        string GetTagStartsWithAliasAsync(string alias);
+
+        Task<Tag> GetTagByIdAsync(string id);
+        Task DeleteTagByIdAsync(string id);
     }
 }

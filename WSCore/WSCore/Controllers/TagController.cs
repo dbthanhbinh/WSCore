@@ -25,17 +25,28 @@ namespace WSCore.Controllers
         {
             if (tagRequest == null)
                 return BadRequest();
-
+            Guid myuuid = Guid.NewGuid();
             var rs = await _tagService.AddTagLogicAsync(tagRequest);
             return Ok(rs);
         }
         #endregion Create
 
-        [HttpGet("getTagByAlias/{alias}", Name = "GetTagByAlias")]
-        public async Task<ActionResult> GetTagByAlias(string alias)
+        #region Delete
+        [HttpDelete("delete/{id}", Name = "DeleteTag")]
+        public ActionResult DeleteTag(string id)
         {
-            var rs = await _tagService.GetTagByAliasAsync(alias);
-            return Ok();
+            var rs = _tagService.DeleteTagByIdAsync(id);
+            return Ok(rs);
         }
+        #endregion Delete
+
+        #region Get
+        [HttpGet("getTagByAlias/{alias}", Name = "GetTagByAlias")]
+        public ActionResult GetTagByAlias(string alias)
+        {
+            var rs = _tagService.GetTagStartsWithAliasAsync(alias);
+            return Ok(rs);
+        }
+        #endregion Get
     }
 }
