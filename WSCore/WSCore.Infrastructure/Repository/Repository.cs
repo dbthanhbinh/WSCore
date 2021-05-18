@@ -18,6 +18,7 @@ namespace WSCore.Infrastructure.Repository
             DbSet = _dbContext.Set<T>();
         }
 
+        #region Create
         public async Task AddAsync(T entity)
         {
             await DbSet.AddAsync(entity);
@@ -32,7 +33,19 @@ namespace WSCore.Infrastructure.Repository
         {
             DbSet.AddRange(ts);
         }
+        #endregion Create
 
+        #region Update
+        public void UpdateAsync(T entity)
+        {
+            DbSet.Update(entity);
+        }
+
+        public void Update(T entity)
+        {
+            DbSet.Update(entity);
+        }
+        #endregion Update
 
         #region Get
         public async Task<T> GetByIdAsync(string id)

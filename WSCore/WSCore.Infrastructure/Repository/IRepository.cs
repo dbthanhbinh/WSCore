@@ -8,9 +8,16 @@ namespace WSCore.Infrastructure.Repository
 {
     public interface IRepository<T> where T : class
     {
+        #region Create
         Task AddAsync(T entity);
         void AddRange(List<T> ts);
         Task AddRangeAsync(List<T> ts);
+        #endregion Create
+
+        #region Update
+        void UpdateAsync(T entity);
+        void Update(T entity);
+        #endregion Update
 
         #region Get
         Task<T> GetByIdAsync(string id);

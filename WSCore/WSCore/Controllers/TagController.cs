@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using WSCore.Controllers.Base;
 using WSCore.Services.TagService;
@@ -21,15 +22,29 @@ namespace WSCore.Controllers
 
         #region Create
         [HttpPost("create", Name = "CreateTagLogic")]
-        public async Task<ActionResult> CreateTagLogic(TagRequest tagRequest)
+        public async Task<ActionResult> CreateTagLogic([FromBody] CreateTagModel createTagModel)
         {
-            if (tagRequest == null)
+            if (createTagModel == null)
                 return BadRequest();
-            Guid myuuid = Guid.NewGuid();
-            var rs = await _tagService.AddTagLogicAsync(tagRequest);
-            return Ok(rs);
+            var rs = await _tagService.AddTagLogicAsync(createTagModel);
+            return Ok(new ApiResponse(rs));
         }
         #endregion Create
+
+        #region Update
+        [HttpPut("update", Name = "UpdateTagLogic")]
+        public async Task<ActionResult> UpdateTagLogic([FromBody] UpdateTagModel updateTagModel)
+        {
+            if (updateTagModel == null)
+                return BadRequest();
+
+            object rs = null;
+            if (ModelState.IsValid) {
+                rs = await _tagService.UpdateTagLogicAsync(updateTagModel);
+            }
+            return Ok(new ApiResponse(rs));
+        }
+        #endregion Update
 
         #region Delete
         [HttpDelete("delete/{id}", Name = "DeleteTag")]
@@ -45,7 +60,7 @@ namespace WSCore.Controllers
         public ActionResult GetTagByAlias(string alias)
         {
             var rs = _tagService.GetTagStartsWithAliasAsync(alias);
-            return Ok(rs);
+            return Ok(new ApiResponse(rs));
         }
         #endregion Get
     }

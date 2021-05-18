@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.ModelBinding;
+using WSCore.Common;
 using WSCore.Controllers.Base;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Model;
@@ -29,7 +31,7 @@ namespace WSCore.Services.TagService
             }
         }
 
-        public async Task<Tag> AddTagLogicAsync(TagRequest createTag)
+        public async Task<Tag> AddTagLogicAsync(CreateTagModel createTag)
         {
             try
             {
@@ -58,6 +60,39 @@ namespace WSCore.Services.TagService
             }
         }
         #endregion Create
+
+        #region Update
+        public async Task<UpdateTagVM> UpdateTagLogicAsync(UpdateTagModel updateTagModel)
+        {
+            try
+            {
+                // validation UpdateTagModel
+
+                var dbContext = _uow.GetRepository<Tag>();
+                Tag tag = await dbContext.GetByIdAsync(updateTagModel.Id);
+                if (tag == null)
+                    return new UpdateTagVM {
+                        Error = 1,
+                        ErrorMessage = "NOT_FOUND"
+                    };
+
+                NameAndAliasVM rs = BGetNameAndAliasVM(updateTagModel.Title, updateTagModel.Alias);
+                tag.Title = rs.Name;
+                tag.Alias = rs.Alias;
+                tag.LastSavedTime = DateTime.UtcNow;
+
+                dbContext.UpdateAsync(tag);
+                _uow.SaveChanges();
+                return new UpdateTagVM {
+                    Data = tag
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion Update
 
         #region Get
         public async Task<Tag> GetTagByIdAsync(string id)

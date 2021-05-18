@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WSCore.Migrations
 {
-    public partial class WSCore : Migration
+    public partial class WScore : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

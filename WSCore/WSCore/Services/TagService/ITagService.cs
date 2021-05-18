@@ -10,11 +10,22 @@ namespace WSCore.Services.TagService
 {
     public interface ITagService : IBaseService<Tag>
     {
+        #region Create
         Task<Tag> AddTagAsync(Tag tagEntity);
-        Task<Tag> AddTagLogicAsync(TagRequest createTag);
-        string GetTagStartsWithAliasAsync(string alias);
+        Task<Tag> AddTagLogicAsync(CreateTagModel createTag);
+        #endregion Create
 
+        #region Update
+        Task<UpdateTagVM> UpdateTagLogicAsync(UpdateTagModel updateTagModel);
+        #endregion Update
+
+        #region Get
+        string GetTagStartsWithAliasAsync(string alias);
         Task<Tag> GetTagByIdAsync(string id);
+        #endregion Get
+
+        #region Delete
         Task DeleteTagByIdAsync(string id);
+        #endregion Delete
     }
 }
