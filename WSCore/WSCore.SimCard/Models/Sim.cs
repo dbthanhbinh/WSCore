@@ -2,7 +2,7 @@
 
 namespace WSCore.SimCard.Models
 {
-    public class Sim : BaseEntity
+    public class Sim : ObjectEntity
     {
         public string Name { set; get; }
         public string Alias { set; get; }

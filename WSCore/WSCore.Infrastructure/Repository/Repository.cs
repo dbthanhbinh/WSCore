@@ -137,6 +137,11 @@ namespace WSCore.Infrastructure.Repository
         {
             DbSet.Remove(entity);
         }
+
+        public void DeleteRange(List<T> entities)
+        {
+            DbSet.RemoveRange(entities);
+        }
         #endregion Delete
     }
 }

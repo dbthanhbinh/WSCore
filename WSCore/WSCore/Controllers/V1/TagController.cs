@@ -1,16 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WSCore.Controllers.Base;
+using WSCore.Models.Dto;
 using WSCore.Services.TagService;
 
-namespace WSCore.Controllers
+namespace WSCore.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     [ApiController]
     public class TagController : BaseController
     {

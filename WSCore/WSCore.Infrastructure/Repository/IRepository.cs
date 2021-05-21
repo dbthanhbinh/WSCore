@@ -37,6 +37,7 @@ namespace WSCore.Infrastructure.Repository
 
         #region Delete
         void Delete(T entity);
+        void DeleteRange(List<T> entities);
         #endregion Delete
     }
 }

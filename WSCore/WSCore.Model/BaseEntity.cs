@@ -11,22 +11,18 @@ namespace WSCore.Model
         }
 
         [Key]
-        [StringLength(8)]
+        [StringLength(11)]
         public string Id { get; private set; } = GetNewUuid();
 
         [Required]
-        [StringLength(8)]
-        public string Status { get; set; } = "publish";
-
-        [Required]
-        [StringLength(8)]
+        [StringLength(11)]
         public string CreatedUserId { get; set; }
         
         [Required]
         public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
         
         [Required]
-        [StringLength(8)]
+        [StringLength(11)]
         public string LastSavedUserId { get; set; }
         
         [Required]

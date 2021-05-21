@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WSCore.Common;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Models.VM;
+using WSCore.Services.ObjectTagService;
 
 namespace WSCore.Services
 {
@@ -17,12 +18,16 @@ namespace WSCore.Services
         {
             _uow = uow;
         }
+
+        public BasicService(IUnitOfWork uow, IObjectTagService objectTagService)
+        {
+            _uow = uow;
+        }
+
         public async Task<string> BGetAlias()
         {
             return "dđ";
         }
-
-
 
         public string BGetNewAliasAsync(
             string alias,

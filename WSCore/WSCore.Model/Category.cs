@@ -5,13 +5,12 @@ using System.Text;
 
 namespace WSCore.Model
 {
-    public class Category : BaseEntity
+    public class Category : ObjectEntity
     {
         [Required]
         [StringLength(300)]
         public string Title { set; get; }
 
-        [Required]
         [StringLength(300)]
         public string Alias { set; get; }
 
@@ -19,7 +18,7 @@ namespace WSCore.Model
         public string Excerpt { set; get; }
         public string Content { set; get; }
 
-        [StringLength(8)]
+        [StringLength(11)]
         public string ParentId { set; get; }
 
         [StringLength(50)]

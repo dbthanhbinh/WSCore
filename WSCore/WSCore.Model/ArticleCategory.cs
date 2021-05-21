@@ -5,14 +5,12 @@ using System.Text;
 
 namespace WSCore.Model
 {
-    public class Tag : ObjectEntity
+    public class ArticleCategory : BaseEntity
     {
         [Required]
-        [StringLength(250)]
-        public string Title { set; get; }
+        public string ArticleId { set; get; }
 
         [Required]
-        [StringLength(250)]
-        public string Alias { set; get; }
+        public string CategoryId { set; get; }
     }
 }

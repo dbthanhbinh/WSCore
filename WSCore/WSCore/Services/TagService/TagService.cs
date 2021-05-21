@@ -1,19 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.ModelBinding;
-using WSCore.Common;
-using WSCore.Controllers.Base;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Model;
+using WSCore.Models.Dto;
 using WSCore.Models.VM;
+using WSCore.Services.ObjectTagService;
 
 namespace WSCore.Services.TagService
 {
     public class TagService : BasicService<Tag>, ITagService
     {
-        public TagService(IUnitOfWork uow) : base(uow){}
+        private readonly IObjectTagService _objectTagService;
+        public TagService(
+            IUnitOfWork uow,
+            IObjectTagService objectTagService
+        ) : base(uow, objectTagService) {
+            _objectTagService = objectTagService;
+        }
 
         #region Create
         public async Task<Tag> AddTagAsync(Tag tagEntity)
@@ -127,9 +130,15 @@ namespace WSCore.Services.TagService
                 var dbContext = _uow.GetRepository<Tag>();
                 Tag tag = null;
                 tag = await dbContext.GetByIdAsync(id);
+
                 if (tag != null)
+                {
+                    // Delete tag
                     dbContext.Delete(tag);
 
+                    // Delete ObjectTags relate Deleted tagId
+                    await _objectTagService.DeleteObjectTagByDeleteTagIdAsync(id, false);
+                }
                 _uow.SaveChanges();
             }
             catch (Exception ex)
@@ -139,5 +148,16 @@ namespace WSCore.Services.TagService
 
         }
         #endregion Delete
+
+        #region Public Process
+        protected void ProcessUpdateTags(string[] tagIds, string objectId)
+        {
+            // Get current tags by objectId
+
+            // Add new
+            // Update
+            // Delete
+        }
+        #endregion Public Process
     }
 }

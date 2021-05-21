@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace WSCore.Controllers.Base
+namespace WSCore.Models.Dto
 {
-    public class TagRequest
+    public class TagDto
     {
-       
     }
 
     public class CreateTagModel

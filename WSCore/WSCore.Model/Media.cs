@@ -6,13 +6,13 @@ namespace WSCore.Model
     public class Media : BaseEntity
     {
         [Required]
-        [StringLength(8)]
+        [StringLength(11)]
         public string FileId { set; get; }
 
         [StringLength(300)]
         public string Path { set; get; }
 
-        [StringLength(8)]
+        [StringLength(11)]
         public string ObjectId { get; set; }
 
         [StringLength(50)]
