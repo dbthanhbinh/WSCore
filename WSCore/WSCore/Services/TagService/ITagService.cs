@@ -9,7 +9,7 @@ namespace WSCore.Services.TagService
     {
         #region Create
         Task<Tag> AddTagAsync(Tag tagEntity);
-        Task<Tag> AddTagLogicAsync(CreateTagModel createTag);
+        Task<Tag> AddTagLogicAsync(TagDto tagDto);
         #endregion Create
 
         #region Update

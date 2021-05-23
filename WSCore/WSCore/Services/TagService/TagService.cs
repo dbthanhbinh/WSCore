@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Threading.Tasks;
+using WSCore.Common;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Model;
 using WSCore.Models.Dto;
@@ -34,22 +38,22 @@ namespace WSCore.Services.TagService
             }
         }
 
-        public async Task<Tag> AddTagLogicAsync(CreateTagModel createTag)
+        public async Task<Tag> AddTagLogicAsync(TagDto tagDto)
         {
             try
             {
-                // validation tag name Special character
-                // validation tag alias Special character
+                string title = tagDto.Title;
+                string alias = tagDto.Alias;
 
-                NameAndAliasVM rs = BGetNameAndAliasVM(createTag.Title, createTag.Alias);
-                string newAlias = BGetNewAliasAsync(rs.Alias, f => f.Alias.StartsWith(rs.Alias), s => s.Alias);
+                // Clean Obj
+                CleanObjecAndBuildtTitleAndAliasDto(ref title, ref alias);
 
                 Tag newEntity = new Tag
                 {
-                    Title = rs.Name,
-                    Alias = newAlias,
-                    CreatedUserId = "469cf3e1",
-                    LastSavedUserId = "469cf3e1"
+                    Title = title,
+                    Alias = alias,
+                    CreatedUserId = GetUserId(),
+                    LastSavedUserId = GetUserId()
                 };
 
                 await _uow.GetRepository<Tag>().AddAsync(newEntity);
@@ -69,20 +73,23 @@ namespace WSCore.Services.TagService
         {
             try
             {
+                string title = updateTagModel.Title;
+                string alias = updateTagModel.Alias;
                 // validation UpdateTagModel
+                // Clean Obj
+
+                CleanObjecAndBuildtTitleAndAliasDto(ref title, ref alias);
 
                 var dbContext = _uow.GetRepository<Tag>();
                 Tag tag = await dbContext.GetByIdAsync(updateTagModel.Id);
                 if (tag == null)
-                    return new UpdateTagVM {
-                        Error = 1,
-                        ErrorMessage = "NOT_FOUND"
-                    };
+                {
+                    throw new Exception("NOT_FOUND");
+                }
 
-                NameAndAliasVM rs = BGetNameAndAliasVM(updateTagModel.Title, updateTagModel.Alias);
-                tag.Title = rs.Name;
-                tag.Alias = rs.Alias;
-                tag.LastSavedTime = DateTime.UtcNow;
+                tag.Title = title;
+                tag.Alias = alias;
+                tag.LastSavedTime = GetLastSavedTime();
 
                 dbContext.UpdateAsync(tag);
                 _uow.SaveChanges();
@@ -137,27 +144,58 @@ namespace WSCore.Services.TagService
                     dbContext.Delete(tag);
 
                     // Delete ObjectTags relate Deleted tagId
-                    await _objectTagService.DeleteObjectTagByDeleteTagIdAsync(id, false);
+                    await _objectTagService.DeleteAllObjectTagRelateToTagIdDeletedAsync(tagId: id, false);
                 }
                 _uow.SaveChanges();
             }
             catch (Exception ex)
             {
-
+                throw ex;
             }
 
         }
         #endregion Delete
 
-        #region Public Process
-        protected void ProcessUpdateTags(string[] tagIds, string objectId)
+        protected void CleanObjectDto(ref TagDto tagDto)
         {
-            // Get current tags by objectId
+            Type t = tagDto.GetType();
+            foreach (PropertyInfo prop in t.GetProperties()) //Iterating through properties
+            {
+                var field = prop.Name;
+                var fieldValue = prop.GetValue(tagDto, new object[] { });
 
-            // Add new
-            // Update
-            // Delete
+                if (field == "Title")
+                {
+                    tagDto.Title = StringHelper.CleanTagHtmlForTitle(fieldValue.ToString().Trim());
+                }
+                if (field == "Alias")
+                {
+                    tagDto.Alias = StringHelper.CleanTagHtmlForTitle(fieldValue.ToString().Trim());
+                }
+            }
+
+            NameAndAliasVM rs = BGetNameAndAliasVM(tagDto.Title, tagDto.Alias);
+            string newAlias = BGetNewAliasAsync(rs.Alias, f => f.Alias.StartsWith(rs.Alias), s => s.Alias);
+            tagDto.Title = rs.Name;
+            tagDto.Alias = newAlias;
         }
-        #endregion Public Process
+
+        /// <summary>
+        /// Clean html tags and build frienly alias from title or not
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="alias"></param>
+        protected void CleanObjecAndBuildtTitleAndAliasDto(ref string title, ref string alias)
+        {
+            if(title.Length >= 3)
+                title = StringHelper.CleanTagHtmlForTitle(title.ToString().Trim());
+            if(alias.Length >= 3)
+                alias = StringHelper.CleanTagHtmlForTitle(alias.ToString().Trim());
+
+            NameAndAliasVM rs = BGetNameAndAliasVM(title, alias);
+            string newAlias = BGetNewAliasAsync(rs.Alias, f => f.Alias.StartsWith(rs.Alias), s => s.Alias);
+            title = rs.Name;
+            alias = newAlias;
+        }
     }
 }

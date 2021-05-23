@@ -8,9 +8,9 @@ namespace WSCore.Common
 {
     public static class StringHelper
     {
-        private static string Ldquo = "&ldquo;";
-        private static string Rdquo = "&rdquo;";
-        private static string Mdash = "&mdash;";
+        private static readonly string Ldquo = "&ldquo;";
+        private static readonly string Rdquo = "&rdquo;";
+        private static readonly string Mdash = "&mdash;";
 
         public static bool IsNullOrWhiteSpace(string str)
         {
@@ -210,6 +210,32 @@ namespace WSCore.Common
             }
             return html;
         }
+
+        public static string CleanTagHtmlForTitle(string html)
+        {
+            StringCollection sc = new StringCollection();
+            // get rid of unnecessary tag spans (comments and title)
+            sc.Add(@"<!--(w|W)+?-->");
+            sc.Add(@"<title>(w|W)+?</title>");
+            // Get rid of classes and styles
+            sc.Add(@"s?class=w+");
+            sc.Add(@"s+style='[^']+'");
+            // Get rid of unnecessary tags
+            sc.Add(@"</?\w+((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?>");
+            sc.Add(@"<.*?>");
+            // Get rid of empty paragraph tags
+            sc.Add(@"(<[^>]+>)+&nbsp;(</w+>)+");
+            // remove bizarre v: element attached to <img> tag
+            sc.Add(@"s+v:w+=""[^""]+""");
+            // remove extra lines
+            sc.Add(@"(nr){2,}");
+            foreach (string s in sc)
+            {
+                html = Regex.Replace(html, s, "", RegexOptions.IgnoreCase);
+            }
+            return html;
+        }
+
         public static string FixEntities(string html)
         {
             NameValueCollection nvc = new NameValueCollection();

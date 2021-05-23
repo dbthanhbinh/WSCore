@@ -17,11 +17,11 @@ namespace WSCore.Controllers.V1
 
         #region Create
         [HttpPost("create", Name = "CreateTagLogic")]
-        public async Task<ActionResult> CreateTagLogic([FromBody] CreateTagModel createTagModel)
+        public async Task<ActionResult> CreateTagLogic([FromBody] TagDto tagDto)
         {
-            if (createTagModel == null)
+            if (tagDto == null)
                 return BadRequest();
-            var rs = await _tagService.AddTagLogicAsync(createTagModel);
+            var rs = await _tagService.AddTagLogicAsync(tagDto);
             return Ok(new ApiResponse(rs));
         }
         #endregion Create
