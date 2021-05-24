@@ -22,19 +22,26 @@ namespace WSCore.Services.UserService
                 User userEntity = new User
                 {
                     Phone = userDto.Phone,
-                    Email = userDto.Email
+                    Email = userDto.Email,
+                    LoginName = userDto.Phone,
+                    CreatedUserId = "469cf3e1",
+                    LastSavedUserId = "469cf3e1"
                 };
 
                 UserSecret userSecret = new UserSecret
                 {
                     Password = hashedPassword,
                     Token = "",
-                    UserId = userEntity.Id
+                    UserId = userEntity.Id,
+                    CreatedUserId = "469cf3e1",
+                    LastSavedUserId = "469cf3e1"
                 };
 
                 UserProfile userProfile = new UserProfile
                 {
-                    UserId = userEntity.Id
+                    UserId = userEntity.Id,
+                    CreatedUserId = "469cf3e1",
+                    LastSavedUserId = "469cf3e1"
                 };
 
                 await _uow.GetRepository<User>().AddAsync(userEntity);
@@ -49,5 +56,23 @@ namespace WSCore.Services.UserService
             }
         }
 
+
+        #region Get
+        private async Task<User> GetExistedUserBy(string email, string phone)
+        {
+            try
+            {
+                var result = await TGetByAsync(s => s.Phone == phone && s.LoginName == loginName, a => a.OrderByDescending(User => User.LastSavedTime), null);
+                if (result != null)
+                    return result.First();
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Issue with API", ex);
+            }
+        }
+        #endregion Get
     }
 }
