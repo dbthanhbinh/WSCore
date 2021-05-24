@@ -9,7 +9,9 @@ using WSCore.Infrastructure.Repository;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Models;
 using WSCore.Services.CategoryService;
+using WSCore.Services.ObjectTagService;
 using WSCore.Services.TagService;
+using WSCore.Services.UserService;
 
 namespace WSCore
 {
@@ -37,6 +39,8 @@ namespace WSCore
 
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IObjectTagService, ObjectTagService>();
+            services.AddScoped<IUserService, UserService>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

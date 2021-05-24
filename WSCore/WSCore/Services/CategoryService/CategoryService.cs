@@ -65,7 +65,7 @@ namespace WSCore.Services.CategoryService
                     dbContext.Delete(category);
 
                     // Delete ObjectTags relate Deleted tagId
-                    await _objectTagService.DeleteObjectTagByDeleteTagIdAsync(id, false);
+                    // await _objectTagService.DeleteObjectTagByDeleteTagIdAsync(id, false);
                 }
                 _uow.SaveChanges();
             }

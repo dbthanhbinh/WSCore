@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSCore.Infrastructure", "WS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSCore.Common", "WSCore.Common\WSCore.Common.csproj", "{996139E1-3901-4D16-925C-077C116A9F59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSCore.SimCard", "WSCore.SimCard\WSCore.SimCard.csproj", "{E06F8120-9817-432F-AA6D-CE0B4BBEB9B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSCore.SimCard", "WSCore.SimCard\WSCore.SimCard.csproj", "{E06F8120-9817-432F-AA6D-CE0B4BBEB9B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
