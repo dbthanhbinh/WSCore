@@ -14,5 +14,9 @@ namespace WSCore.Models
         DbSet<Tag> Tags { set; get; }
         DbSet<Category> Categories { set; get; }
         DbSet<Article> Articles { set; get; }
+        DbSet<User> Users { get; set; }
+        DbSet<UserSecret> UserSecrets { get; set; }
+        DbSet<UserProfile> UserProfiles { get; set; }
+        DbSet<ObjectTag> ObjectTags { set; get; }
     }
 }

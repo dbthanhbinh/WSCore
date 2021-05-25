@@ -10,3 +10,15 @@ D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Upload\bin\Debug\netcoreapp3.1\WSCore.Up
 D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Upload\obj\Debug\netcoreapp3.1\WSCore.Upload.csproj.CoreCompileInputs.cache
 D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Upload\obj\Debug\netcoreapp3.1\WSCore.Upload.dll
 D:\BINH\netcore\WSCore_bk\WSCore\WSCore.Upload\obj\Debug\netcoreapp3.1\WSCore.Upload.pdb
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\bin\Debug\netcoreapp3.1\WSCore.Upload.deps.json
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\bin\Debug\netcoreapp3.1\WSCore.Upload.dll
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\bin\Debug\netcoreapp3.1\WSCore.Upload.pdb
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\bin\Debug\netcoreapp3.1\WSCore.Model.dll
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\bin\Debug\netcoreapp3.1\WSCore.Model.pdb
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\obj\Debug\netcoreapp3.1\WSCore.Upload.csprojAssemblyReference.cache
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\obj\Debug\netcoreapp3.1\WSCore.Upload.AssemblyInfoInputs.cache
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\obj\Debug\netcoreapp3.1\WSCore.Upload.AssemblyInfo.cs
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\obj\Debug\netcoreapp3.1\WSCore.Upload.csproj.CoreCompileInputs.cache
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\obj\Debug\netcoreapp3.1\WSCore.Upload.csproj.CopyComplete
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\obj\Debug\netcoreapp3.1\WSCore.Upload.dll
+E:\dbthanhbinh\.Net\WSCore_React\WSCore\WSCore\WSCore.Upload\obj\Debug\netcoreapp3.1\WSCore.Upload.pdb

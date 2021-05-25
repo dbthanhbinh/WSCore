@@ -9,3 +9,7 @@ WSCore/WSCore.Common/bin
 WSCore/WSCore.Infrastructure/bin
 WSCore/WSCore.Infrastructure/obj
 WSCore/WSCore.Model/bin
+WSCore/WSCore/Migrations/
+WSCore/WSCore.Upload/bin/
+WSCore/WSCore.Upload/obj/
+WSCore/WSCore.Upload/obj/Debug/netcoreapp3.1/WSCore.Upload.csprojAssemblyReference.cache

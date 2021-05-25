@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Upload\\WSCore.Upload.csproj": {}
+    "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Upload\\WSCore.Upload.csproj": {}
   },
   "projects": {
-    "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj": {
+    "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Model\\WSCore.Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
+        "projectUniqueName": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
         "projectName": "WSCore.Model",
-        "projectPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
-        "packagesPath": "C:\\Users\\THANH\\.nuget\\packages\\",
-        "outputPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\obj\\",
+        "projectPath": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Model\\WSCore.Model.csproj",
+        "packagesPath": "C:\\Users\\binh.trinh\\.nuget\\packages\\",
+        "outputPath": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Model\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\THANH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\binh.trinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,6 +26,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -37,6 +38,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "imports": [
             "net461",
             "net462",
@@ -52,21 +54,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Upload\\WSCore.Upload.csproj": {
+    "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Upload\\WSCore.Upload.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Upload\\WSCore.Upload.csproj",
+        "projectUniqueName": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Upload\\WSCore.Upload.csproj",
         "projectName": "WSCore.Upload",
-        "projectPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Upload\\WSCore.Upload.csproj",
-        "packagesPath": "C:\\Users\\THANH\\.nuget\\packages\\",
-        "outputPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Upload\\obj\\",
+        "projectPath": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Upload\\WSCore.Upload.csproj",
+        "packagesPath": "C:\\Users\\binh.trinh\\.nuget\\packages\\",
+        "outputPath": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Upload\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\THANH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\binh.trinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -78,9 +80,10 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj": {
-                "projectPath": "D:\\BINH\\netcore\\WSCore_bk\\WSCore\\WSCore.Model\\WSCore.Model.csproj"
+              "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Model\\WSCore.Model.csproj": {
+                "projectPath": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Model\\WSCore.Model.csproj"
               }
             }
           }
@@ -93,6 +96,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "LazZiya.ImageResize": {
               "target": "Package",
@@ -118,7 +122,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
