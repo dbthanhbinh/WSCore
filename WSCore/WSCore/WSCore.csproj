@@ -29,13 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WSCore.Common\WSCore.Common.csproj" />
-    <ProjectReference Include="..\WSCore.Infrastructure\WSCore.Infrastructure.csproj" />
-    <ProjectReference Include="..\WSCore.Model\WSCore.Model.csproj" />
+    <Compile Remove="Services\TagService\TagService - Copy.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\WSCore.Common\WSCore.Common.csproj" />
+    <ProjectReference Include="..\WSCore.Infrastructure\WSCore.Infrastructure.csproj" />
+    <ProjectReference Include="..\WSCore.Model\WSCore.Model.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

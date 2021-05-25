@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using WSCore.Common;
 using WSCore.Infrastructure.UnitOfWork;
@@ -22,6 +23,16 @@ namespace WSCore.Services
         public BasicService(IUnitOfWork uow, IObjectTagService objectTagService)
         {
             _uow = uow;
+        }
+
+        protected string GetUserId()
+        {
+            return "469cf3e1";
+        }
+
+        protected DateTime GetLastSavedTime()
+        {
+            return DateTime.UtcNow;
         }
 
         public async Task<string> BGetAlias()

@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "0kX+daGiv51Bk1k/U+2VNjv1o1js0vVnfve/s8KhA3AkNmQtkP1k5jdjDXqD+/1r9af9yDg1OHck7QBGs/Oe/A==",
+  "success": true,
+  "projectFilePath": "E:\\dbthanhbinh\\.Net\\WSCore_React\\WSCore\\WSCore\\WSCore.Upload\\WSCore.Upload.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\binh.trinh\\.nuget\\packages\\lazziya.imageresize\\3.0.2\\lazziya.imageresize.3.0.2.nupkg.sha512",
+    "C:\\Users\\binh.trinh\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.6\\microsoft.aspnetcore.http.features.5.0.6.nupkg.sha512",
+    "C:\\Users\\binh.trinh\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
+    "C:\\Users\\binh.trinh\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
+    "C:\\Users\\binh.trinh\\.nuget\\packages\\microsoft.win32.systemevents\\4.5.0\\microsoft.win32.systemevents.4.5.0.nupkg.sha512",
+    "C:\\Users\\binh.trinh\\.nuget\\packages\\system.drawing.common\\4.5.1\\system.drawing.common.4.5.1.nupkg.sha512",
+    "C:\\Users\\binh.trinh\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512",
+    "C:\\Users\\binh.trinh\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\5.0.0\\system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

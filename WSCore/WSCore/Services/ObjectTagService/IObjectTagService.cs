@@ -16,12 +16,12 @@ namespace WSCore.Services.ObjectTagService
         #region Get
         Task<List<ObjectTag>> GetObjectTagByTagIdAsync(string tagId);
 
-        Task<List<ObjectTag>> GetObjectTagByObjectIdAndTypeAsync(string objId, string objectType);
+        Task<List<ObjectTag>> GetObjectTagByObjectIdAndObjectTypeAsync(string objId, string objectType);
         #endregion Get
 
         #region Delete
         Task DeleteObjectTagByIdAsync(string id);
-        Task DeleteObjectTagByDeleteTagIdAsync(string tagId, bool isSaveChange);
+        Task DeleteAllObjectTagRelateToTagIdDeletedAsync(string tagId, bool isSaveChange);
 
         /// <summary>
         /// Delete All ObjectTag relate to ObjectId has been deleted ObjectId[CategoryId/ArticleId]
@@ -30,7 +30,11 @@ namespace WSCore.Services.ObjectTagService
         /// <param name="objectType"></param>
         /// <param name="isSaveChange"></param>
         /// <returns></returns>
-        Task DeleteObjectTagByDeleteObjectIdAsync(string objectId, string objectType, bool isSaveChange);
+        Task DeleteAllObjectTagRelateToObjectDeletedAsync(string objectId, string objectType, bool isSaveChange);
         #endregion Delete
+
+        #region Update
+        void UpdateObjectTagsInObject(List<string> tagIds, string objectId, string objectType, string objectName, bool isSaveChange);
+        #endregion Update
     }
 }

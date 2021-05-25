@@ -10,6 +10,15 @@ namespace WSCore.Model
         public string FileId { set; get; }
 
         [StringLength(300)]
+        public string Title { set; get; }
+
+        [StringLength(300)]
+        public string Alt { set; get; }
+
+        [StringLength(300)]
+        public string Caption { set; get; }
+
+        [StringLength(300)]
         public string Path { set; get; }
 
         [StringLength(11)]
@@ -29,5 +38,8 @@ namespace WSCore.Model
 
         [StringLength(50)]
         public string MediaType { set; get; }
+
+        [StringLength(50)]
+        public string AttachedType { set; get; }
     }
 }

@@ -18,7 +18,8 @@ namespace WSCore.Models.VM
         public string SeoKeyWord { get; set; }
     }
 
-    public class CategoryLogicVM : CategoryVM
+    public class CategoryLogicVM
     {
+        public CategoryVM categoryVM { get; set; }
     }
 }

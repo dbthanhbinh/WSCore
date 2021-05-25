@@ -8,10 +8,6 @@ namespace WSCore.Models.Dto
 {
     public class TagDto
     {
-    }
-
-    public class CreateTagModel
-    {
         [Required]
         [MinLength(3, ErrorMessage = "MIN_LENGTH_INVALID")]
         [MaxLength(50, ErrorMessage = "MAX_LENGTH_INVALID")]
@@ -37,4 +33,5 @@ namespace WSCore.Models.Dto
         public string ErrorMessage { set; get; } = null;
         public object Data { set; get; } = null;
     }
+
 }
