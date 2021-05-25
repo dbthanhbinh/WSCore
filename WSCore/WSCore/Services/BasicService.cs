@@ -30,6 +30,11 @@ namespace WSCore.Services
             return "469cf3e1";
         }
 
+        protected bool GetPermissions(string userId)
+        {
+            return true;
+        }
+
         protected DateTime GetLastSavedTime()
         {
             return DateTime.UtcNow;
@@ -136,5 +141,29 @@ namespace WSCore.Services
                 Content = content
             };
         }
+
+        #region Delete entity
+        public async Task DeleteEntityByIdAsync(string id, bool isSaveChange)
+        {
+            try
+            {
+                var dbContext = _uow.GetRepository<T>();
+                var entity = await dbContext.GetByIdAsync(id);
+                if (entity != null)
+                {
+                    // Delete tag
+                    dbContext.Delete(entity);
+                }
+
+                if(isSaveChange)
+                    _uow.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        #endregion Delete entity
     }
 }
