@@ -62,10 +62,10 @@ namespace WSCore.Services.UserService
         {
             try
             {
-                var result = await TGetByAsync(s => s.Phone == phone && s.LoginName == loginName, a => a.OrderByDescending(User => User.LastSavedTime), null);
-                if (result != null)
-                    return result.First();
-                else
+                //var result = ""; // await  GetByAsync(s => s.Phone == phone && s.LoginName == loginName, a => a.OrderByDescending(User => User.LastSavedTime), null);
+                //if (result != null)
+                //    return result.First();
+                //else
                     return null;
             }
             catch (Exception ex)
