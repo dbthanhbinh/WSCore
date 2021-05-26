@@ -16,7 +16,7 @@ namespace WSCore.Controllers.V1
         }
 
         [HttpPost("users")]
-        public async Task<ActionResult> CreateUser([FromBody] UserDto userDto)
+        public ActionResult CreateUser([FromBody] UserDto userDto)
         {
             if (userDto == null)
                 return BadRequest();

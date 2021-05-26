@@ -27,9 +27,9 @@ namespace WSCore.Services.UserService
                 if (userDto == null)
                     throw new ArgumentNullException("Null");
 
-                var existedUser = await GetExistedUserBy(userDto.Email, userDto.Phone);
+                var existedUser = GetExistedUserBy(userDto.Email, userDto.Phone);
 
-                if (existedUser != null)
+                if (existedUser)
                     throw new ArgumentNullException("ex");
 
                 string hashedPassword = UserHelper.Hash(userDto.Password);
@@ -78,28 +78,26 @@ namespace WSCore.Services.UserService
         /// <param name="email"></param>
         /// <param name="phone"></param>
         /// <returns></returns>
-        private async Task<User> GetExistedUserBy(string email, string phone)
+        private bool GetExistedUserBy(string email, string phone)
         {
             try
             {
-                //var user = _uow.GetRepository<User>().GetEntities(x => x.Phone == phone && x.Email == email).FirstOrDefault();
                 var x = (from u in _uow.GetRepository<User>().GetEntities(x => x.Phone == phone && x.Email == email).Select(s => new { s.Id, s.Email, s.Phone })
                          join
-                            us in _uow.GetRepository<UserSecret>().GetEntities().Select(s => new { s.Id, s.UserId, s.Password }) on u.Id equals us.UserId
+                            us in _uow.GetRepository<UserSecret>().GetEntities().Select(s => new { s.Id, s.UserId }) on u.Id equals us.UserId
                          where u.Email == email && u.Phone == phone
                          select new {
                              u.Phone,
                              u.Email,
-                             us.UserId,
-                             us.Password
+                             us.UserId
                          }
                      ).FirstOrDefault();
 
-                return null;
+                return x != null;
             }
             catch (Exception ex)
             {
-                throw new Exception("Issue with API", ex);
+                throw ex;
             }
         }
         #endregion Get
@@ -112,47 +110,94 @@ namespace WSCore.Services.UserService
         /// <param name="phone"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task<User> Login(string email, string phone, string password)
+        public UserLoggedInVM Login(string email, string phone, string password)
         {
             try
             {
-                string hashedPassword = UserHelper.Hash(password);
-                //var user = _uow.GetRepository<User>()
-                //    .GetByFilter(u => u.Phone == loginReq.Phone && UserHelper.Verify(u.Password, hashed_password))
-                //    .FirstOrDefault();
-                var user = await GetExistedUserBy(email, phone);
+                UserLoggedInVM userLoggedIn = VerifyLoginUser(email, phone, password);
 
-                // UserHelper.Verify(loginReq.Password, hashed_password)
-                // return null if user not found
-                if (user == null)
+                if (userLoggedIn == null)
                     return null;
 
-                // authentication successful so generate jwt token
+                // Authentication successful so generate jwt token
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes("Y2F0Y2hlciUyMHdvbmclMjBsb3ZlJTIwLm5ldA==");
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                            new Claim(ClaimTypes.Sid, user.Id.ToString()),
-                            new Claim(ClaimTypes.Name, user.FullName.ToString()),
-                            new Claim(ClaimTypes.Email, user.Email.ToString()),
+                            new Claim(ClaimTypes.Sid, userLoggedIn.Id.ToString()),
+                            new Claim(ClaimTypes.Email, userLoggedIn.Email.ToString()),
                             new Claim(ClaimTypes.Role, "SupperAdmin"),
-                            new Claim(ClaimTypes.MobilePhone, user.Phone.ToString()),
-                            new Claim("LoginName", user.LoginName.ToString())
+                            new Claim(ClaimTypes.MobilePhone, userLoggedIn.Phone.ToString()),
+                            new Claim("LoginName", userLoggedIn.LoginName.ToString())
                     }),
                     Expires = DateTime.UtcNow.AddDays(2),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var jwtSecurityToken = tokenHandler.WriteToken(token);
-
-                return null;
+                return userLoggedIn;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
+        private UserLoggedInVM VerifyLoginUser(string email, string phone, string password)
+        {
+            try
+            {
+                string hashedPassword = UserHelper.Hash(password);
+                UserLoggedInVM loggedIn = (from u in _uow.GetRepository<User>()
+                                           .GetEntities(x => x.Phone == phone && x.Email == email)
+                                           .Select(s => new { s.Id, s.Email, s.Phone, s.LoginName })
+                                         join
+                                            us in _uow.GetRepository<UserSecret>()
+                                            .GetEntities(usr => UserHelper.Verify(usr.Password, hashedPassword))
+                                            .Select(s => new { s.UserId, s.Token }) on u.Id equals us.UserId
+                                         where u.Email == email && u.Phone == phone
+                                         select new UserLoggedInVM
+                                         {
+                                             Id = u.Id,
+                                             Phone = u.Phone,
+                                             Email = u.Email,
+                                             LoginName = u.LoginName,
+                                             UserId = us.UserId,
+                                             Token = us.Token
+                                         }
+                                     ).FirstOrDefault();
+
+                if (loggedIn != null)
+                    return loggedIn;
+                return new UserLoggedInVM {};
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+    }
+
+    public class UserLoggedInVM
+    {
+        public string Id { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string LoginName { get; set; }
+        public string UserId { get; set; }
+        public string Token { get; set; }
+    }
+
+    public class UserCreatedVM
+    {
+        public string Id { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string LoginName { get; set; }
+        public string UserId { get; set; }
+        public string Token { get; set; }
     }
 }
