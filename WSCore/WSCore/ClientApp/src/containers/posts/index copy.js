@@ -43,7 +43,6 @@ class ShowArticle extends Component {
     
     render(){
         const {currentArticles, currentProviders, currentTypes} = this.props
-        console.log('=====5');
         this.currentProviders = initReduceIdName(currentProviders || [], 'id', ['name', 'slug', 'thumb'])
         this.currentTypes = initReduceIdName(currentTypes || [], 'id', ['name'])
 

@@ -1,11 +1,11 @@
 import './App.css'
 
-import MainArticle from './containers/posts'
+import EditUser from './containers/members/editUser'
 
 function App() {
   return (
     <div className="app-main">
-        <MainArticle />
+        <EditUser />
     </div>
   );
 }

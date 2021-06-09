@@ -1,12 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import ArticleReducer from './reducers/article.reducers'
-import ContentReducer from './contents/content.reducers'
+import UserReducer from './reducers/user.reducers'
 
 const store = configureStore({
     reducer: {
-        article: ArticleReducer,
-        content: ContentReducer
+        user: UserReducer
     }
 })
 

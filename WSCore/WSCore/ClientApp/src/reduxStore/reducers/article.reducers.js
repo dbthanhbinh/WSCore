@@ -15,7 +15,7 @@ const articleSlice = createSlice({
         setCurrentArticles: (state, action) => {
             state.currentArticles = action.payload
         }
-    }
+    }    
 })
 
 export const { action, reducer } = articleSlice
