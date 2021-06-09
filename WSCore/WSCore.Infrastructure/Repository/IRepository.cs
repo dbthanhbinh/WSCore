@@ -17,6 +17,7 @@ namespace WSCore.Infrastructure.Repository
         #region Update
         void UpdateAsync(T entity);
         void Update(T entity);
+        void UpdateRange(List<T> entities);
         #endregion Update
 
         #region Get

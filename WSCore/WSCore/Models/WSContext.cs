@@ -18,5 +18,10 @@ namespace WSCore.Models
         DbSet<UserSecret> UserSecrets { get; set; }
         DbSet<UserProfile> UserProfiles { get; set; }
         DbSet<ObjectTag> ObjectTags { set; get; }
+        DbSet<Module> Modules { set; get; }
+        DbSet<Package> Packages { set; get; }
+        DbSet<PackageModule> PackageModules { set; get; }
+        DbSet<Role> Roles { set; get; }
+        DbSet<UserModuleAct> UserModuleActs { get; set; }
     }
 }

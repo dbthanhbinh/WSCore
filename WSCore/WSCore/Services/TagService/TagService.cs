@@ -38,6 +38,11 @@ namespace WSCore.Services.TagService
             }
         }
 
+        /// <summary>
+        /// Create Tag by logic
+        /// </summary>
+        /// <param name="tagDto"></param>
+        /// <returns></returns>
         public async Task<Tag> AddTagLogicAsync(TagDto tagDto)
         {
             try

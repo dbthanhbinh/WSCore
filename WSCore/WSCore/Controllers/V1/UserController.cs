@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using WSCore.Services.UserService;
 
@@ -25,6 +27,40 @@ namespace WSCore.Controllers.V1
             {
                 rs = _userService.CreateUserAsync(userDto);
             }
+            return Ok(new ApiResponse(rs));
+        }
+
+        [HttpPut("users")]
+        public ActionResult UpdateAsync([FromBody] EditUserDto editUserDto)
+        {
+            if (editUserDto == null)
+                return BadRequest();
+
+            object rs = null;
+            if (ModelState.IsValid)
+            {
+                rs = _userService.UpdateAsync(editUserDto);
+            }
+            return Ok(new ApiResponse(rs));
+        }
+
+        [HttpGet("users/{userId}")]
+        public ActionResult GetDetailUser(string userId)
+        {
+            if (userId == null)
+                return BadRequest();
+            object rs = null;
+            rs = _userService.GetExistedUserById(userId);
+            return Ok(new ApiResponse(rs));
+        }
+
+        [HttpGet("permissions/{userId}")]
+        public ActionResult GetUserPermission(string userId)
+        {
+            if (userId == null)
+                return BadRequest();
+            object rs = null;
+            rs = _userService.GetUserPermissions(userId);
             return Ok(new ApiResponse(rs));
         }
     }

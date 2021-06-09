@@ -1,4 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -55,12 +57,49 @@ namespace WSCore.Services.UserService
                 {
                     UserId = userEntity.Id,
                     CreatedUserId = "469cf3e1",
-                    LastSavedUserId = "469cf3e1"
+                    LastSavedUserId = "469cf3e1",
+                    RoleId = "469cf3e1",
+                    RoleType = "Member"
                 };
 
-                await _uow.GetRepository<User>().AddAsync(userEntity);
-                await _uow.GetRepository<UserSecret>().AddAsync(userSecret);
-                await _uow.GetRepository<UserProfile>().AddAsync(userProfile);
+
+                List<Role> roles = new List<Role>();
+                roles.Add(new Role { Title = "Member", Alias = "Member", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                roles.Add(new Role { Title = "Agency", Alias = "Agency", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                roles.Add(new Role { Title = "Editor", Alias = "Editor", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                roles.Add(new Role { Title = "Admin", Alias = "Admin", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                roles.Add(new Role { Title = "SuperAdmin", Alias = "SuperAdmin", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+
+                List<Package> packages = new List<Package>();
+                packages.Add(new Package { Title = "Bronze", Alias = "Bronze", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                packages.Add(new Package { Title = "Silver", Alias = "Silver", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                packages.Add(new Package { Title = "Gold", Alias = "Gold", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                packages.Add(new Package { Title = "Diamon", Alias = "Diamon", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+
+                List<Module> modules = new List<Module>();
+                modules.Add(new Module { Title = "User", Alias = "User", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                modules.Add(new Module { Title = "Media", Alias = "Media", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                modules.Add(new Module { Title = "Tag", Alias = "Tag", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                modules.Add(new Module { Title = "Post", Alias = "Post", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                modules.Add(new Module { Title = "Category", Alias = "Category", CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+
+                List<PackageModule> packageModules = new List<PackageModule>();
+                packageModules.Add(new PackageModule { ModuleId = "28676658", PackageId = "394d0c28", Limit = 10, CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                packageModules.Add(new PackageModule { ModuleId = "73d337a4", PackageId = "394d0c28", Limit = 10, CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                packageModules.Add(new PackageModule { ModuleId = "7d435e92", PackageId = "394d0c28", Limit = 10, CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+                packageModules.Add(new PackageModule { ModuleId = "c0ce2d3a", PackageId = "394d0c28", Limit = 10, CreatedUserId = "469cf3e1", LastSavedUserId = "469cf3e1" });
+
+
+                //await _uow.GetRepository<Role>().AddRangeAsync(roles);
+                //await _uow.GetRepository<Package>().AddRangeAsync(packages);
+                //await _uow.GetRepository<Module>().AddRangeAsync(modules);
+                //await _uow.GetRepository<PackageModule>().AddRangeAsync(packageModules);
+
+                // GetPermissions("469cf3e1");
+
+                //await _uow.GetRepository<User>().AddAsync(userEntity);
+                //await _uow.GetRepository<UserSecret>().AddAsync(userSecret);
+                //await _uow.GetRepository<UserProfile>().AddAsync(userProfile);
 
                 _uow.SaveChanges();
             }
@@ -70,6 +109,77 @@ namespace WSCore.Services.UserService
             }
         }
 
+        #region Update
+        public async Task UpdateAsync(EditUserDto editUserDto)
+        {
+            if (editUserDto == null)
+                throw new ArgumentNullException("Null");
+
+            try
+            {
+                string modules = editUserDto.Modules;
+                List<JSDeserializeObject> objs = JsonConvert.DeserializeObject<List<JSDeserializeObject>>(editUserDto.Modules);
+
+                // userModuleActs
+                List<UserModuleAct> userModuleActs = UserModuleActs(GetUserId());
+
+                List<UserModuleAct> lsNew = new List<UserModuleAct>();
+                List<UserModuleAct> lsUpdate = new List<UserModuleAct>();
+                List<UserModuleAct> lsDel = new List<UserModuleAct>();
+
+                if (objs != null)
+                {
+                    foreach (JSDeserializeObject obj in objs)
+                    {
+                        UserModuleAct userModuleAct1 = userModuleActs.Find(s => s.ModuleId == obj.ModuleId && s.PackageId == obj.PackageId);
+                        if(userModuleAct1 == null)
+                        {
+                            UserModuleAct userModuleAct = new UserModuleAct
+                            {
+                                UserId = GetUserId(),
+                                ModuleId = obj.ModuleId,
+                                PackageId = obj.PackageId,
+                                MemberRole = "Client",
+                                Limit = obj.Limit,
+                                Acts = obj.Acts,
+                                CreatedUserId = GetUserId(),
+                                LastSavedUserId = GetUserId()
+                            };
+                            lsNew.Add(userModuleAct);
+                        }
+                        else
+                        {
+                            userModuleAct1.UserId = GetUserId();
+                            userModuleAct1.Limit = obj.Limit;
+                            userModuleAct1.Acts = obj.Acts;
+                            userModuleAct1.LastSavedUserId = GetUserId();
+                            userModuleAct1.LastSavedTime = DateTime.UtcNow;
+                            lsUpdate.Add(userModuleAct1);
+                        }
+                    }
+                }
+
+                foreach(UserModuleAct userModuleAct1 in userModuleActs)
+                {
+                    var rs = objs.Find(s => s.ModuleId == userModuleAct1.ModuleId && s.PackageId == userModuleAct1.PackageId);
+                    if (rs == null)
+                    {  
+                        lsDel.Add(userModuleAct1);
+                    }
+                }
+
+                _uow.GetRepository<UserModuleAct>().UpdateRange(lsUpdate);
+                _uow.GetRepository<UserModuleAct>().AddRange(lsNew);
+                _uow.GetRepository<UserModuleAct>().DeleteRange(lsDel);
+                _uow.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion Update
 
         #region Get
         /// <summary>
@@ -100,8 +210,90 @@ namespace WSCore.Services.UserService
                 throw ex;
             }
         }
+
+        public ExistedUserPermissionVM GetExistedUserById(string userId)
+        {
+            try
+            {
+                var x = (from u in _uow.GetRepository<User>().GetEntities(x => x.Id == userId && x.IsActive == true).Select(s => new { s.Id, s.Email, s.Phone })
+                         join
+                            us in _uow.GetRepository<UserProfile>().GetEntities().Select(s => new { s.RoleId, s.PackageId, s.UserId }) on u.Id equals us.UserId
+                         where u.Id == userId
+                         select new ExistedUserPermissionVM
+                         {
+                             Phone = u.Phone,
+                             Email = u.Email,
+                             UserId = us.UserId,
+                             RoleId = us.RoleId,
+                             PackageId = us.PackageId
+                         }
+                     ).FirstOrDefault();
+
+                return x;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private List<ModulesWithPackageIdVM> GetModulesWithPackageId(string packageId)
+        {
+            try
+            {
+                var x = (from u in _uow.GetRepository<PackageModule>()
+                         .GetEntities(x => x.PackageId == packageId && x.IsActive == true)
+                         .Select(s => new { s.Id, s.PackageId, s.ModuleId })
+                         join
+                            us in _uow.GetRepository<Module>()
+                            .GetEntities()
+                            .Select(s => new { s.Title, s.Alias, s.Id }) on u.ModuleId equals us.Id
+                         where u.PackageId == packageId
+                         select new ModulesWithPackageIdVM
+                         {
+                             PackageModuleId = u.Id,
+                             ModuleId = u.ModuleId,
+                             PackageId = u.PackageId,
+                             ModuleTitle = us.Title,
+                             ModuleAlias = us.Alias
+                         }
+                     ).ToList();
+
+                return x;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion Get
 
+        public ClientActVM GetUserPermissions(string userId)
+        {
+            ExistedUserPermissionVM existedUserPermissionVM = GetExistedUserById(userId);
+
+            List<ModulesWithPackageIdVM> modulesWithPackageIds = new List<ModulesWithPackageIdVM>();
+
+            if (existedUserPermissionVM != null)
+            {
+                modulesWithPackageIds = GetModulesWithPackageId(existedUserPermissionVM.PackageId);
+            }
+
+            // clientAdminModuleActs
+            List<UserModuleAct> userModuleActs = UserModuleActs(GetUserId());
+            
+
+            // ClientActVM
+            string[] otherAdminActs = {}; // List module will effect acts
+            ClientActVM clientAct = new ClientActVM
+            {
+                PackageModules = modulesWithPackageIds,
+                ClientTypeRole = existedUserPermissionVM.PackageId,
+                UserModuleActs = userModuleActs,
+                ClientOtherActs = otherAdminActs
+            };
+            return clientAct;
+        }
 
         /// <summary>
         /// Login
@@ -179,6 +371,29 @@ namespace WSCore.Services.UserService
             }
         }
 
+        private List<UserModuleAct> UserModuleActs(string userId)
+        {
+            try
+            {
+                List<UserModuleAct> userModuleActs = _uow.GetRepository<UserModuleAct>()
+                         .GetEntities(x => x.UserId == userId && x.IsActive == true).ToList();
+
+                return userModuleActs;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+
+
+    public class ClientActVM
+    {
+        public List<ModulesWithPackageIdVM> PackageModules { get; set; }
+        public string ClientTypeRole { get; set; } // clien/admin-client
+        public List<UserModuleAct> UserModuleActs { get; set; }
+        public string[] ClientOtherActs { get; set; }
     }
 
     public class UserLoggedInVM
@@ -199,5 +414,25 @@ namespace WSCore.Services.UserService
         public string LoginName { get; set; }
         public string UserId { get; set; }
         public string Token { get; set; }
+    }
+
+    public class ExistedUserPermissionVM
+    {
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string UserId { get; set; }
+        public string RoleId { get; set; }
+        public string PackageId { get; set; }
+    }
+
+    public class ModulesWithPackageIdVM
+    {
+        public string PackageModuleId { get; set; }
+
+        public string ModuleTitle { get; set; }
+        public string ModuleAlias { get; set; }
+        public string ModuleId { get; set; }
+
+        public string PackageId { get; set; }
     }
 }

@@ -45,6 +45,11 @@ namespace WSCore.Infrastructure.Repository
         {
             DbSet.Update(entity);
         }
+
+        public void UpdateRange(List<T> entities)
+        {
+            DbSet.UpdateRange(entities);
+        }
         #endregion Update
 
         #region Get

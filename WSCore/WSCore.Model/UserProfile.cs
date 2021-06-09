@@ -15,8 +15,13 @@ namespace WSCore.Model
         public string Descriptions { set; get; }
         public string Avatar { set; get; }
         public string Banner { set; get; }
-
         [Required]
         public string UserId { set; get; }
+        [Required]
+        public string RoleId { set; get; }
+        [Required]
+        public string RoleType { set; get; }
+        public string PackageId { set; get; }
+        public string GroupId { set; get; }
     }
 }

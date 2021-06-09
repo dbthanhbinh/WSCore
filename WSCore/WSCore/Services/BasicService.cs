@@ -13,21 +13,26 @@ namespace WSCore.Services
 {
     public class BasicService<T> where T : class
     {
+        public readonly string userId = "469cf3e1";
         public readonly IUnitOfWork _uow;
 
         public BasicService(IUnitOfWork uow)
         {
             _uow = uow;
+
+            GetPermissions(userId);
         }
 
         public BasicService(IUnitOfWork uow, IObjectTagService objectTagService)
         {
             _uow = uow;
+
+            GetPermissions(userId);
         }
 
         protected string GetUserId()
         {
-            return "469cf3e1";
+            return userId;
         }
 
         protected bool GetPermissions(string userId)
