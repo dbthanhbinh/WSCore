@@ -14,7 +14,7 @@ namespace WSCore.Model
         public string ObjName { set; get; } // Category||Post
 
         [Required]
-        public string ObjType { set; get; } // category||post||article
+        public string ObjType { set; get; } // category||post||article|news
 
         [Required]
         public string TagId { set; get; }

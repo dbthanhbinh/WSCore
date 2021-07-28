@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace WSCore.Upload
+namespace WSCore.Services.UploadService
 {
     public class Commons
     {

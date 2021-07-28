@@ -16,7 +16,7 @@ namespace WSCore.Controllers.V1
         }
 
         #region Create
-        [HttpPost("create", Name = "CreateTagLogic")]
+        [HttpPost("tags")]
         public async Task<ActionResult> CreateTagLogic([FromBody] TagDto tagDto)
         {
             if (tagDto == null)
@@ -51,6 +51,13 @@ namespace WSCore.Controllers.V1
         #endregion Delete
 
         #region Get
+        [HttpGet("tags")]
+        public async Task<ActionResult> GetListTags()
+        {
+            var rs = await _tagService.GetListTagsAsync();
+            return Ok(new ApiResponse(rs));
+        }
+
         [HttpGet("getTagByAlias/{alias}", Name = "GetTagByAlias")]
         public ActionResult GetTagByAlias(string alias)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using WSCore.Common;
@@ -110,6 +111,22 @@ namespace WSCore.Services.TagService
         #endregion Update
 
         #region Get
+
+        public async Task<List<Tag>> GetListTagsAsync()
+        {
+            try
+            {
+                List<Tag> tags = new List<Tag>();
+                var dbContext = _uow.GetRepository<Tag>();
+                var rs = await dbContext.GetByAsync(q => q.IsActive == true);
+                return tags = rs?.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<Tag> GetTagByIdAsync(string id)
         {
             try

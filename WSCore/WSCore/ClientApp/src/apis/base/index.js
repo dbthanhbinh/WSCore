@@ -5,7 +5,8 @@ const apiResources = `http://localhost:5000/${apiName}`
 const methods = {
     GET: 'GET',
     POST: 'POST',
-    PUT: 'PUT'
+    PUT: 'PUT',
+    DELETE: 'DELETE'
 }
 
 class BaseAPI {
@@ -111,27 +112,7 @@ class BaseAPI {
     }
 
     // --------------------
-    postForm(payload, cb){
-        const {url, body} = this.getApiResourcesFromPayload(payload, true)
-        let formData = new FormData()
-        formData = this.appendFormData(body)
-        let options = this._conf
-            options.method = methods.POST
-            options.body = formData
-        return fetch(url, options, cb)
-    }
-
-    putForm(payload, cb){
-        const {url, body} = this.getApiResourcesFromPayload(payload, true)
-        let formData = new FormData()
-        formData = this.appendFormData(body)
-
-        let options = this._conf
-            options.method = methods.PUT
-            options.body = formData
-        return fetch(url, options, cb)
-    }
-
+    
     postNoneToken(payload, cb){
         const {url, body} = this.getApiResourcesFromPayload(payload)
         let options = this._conf
@@ -139,32 +120,6 @@ class BaseAPI {
             options.body = body
         this._fetch(url, options, cb)
     }
-
-
-
-    // async _fetch(url, options, cb){
-    //     if(url){
-    //         fetch(url, null)
-    //         .then(response => {
-    //             return this.handleResponse(response, cb)                
-    //         }).then(json => {
-    //             // return this.handleThenResponse(json, cb)
-    //             return json
-    //         }).catch(error => {
-    //             return this.handleErrorCatched(error, cb)
-    //         })
-    //     } else {
-    //         return this.handleErrorApiResourcesIsNull(cb)
-    //     } 
-    // }
-
-
-
-
-
-
-
-
 
     /**
      * 
@@ -183,23 +138,33 @@ class BaseAPI {
         return apiResources
     }
 
-    async _fetch2(url, options = null){
+    async _fetch2(url, options = null, cb){
         if(!url) return
-
         try {
+            let result = null
             let response = await fetch(url, options)
-            return await response.json()
-
+            if(response.ok && response.status === 200){
+                result =  await response.json()
+                return { error: null, result: result?.result }
+            } else {
+                result =  response
+                return { error: result.statusText.toString(), result: null}
+            }
         } catch (error) {
-            console.log('Fetch error: ', error);
+            console.log('Error: ', error);
+            if(cb && typeof cb === 'function')
+                    return cb(error, null)
+            else
+                return error
         }
     }
 
-    async getFrom(payload) {
+    async getFrom(payload, cb) {
         const {url} = this.getApiResourcesFromPayload(payload)
         let options = this._conf
+        options.method = methods.GET
             delete options['body']
-        return await this._fetch2(url, options)
+        return await this._fetch2(url, options, cb)
     }
 
     // Update Api
@@ -210,6 +175,54 @@ class BaseAPI {
             options.body = body
         return await this._fetch2(url, options)
     }
-}
 
+    async putForm(payload){
+        const {url, body} = this.getApiResourcesFromPayload(payload, true)
+        let formData = new FormData()
+        formData = this.appendFormData(body)
+        let options = this._conf
+            options.method = methods.PUT
+            options.body = formData
+            options.headers = new Headers({
+                // "Content-Type": "multipart/form-data",
+                // "Authorization": this.bearerToken
+            })
+
+        return await this._fetch2(url, options)
+    }
+
+    // Create Api
+    async postForm(payload){
+        const {url, body} = this.getApiResourcesFromPayload(payload, true)
+        let formData = new FormData()
+        formData = this.appendFormData(body)
+        let options = this._conf
+            options.method = methods.POST
+            options.body = formData
+            options.headers = new Headers({
+                // "Content-Type": "multipart/form-data",
+                // "Authorization": this.bearerToken
+            })
+
+        return await this._fetch2(url, options)
+    }
+
+    // Post body
+    async postTo(payload){
+        const {url, body} = this.getApiResourcesFromPayload(payload, true)
+        let options = this._conf
+            options.method = methods.POST
+            options.body = JSON.stringify(body)
+        return await this._fetch2(url, options)
+    }
+
+    // Delete
+    async delTo(payload, cb){
+        const {url} = this.getApiResourcesFromPayload(payload)
+        let options = this._conf
+            options.method = methods.DELETE
+            delete options['body']
+        return await this._fetch2(url, options)
+    }
+}
 export default BaseAPI

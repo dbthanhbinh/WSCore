@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,6 +25,8 @@ namespace WSCore.Models.Dto
 
         [StringLength(50)]
         public string Type { set; get; }
+
+        public virtual IFormFile File { get; set; }
 
         [StringLength(300)]
         public string SeoTitle { get; set; }

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WSCore.Model;
 
 namespace WSCore.Models.VM
 {
     public class CategoryVM
     {
+        public string Id { set; get; }
         public string Title { set; get; }
         public string Alias { set; get; }
         public string Excerpt { set; get; }
@@ -20,6 +22,6 @@ namespace WSCore.Models.VM
 
     public class CategoryLogicVM
     {
-        public CategoryVM categoryVM { get; set; }
+        public Category category { get; set; }
     }
 }

@@ -81,15 +81,16 @@ class ListModule extends Component {
         let _acts = itemAct?.acts
         let acts = userActions && userActions.map((item, idx) => {
             let isChecked = (_acts && _acts.length > 0 && _acts.includes(item.key)) ? true : false
-            return <Checkbox
-                disabled={itemAct.actsReadonly}
-                key={idx.toString()}
-                label={item.label}
-                value={item.key}
-                checked={isChecked}
-                onChange={this.handleCheckboxClicked}
-                refdata={refdata}
-            />
+            return <li key={idx.toString()}>
+                <Checkbox
+                    disabled={itemAct.actsReadonly}
+                    label={item.label}
+                    value={item.key}
+                    checked={isChecked}
+                    onChange={this.handleCheckboxClicked}
+                    refdata={refdata}
+                />
+            </li>
         })
 
         return acts
@@ -113,7 +114,9 @@ class ListModule extends Component {
                         onChange={this.handleCheckboxClicked}
                         refdata={refdata}
                     />
-                    {acts}
+                    <ul>
+                        {acts}
+                    </ul>
                 </div>
         })
     }
@@ -140,12 +143,12 @@ class ListModule extends Component {
             })
         })
 
-        this.setState({ListModules})
+        this.setState({ListModules}, () => {
+            this.props.handleOnChange(ListModules)
+        })
     }
 
     render(){
-        console.log('======', this.state.ListModules)
-
         return(
             <div>
                 {this.checkBoxItems(this.props.items)}

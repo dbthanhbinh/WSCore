@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSCore.Common", "WSCore.Com
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSCore.SimCard", "WSCore.SimCard\WSCore.SimCard.csproj", "{E06F8120-9817-432F-AA6D-CE0B4BBEB9B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSCore.Upload", "WSCore.Upload\WSCore.Upload.csproj", "{24EA96A9-A222-4065-B3F6-208002A23402}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,12 +50,6 @@ Global
 		{E06F8120-9817-432F-AA6D-CE0B4BBEB9B8}.Local|Any CPU.Build.0 = Debug|Any CPU
 		{E06F8120-9817-432F-AA6D-CE0B4BBEB9B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E06F8120-9817-432F-AA6D-CE0B4BBEB9B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{24EA96A9-A222-4065-B3F6-208002A23402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24EA96A9-A222-4065-B3F6-208002A23402}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24EA96A9-A222-4065-B3F6-208002A23402}.Local|Any CPU.ActiveCfg = Debug|Any CPU
-		{24EA96A9-A222-4065-B3F6-208002A23402}.Local|Any CPU.Build.0 = Debug|Any CPU
-		{24EA96A9-A222-4065-B3F6-208002A23402}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24EA96A9-A222-4065-B3F6-208002A23402}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WSCore.Common.Business;
 using WSCore.Model;
 using WSCore.Models.Dto;
@@ -17,6 +18,7 @@ namespace WSCore.Services.TagService
         #endregion Update
 
         #region Get
+        Task<List<Tag>> GetListTagsAsync();
         string GetTagStartsWithAliasAsync(string alias);
         Task<Tag> GetTagByIdAsync(string id);
         #endregion Get

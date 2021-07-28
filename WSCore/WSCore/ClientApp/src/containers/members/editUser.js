@@ -21,6 +21,7 @@ class EditUser extends Component{
     constructor(props){
         super(props)
         this.state = {
+            isLoading: false,
             userModules: [],
             model: this.props?.model
         }
@@ -87,7 +88,7 @@ class EditUser extends Component{
                             />
                         }
                     </Form.Field>
-                    <Button onClick={this.handleSubmitData} type='submit'>Submit</Button>
+                    <Button onClick={this.handleSubmitData} loading type='submit'>Submit</Button>
                 </Form>
             </Fragment>
         )

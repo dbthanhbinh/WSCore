@@ -53,9 +53,10 @@ export const textLength = {
 }
 
 export const validMsg = {
-    field_not_allowed_empty: 'không được trống!',
-    field_not_allowed_min: '%s không được nhỏ hơn %s',
-    field_not_allowed_max: '%s không được lớn hơn %s'
+    field_not_allowed_empty: '%s không được trống!',
+    field_not_allowed_min: '%s không nhỏ hơn %d ký tự',
+    field_not_allowed_max: '%s không lớn hơn %d ký tự',
+    field_not_allowed_special: '%s không cho phép ký tự đặc biệt'
 }
 
 export const controlled = {
@@ -81,3 +82,7 @@ export const storedName = {
     categoryStored: 'categoryStored',
     articleStored: 'articleStored'
 }
+
+// regex special characters escape 
+export const regexEscape  = /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/g
+export const notAllowSpecial= /[`~,.<>;':"\/\[\]\|{}()]/g;

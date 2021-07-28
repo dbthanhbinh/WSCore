@@ -214,21 +214,24 @@ namespace WSCore.Services.ObjectTagService
                 }
 
                 // Find tags need to Added new
-                foreach (var tagid in tagIds)
+                if (tagIds != null)
                 {
-                    var fn = objectTags.Result.Find(f => f.Id == tagid);
-                    if (fn == null)
+                    foreach (var tagid in tagIds)
                     {
-                        ObjectTag objectTag2 = new ObjectTag
+                        var fn = objectTags.Result.Find(f => f.Id == tagid);
+                        if (fn == null)
                         {
-                            ObjId = objectId,
-                            ObjName = objectName,
-                            ObjType = objectType,
-                            TagId = tagid
-                        };
+                            ObjectTag objectTag2 = new ObjectTag
+                            {
+                                ObjId = objectId,
+                                ObjName = objectName,
+                                ObjType = objectType,
+                                TagId = tagid
+                            };
 
-                        objectTagsAdded.Add(objectTag2);
-                    }   
+                            objectTagsAdded.Add(objectTag2);
+                        }
+                    }
                 }
             }
             catch (Exception ex)

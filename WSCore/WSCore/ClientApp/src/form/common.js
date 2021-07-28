@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import { textLength, validMsg } from '../data/enums'
+import { sprintf } from 'sprintf-js'
+import { textLength, validMsg, notAllowSpecial } from '../data/enums'
 
 export function getUploadFolder() {
     return '/Uploads/'
@@ -16,27 +17,30 @@ export function getInputData(e, data){
     return { name, value }
 }
 
-export function initModel(rawModel){
+export function initModel(rawModel, isInitModel){
     let model = rawModel ? rawModel : {}
     if(model){
         Object.keys(model).forEach((key) => {
-            model[key].isValid = true
-            model[key].message = null
             model[key] = initRequired(model[key])
+            model[key] = validatorField(model[key], key)
+            model[key].isInitModel = isInitModel
         })
     }
-    return { model, isFormValid: true }
+    let _valid = _.some(model, { 'isValid': false });
+    return { model, isFormValid: !_valid }
 }
 
-// export function setFieldValue(name, value, obj){
-//     if(obj) {
-//         obj.model[name].value = value
-//         obj.model[name] = validatorField(obj.model[name], name)
-
-//         let _valid = _.some(obj.model, { 'isValid': false });
-//         return { model: obj.model, isFormValid: !_valid }
-//     }
-// }
+export function reInitModel(rawModel, isInitModel){
+    let model = rawModel ? rawModel : {}
+    if(model){
+        Object.keys(model).forEach((key) => {
+            model[key] = validatorField(model[key], key)
+            model[key].isInitModel = isInitModel
+        })
+    }
+    let _valid = _.some(model, { 'isValid': false });
+    return { model, isFormValid: !_valid }
+}
 
 export function setFieldValue(name, value, model){
     if(model && model[name]) {
@@ -54,19 +58,52 @@ export function validatorField(fieldModel){
     if(fieldModel){
         if(fieldModel.validators && fieldModel.validators.length > 0){
             fieldModel.validators.forEach((item) => {
+                let flag = false
                 if(item.required){
                     fieldModel.required = isRequired(item.required)
-                    let { isValid, message } = checkValidEmptyText(fieldModel.value)
-                    fieldModel.isValid = isValid
-                    fieldModel.message = message                    
-                }
-
-                if(item.isCheckLenString){
-                    let { isValid, message } = checkValidLengthText(fieldModel.value, null, null)
+                    let { isValid, message } = checkValidEmptyText(fieldModel.value, fieldModel.label)
                     fieldModel.isValid = isValid
                     fieldModel.message = message
+                    fieldModel.isInitModel = false
+                    if(message)
+                        flag = true
                 }
+                if(flag) return fieldModel
+
+                if(item.isCheckLenString){
+                    let { isValid, message } = checkValidLengthText(fieldModel.value, fieldModel.minLength || null, fieldModel.maxLength || null, fieldModel.label)
+                    fieldModel.isValid = isValid
+                    fieldModel.message = message
+                    fieldModel.isInitModel = false
+                    if(message)
+                        flag = true
+                }
+                if(flag) return fieldModel
+
+                if(item.isCheckMaxString){
+                    let { isValid, message } = checkValidMaxLengthText(fieldModel.value, fieldModel.maxLength || null, fieldModel.label)
+                    fieldModel.isValid = isValid
+                    fieldModel.message = message
+                    fieldModel.isInitModel = false
+                    if(message)
+                        flag = true
+                }
+                if(flag) return fieldModel
+
+                if(item.isCheckAllowSpecial){
+                    let { isValid, message } = checkValidAllowSpecialText(fieldModel.value, notAllowSpecial, fieldModel.label)
+                    fieldModel.isValid = isValid
+                    fieldModel.message = message
+                    fieldModel.isInitModel = false
+                    if(message)
+                        flag = true
+                }
+                if(flag) return fieldModel
             })
+        } else {
+            fieldModel.isInitModel = false
+            fieldModel.isValid = true
+            fieldModel.message = null
         }
     }
     return fieldModel
@@ -79,6 +116,7 @@ export function initRequired(fieldModel){
             fieldModel.validators.forEach((item) => {
                 if(item.required){
                     fieldModel.required = isRequired(item.required)
+                    
                 }
             })
         }
@@ -104,36 +142,37 @@ function isRequired(required) {
 }
 
 // Check string is not empty and have minLength & maxLength default
-function checkValidEmptyText(str) {
+function checkValidEmptyText(str, name = null) {
     if(!(typeof str === "string" && str.length > 0)) {
-        return { isValid: false, message: validMsg.field_not_allowed_empty }
-    }
-    let minLength = textLength.textMin
-    let maxLength = textLength.maxLength
+        return { isValid: false, message: sprintf(validMsg.field_not_allowed_empty, name) }
+    }    
+    return { isValid: true, message: null }
+}
+
+function checkValidLengthText(str, minLength, maxLength, name = null) {
+    if(!minLength) minLength = textLength.textMin
+    if(!maxLength) maxLength = textLength.textMax
 
     if(str.length < minLength) {
-        return { isValid: false, message: validMsg.field_not_allowed_min }
+        return { isValid: false, message: sprintf(validMsg.field_not_allowed_min, name, minLength) }
     } else if(str.length > maxLength) {
-        return { isValid: false, message: validMsg.field_not_allowed_max }
+        return { isValid: false, message: sprintf(validMsg.field_not_allowed_max, name, maxLength) }
     }
     return { isValid: true, message: null }
 }
 
-function checkValidLengthText(str, minLength, maxLength) {
-    if(!(typeof str === "string" && str.length > 0)) {
-        return { isValid: false, message: validMsg.field_not_allowed_empty }
-    }
-    if(!minLength || !maxLength)
-    {
-        minLength = textLength.textMin
-        maxLength = textLength.maxLength
-    }
+function checkValidAllowSpecialText(str, allowPattern, name = 'Title') {
+    if(str.length > 0 && allowPattern.test(str)) {
+        return { isValid: false, message: sprintf(validMsg.field_not_allowed_special, name) }
+    } else return { isValid: true, message: null }
+}
 
-    if(str.length < minLength) {
-        return { isValid: false, message: validMsg.field_not_allowed_min }
-    } else if(str.length > maxLength) {
-        return { isValid: false, message: validMsg.field_not_allowed_max }
+function checkValidMaxLengthText(str, maxLength, name = null) {
+    if(!maxLength) maxLength = textLength.textMax
+    if(str.length > maxLength) {
+        return { isValid: false, message: sprintf(validMsg.field_not_allowed_max, name, maxLength) }
     }
+     
     return { isValid: true, message: null }
 }
 
@@ -167,7 +206,6 @@ export function buildDataOption(originalDataList=[]) {
 }
 
 // ------------------------------------------------------------------------------
-
 export function findChildIdsWithId(dataList, id, level=1){
     if(!dataList || !id || level < 1 || level > 3) return null
 
@@ -261,9 +299,7 @@ export function buildDataOptionNormal(originalDataList=[]) {
     return newOptionList
 }
 
-
 // For get Media
-
 export function buildThumbnailSrc(src) {
     if(!src) return null
     

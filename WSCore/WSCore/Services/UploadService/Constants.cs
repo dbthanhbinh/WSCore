@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WSCore.Upload
+namespace WSCore.Services.UploadService
 {
     public static class Constants
     {
@@ -21,7 +21,7 @@ namespace WSCore.Upload
         public const string ATTACHED_TYPE_THUMBNAIL = "thumbnail";
         public const long MAX_FILE_SIZE = 10485760;
         public const long MIN_FILE_SIZE = 0;
-        public const string UPLOADED = "frontend/public/Uploads";
+        public const string UPLOADED = "ClientApp/public/Uploads";
         public const string NOT_FOUND_FILE = "Please select file to upload.";
         public const string FILE_TYPE_NOt_ALLOW = "The file type is not allow.";
         public const string FILE_SIZE_TOO_BIG = "The file size is too big.";

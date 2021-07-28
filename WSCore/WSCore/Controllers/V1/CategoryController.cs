@@ -15,8 +15,22 @@ namespace WSCore.Controllers.V1
             _categoryService = categoryService;
         }
 
+        [HttpGet("categories")]
+        public async Task<ActionResult> GetCategories()
+        {
+            var rs = await _categoryService.GetListCategoriesAsync();
+            return Ok(new ApiResponse(rs));
+        }
+
+        [HttpGet("categories/{categoryId}")]
+        public async Task<ActionResult> GetCategoryById(string categoryId)
+        {
+            var rs = await _categoryService.GetCategoryByIdAsync(categoryId);
+            return Ok(new ApiResponse(rs));
+        }
+
         [HttpPost("categories")]
-        public async Task<ActionResult> CreateCategory([FromBody] CategoryLogicDto categoryDto)
+        public async Task<ActionResult> CreateCategory([FromForm] CategoryLogicDto categoryDto)
         {
             if (categoryDto == null)
                 return BadRequest();
@@ -28,17 +42,24 @@ namespace WSCore.Controllers.V1
             return Ok(new ApiResponse(rs));
         }
 
-        [HttpGet("categories", Name = "GetCategories")]
-        public ActionResult GetCategories()
+        [HttpPut("categories/{categoryId}")]
+        public async Task<ActionResult> UpdateCategory([FromForm] CategoryLogicDto categoryDto, string categoryId)
         {
-
-            return Ok();
+            if (categoryDto == null)
+                return BadRequest();
+            object rs = null;
+            if (ModelState.IsValid)
+            {
+                rs = await _categoryService.UpdateCategoryLogicAsync(categoryId, categoryDto);
+            }
+            return Ok(new ApiResponse(rs));
         }
 
-        [HttpGet("categories/{id}")]
-        public ActionResult GetCategoryById()
+        [HttpDelete("categories/{categoryId}")]
+        public ActionResult DeleteCategoryById(string categoryId)
         {
-            return Ok();
+            var rs = _categoryService.DeleteCategoryAsync(categoryId);
+            return Ok(new ApiResponse(rs));
         }
     }
 }

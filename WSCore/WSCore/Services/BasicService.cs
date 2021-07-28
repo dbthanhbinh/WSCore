@@ -8,12 +8,20 @@ using WSCore.Common;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Models.VM;
 using WSCore.Services.ObjectTagService;
+using WSCore.Services.UserService;
+using WSCore.Services.UploadService;
+using WSCore.Services.MediaService;
 
 namespace WSCore.Services
 {
     public class BasicService<T> where T : class
     {
         public readonly string userId = "469cf3e1";
+        protected string controllerObj = "";
+        protected readonly string attachedThumb = "thumbnail";
+        protected readonly string attachedAttachment = "attachment";
+        protected readonly string attachedPhotos = "photos";
+
         public readonly IUnitOfWork _uow;
 
         public BasicService(IUnitOfWork uow)
@@ -23,7 +31,35 @@ namespace WSCore.Services
             GetPermissions(userId);
         }
 
+        public BasicService(IUnitOfWork uow, IUserService userService)
+        {
+            _uow = uow;
+
+            GetPermissions(userId);
+        }
+
+        public BasicService(IUnitOfWork uow, IUploadService uploadService)
+        {
+            _uow = uow;
+
+            GetPermissions(userId);
+        }
+
         public BasicService(IUnitOfWork uow, IObjectTagService objectTagService)
+        {
+            _uow = uow;
+
+            GetPermissions(userId);
+        }
+
+        public BasicService(IUnitOfWork uow, IUserService userService, IObjectTagService objectTagService)
+        {
+            _uow = uow;
+
+            GetPermissions(userId);
+        }
+
+        public BasicService(IUnitOfWork uow, IUserService userService, IObjectTagService objectTagService, IMediaService mediaService)
         {
             _uow = uow;
 

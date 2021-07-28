@@ -58,6 +58,11 @@ namespace WSCore.Infrastructure.Repository
             return await DbSet.FindAsync(id);
         }
 
+        public T GetById(string id)
+        {
+            return DbSet.Find(id);
+        }
+
         public IQueryable<T> GetEntities(Expression<Func<T, bool>> condition = null,
         Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
         string includeProperties = "")

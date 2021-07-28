@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WSCore.Model;
 using WSCore.Models.Dto;
 using WSCore.Models.VM;
@@ -22,11 +23,12 @@ namespace WSCore.Services.CategoryService
         #endregion Update
 
         #region Get
-
+        Task<List<Category>> GetListCategoriesAsync();
+        Task<Category> GetCategoryByIdAsync(string id);
         #endregion Get
 
         #region Delete
-        Task DeleteCategoryAsync(string id);
+        Category DeleteCategoryAsync(string id);
         #endregion Delete
     }
 }

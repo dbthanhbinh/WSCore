@@ -22,6 +22,7 @@ namespace WSCore.Infrastructure.Repository
 
         #region Get
         Task<T> GetByIdAsync(string id);
+        T GetById(string id);
 
         IQueryable<T> GetEntities(Expression<Func<T, bool>> condition = null,
         Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,

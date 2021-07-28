@@ -1,8 +1,8 @@
 import {createAction, createAsyncThunk} from '@reduxjs/toolkit'
 import {User} from '../../apis'
 
-export const setCurrentUser = createAction('article/setCurrentUser')
-export const setCurrentUsers = createAction('article/setCurrentUsers')
+export const setCurrentUser = createAction('user/setCurrentUser')
+export const setCurrentUsers = createAction('user/setCurrentUsers')
 export const setUserPermission = createAction('user/setUserPermission')
 
 const preFixAction = 'user'
