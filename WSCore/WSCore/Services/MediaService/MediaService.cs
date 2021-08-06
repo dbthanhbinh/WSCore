@@ -46,17 +46,22 @@ namespace WSCore.Services.MediaService
         /// <param name="objectType">Like: category, post, article</param>
         /// <param name="attachedType">Like: thumbnail, attachment, photos</param>
         /// <returns></returns>
-        public async Task<Media> CreateSingleMediaAsync(IFormFile file, string objectId, string objectType, string attachedType, bool isSaveChange = false)
+        public async Task<Media> CreateOrUpdateSingleMediaAsync(
+            IFormFile file,
+            string objectId,
+            string objectType,
+            string attachedType,
+            string mediaId = null,
+            bool isSaveChange = false,
+            bool isUpdate = false
+        )
         {
             try
             {
-                UploadedFull uploadedFull = Upload(file, objectType, attachedType);
-
-                Uploaded uploaded = new Uploaded();
-                uploaded = uploadedFull.Uploaded;
+                Uploaded uploaded = Upload(file, objectType, attachedType);
 
                 // Upload media success!
-                string fileId = uploaded?.Id;
+                string fileId = uploaded?.FiledId;
                 string fileName = uploaded?.FileName;
                 string path = uploaded?.OriginalPath; // Original media path
                 string small = uploaded?.SmallPath; // Small media path
@@ -64,23 +69,51 @@ namespace WSCore.Services.MediaService
                 string large = uploaded.LargePath; // Large media path
                 string mediaType = uploaded.ContentType;
 
-                Media entity = new Media {
-                    FileId = fileId,
-                    Title = fileName,
-                    Alt = fileName,
-                    Caption = fileName,
-                    Path = path, // Original media path
-                    ObjectId = objectId, // categoryId or postId
-                    ObjectType = objectType, // category or post
-                    Small = small, // Small media path
-                    Medium = medium, // Medium media path
-                    Large = large, // Large media path
-                    MediaType = mediaType,
-                    AttachedType = attachedType,
-                    CreatedUserId = GetUserId(),
-                    LastSavedUserId = GetUserId()
-                };
-                await CreateMediaAsync(entity, false);
+                Media entity = new Media();
+
+                if (isUpdate && !string.IsNullOrEmpty(mediaId) && !string.IsNullOrWhiteSpace(mediaId))
+                {
+                    entity = await GetMediaIdAsync(mediaId);
+                    if (entity != null)
+                    {
+                        entity.FileId = fileId;
+                        entity.Title = uploaded?.SubName;
+                        entity.Alt = uploaded?.SubName;
+                        entity.Caption = uploaded?.SubName;
+                        entity.Path = path; // Original media path
+                        entity.Small = small; // Small media path
+                        entity.Medium = medium; // Medium media path
+                        entity.Large = large; // Large media path
+                        entity.MediaType = mediaType;
+                        entity.AttachedType = attachedType;
+                        entity.CreatedUserId = GetUserId();
+                        entity.LastSavedUserId = GetUserId();
+
+                        UpdateMediaAsync(entity, false);
+                    }
+                }
+                else
+                {
+                    // Add new Media
+                    entity = new Media
+                    {
+                        FileId = fileId,
+                        Title = uploaded?.SubName,
+                        Alt = uploaded?.SubName,
+                        Caption = uploaded?.SubName,
+                        Path = path, // Original media path
+                        ObjectId = objectId, // categoryId or postId
+                        ObjectType = objectType, // category or post
+                        Small = small, // Small media path
+                        Medium = medium, // Medium media path
+                        Large = large, // Large media path
+                        MediaType = mediaType,
+                        AttachedType = attachedType,
+                        CreatedUserId = GetUserId(),
+                        LastSavedUserId = GetUserId()
+                    };
+                    await CreateMediaAsync(entity, false);
+                }
 
                 if(isSaveChange)
                     _uow.SaveChanges();
@@ -94,13 +127,28 @@ namespace WSCore.Services.MediaService
         }
         #endregion Create
 
+        #region Get
+        protected async Task<Media> GetMediaIdAsync(string id)
+        {
+            try
+            {
+                var dbContext = _uow.GetRepository<Media>();
+                return await dbContext.GetByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion Get
+
         #region Update
         protected void UpdateMediaAsync(Media media, bool isSaveChange)
         {
             try
             {
                 var dbContext = _uow.GetRepository<Media>();
-                dbContext.AddAsync(media);
+                dbContext.UpdateAsync(media);
                 if (isSaveChange)
                     _uow.SaveChanges();
             }
@@ -112,11 +160,11 @@ namespace WSCore.Services.MediaService
         #endregion Update
 
         #region Upload media
-        protected UploadedFull Upload(IFormFile file, string subContainer, string attachedType)
+        protected Uploaded Upload(IFormFile file, string subContainer, string attachedType)
         {   
             try
             {
-                UploadedFull uploadedFull = new UploadedFull();
+                Uploaded uploadedFull = new Uploaded();
                 uploadedFull = _uploadService.Upload(file, subContainer, attachedType);
                 return uploadedFull;
             }

@@ -7,7 +7,7 @@ namespace WSCore.Services.UploadService
 {
     public interface IUploadService
     {
-        UploadedFull Upload(IFormFile file, string subContainer, string attachedType = Constants.ATTACHED_TYPE_THUMBNAIL);
+        Uploaded Upload(IFormFile file, string subContainer, string attachedType = Constants.ATTACHED_TYPE_THUMBNAIL);
         UploadedMultiple UploadMultiple(List<IFormFile> files, string subContainer);
     }
 }

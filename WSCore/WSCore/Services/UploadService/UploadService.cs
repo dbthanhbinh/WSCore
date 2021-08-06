@@ -29,7 +29,7 @@ namespace WSCore.Services.UploadService
             subPathFileUrl = year + "/" + month + "/" + day + "/";
         }
 
-        public UploadedFull Upload(IFormFile file, string subContainer, string attachedType = Constants.ATTACHED_TYPE_THUMBNAIL)
+        public Uploaded Upload(IFormFile file, string subContainer, string attachedType = Constants.ATTACHED_TYPE_THUMBNAIL)
         {
             try
             {
@@ -51,7 +51,6 @@ namespace WSCore.Services.UploadService
                 if (!common.CheckFileSize(file.Length))
                     throw new Exception(Constants.FILE_SIZE_TOO_BIG);
 
-                string subName = Path.GetFileNameWithoutExtension(file.FileName);
                 string fileName = common.CreateFileName(subPathDirectory, file.FileName);
                 //4 set the path where file will be copied
                 string filePath = Path.GetFullPath(Path.Combine(common.GetCurrentDirectoryForUpload(subPathDirectory)));
@@ -63,14 +62,10 @@ namespace WSCore.Services.UploadService
                 }
 
                 Uploaded uploaded = new Uploaded(file.ContentType, fileName, file.Length);
-                uploaded.OriginalPath = subPathFileUrl;
-
-                // This process Resize image
-                UploadedFull uploadedFull = new UploadedFull
-                {
-                    Uploaded = uploaded
-                };
-                
+                string subName = Path.GetFileNameWithoutExtension(file.FileName);
+                uploaded.OriginalPath = subPathFileUrl + fileName;
+                uploaded.SubName = subName;
+                               
                 // Insert Original file table
                 Files file1 = new Files
                 {
@@ -80,10 +75,10 @@ namespace WSCore.Services.UploadService
                     CreatedUserId = GetUserId(),
                     LastSavedUserId = GetUserId()
                 };
-                uploadedFull.Uploaded.Id = file1.Id;
                 _uow.GetRepository<Files>().AddAsync(file1);
                 _uow.SaveChanges();
 
+                uploaded.FiledId = file1.Id;
 
                 // Resize Image for other thumb
                 if (!string.IsNullOrEmpty(attachedType)
@@ -109,33 +104,26 @@ namespace WSCore.Services.UploadService
                         string filePathLarge = Path.GetFullPath(Path.Combine(common.GetCurrentDirectoryForUpload(resizeLargeFolder)));
                         imgLarge.SaveAs($"{filePathLarge}\\{fileName}");
                         string subFilePathLarge = subPathFileUrl + Constants.RESIZE_LAGRE_LABEL + "/" + fileName;
-                        Uploaded uploadedLarge = new Uploaded(file.ContentType, fileName, file.Length);
-                        uploadedLarge.LargePath = subFilePathLarge;
-                        uploadeds.Add(uploadedLarge);
+                        uploaded.LargePath = subFilePathLarge;
+
 
                         // For Medium
                         var imgMedium = ImageResize.Scale(uploadedImage, Constants.RESIZE_MEDIUM_WIDTH, Constants.RESIZE_MEDIUM_HEIGHT);
                         string filePathMedium = Path.GetFullPath(Path.Combine(common.GetCurrentDirectoryForUpload(resizeMediumFolder)));
                         imgMedium.SaveAs($"{filePathMedium}\\{fileName}");
                         string subFilePathMedium = subPathFileUrl + Constants.RESIZE_MEDIUM_LABEL + "/" + fileName;
-                        Uploaded uploadedMedium = new Uploaded(file.ContentType, fileName, file.Length);
-                        uploadedLarge.MediumPath = subFilePathMedium;
-                        uploadeds.Add(uploadedMedium);
+                        uploaded.MediumPath = subFilePathMedium;
 
                         // For Small
                         var imgSmall = ImageResize.Scale(uploadedImage, Constants.RESIZE_SMALL_WIDTH, Constants.RESIZE_SMALL_HEIGHT);
                         string filePathSmall = Path.GetFullPath(Path.Combine(common.GetCurrentDirectoryForUpload(resizeSmallFolder)));
                         imgSmall.SaveAs($"{filePathSmall}\\{fileName}");
                         string subFilePathSmall = subPathFileUrl + Constants.RESIZE_SMALL_LABEL + "/" + fileName;
-                        Uploaded uploadedSmall = new Uploaded(file.ContentType, fileName, file.Length);
-                        uploadedLarge.SmallPath = subFilePathSmall;
-                        uploadeds.Add(uploadedSmall);
-
-                        uploadedFull.ResizeUploaded = uploadeds;
+                        uploaded.SmallPath = subFilePathSmall;
                     }
                 }
 
-                return uploadedFull;
+                return uploaded;
             }
             catch (Exception ex)
             {
@@ -200,8 +188,10 @@ namespace WSCore.Services.UploadService
     public class Uploaded
     {
         public string Id { get; set; }
+        public string FiledId { get; set; }
         public string ContentType { get; set; }
         public string FileName { get; set; }
+        public string SubName { get; set; }
         public long Length { get; set; }
         public string OriginalPath { get; set; }
         public string SmallPath { get; set; }
@@ -216,12 +206,6 @@ namespace WSCore.Services.UploadService
             FileName = fileName;
             Length = length;
         }
-    }
-
-    public class UploadedFull
-    {
-        public Uploaded Uploaded { get; set; }
-        public List<Uploaded> ResizeUploaded { get; set; }
     }
 
     public class UploadedMultiple

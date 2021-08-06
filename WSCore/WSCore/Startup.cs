@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using WSCore.Infrastructure.Repository;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Models;
+using WSCore.Services.ArticleService;
 using WSCore.Services.CategoryService;
 using WSCore.Services.MediaService;
 using WSCore.Services.ObjectTagService;
@@ -56,6 +57,7 @@ namespace WSCore
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUploadService, UploadService>();
             services.AddScoped<IMediaService, MediaService>();
+            services.AddScoped<IArticleService, ArticleService>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

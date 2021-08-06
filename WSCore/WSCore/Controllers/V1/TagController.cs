@@ -27,25 +27,25 @@ namespace WSCore.Controllers.V1
         #endregion Create
 
         #region Update
-        [HttpPut("update", Name = "UpdateTagLogic")]
-        public async Task<ActionResult> UpdateTagLogic([FromBody] UpdateTagModel updateTagModel)
+        [HttpPut("tags/{tagId}")]
+        public async Task<ActionResult> UpdateTagLogic([FromBody] UpdateTagModel updateTagModel, string tagId)
         {
             if (updateTagModel == null)
                 return BadRequest();
 
             object rs = null;
             if (ModelState.IsValid) {
-                rs = await _tagService.UpdateTagLogicAsync(updateTagModel);
+                rs = await _tagService.UpdateTagLogicAsync(updateTagModel, tagId);
             }
             return Ok(new ApiResponse(rs));
         }
         #endregion Update
 
         #region Delete
-        [HttpDelete("delete/{id}", Name = "DeleteTag")]
-        public ActionResult DeleteTag(string id)
+        [HttpDelete("tags/{id}")]
+        public async Task<ActionResult> DeleteTag(string id)
         {
-            var rs = _tagService.DeleteTagByIdAsync(id);
+            var rs = await _tagService.DeleteTagByIdAsync(id);
             return Ok(rs);
         }
         #endregion Delete
@@ -58,10 +58,17 @@ namespace WSCore.Controllers.V1
             return Ok(new ApiResponse(rs));
         }
 
-        [HttpGet("getTagByAlias/{alias}", Name = "GetTagByAlias")]
+        [HttpGet("tags/{alias}")]
         public ActionResult GetTagByAlias(string alias)
         {
             var rs = _tagService.GetTagStartsWithAliasAsync(alias);
+            return Ok(new ApiResponse(rs));
+        }
+
+        [HttpGet("getByid/{id}")]
+        public async Task<ActionResult> GetTagById(string id)
+        {
+            var rs = await _tagService.GetTagByIdAsync(id);
             return Ok(new ApiResponse(rs));
         }
         #endregion Get

@@ -81,11 +81,6 @@ namespace WSCore.Services
             return DateTime.UtcNow;
         }
 
-        public async Task<string> BGetAlias()
-        {
-            return "dđ";
-        }
-
         public string BGetNewAliasAsync(
             string alias,
             Expression<Func<T, bool>> condition = null,

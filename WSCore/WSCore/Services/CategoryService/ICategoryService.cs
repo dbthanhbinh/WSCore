@@ -23,8 +23,8 @@ namespace WSCore.Services.CategoryService
         #endregion Update
 
         #region Get
-        Task<List<Category>> GetListCategoriesAsync();
-        Task<Category> GetCategoryByIdAsync(string id);
+        List<CategoriesVM> GetListCategoriesAsync();
+        CategoryInfoVM GetCategoryByIdAsync(string id);
         #endregion Get
 
         #region Delete

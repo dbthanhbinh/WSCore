@@ -16,16 +16,16 @@ namespace WSCore.Controllers.V1
         }
 
         [HttpGet("categories")]
-        public async Task<ActionResult> GetCategories()
+        public ActionResult GetCategories()
         {
-            var rs = await _categoryService.GetListCategoriesAsync();
+            var rs = _categoryService.GetListCategoriesAsync();
             return Ok(new ApiResponse(rs));
         }
 
         [HttpGet("categories/{categoryId}")]
-        public async Task<ActionResult> GetCategoryById(string categoryId)
+        public ActionResult GetCategoryById(string categoryId)
         {
-            var rs = await _categoryService.GetCategoryByIdAsync(categoryId);
+            var rs = _categoryService.GetCategoryByIdAsync(categoryId);
             return Ok(new ApiResponse(rs));
         }
 

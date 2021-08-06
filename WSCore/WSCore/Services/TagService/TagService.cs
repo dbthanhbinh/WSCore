@@ -52,7 +52,7 @@ namespace WSCore.Services.TagService
                 string alias = tagDto.Alias;
 
                 // Clean Obj
-                CleanObjecAndBuildtTitleAndAliasDto(ref title, ref alias);
+                CleanObjecAndBuildtTitleAndAliasDto(ref title, ref alias, false);
 
                 Tag newEntity = new Tag
                 {
@@ -75,7 +75,7 @@ namespace WSCore.Services.TagService
         #endregion Create
 
         #region Update
-        public async Task<UpdateTagVM> UpdateTagLogicAsync(UpdateTagModel updateTagModel)
+        public async Task<UpdateTagVM> UpdateTagLogicAsync(UpdateTagModel updateTagModel, string tagId)
         {
             try
             {
@@ -83,11 +83,10 @@ namespace WSCore.Services.TagService
                 string alias = updateTagModel.Alias;
                 // validation UpdateTagModel
                 // Clean Obj
-
-                CleanObjecAndBuildtTitleAndAliasDto(ref title, ref alias);
+                CleanObjecAndBuildtTitleAndAliasDto(ref title, ref alias, true);
 
                 var dbContext = _uow.GetRepository<Tag>();
-                Tag tag = await dbContext.GetByIdAsync(updateTagModel.Id);
+                Tag tag = await dbContext.GetByIdAsync(tagId);
                 if (tag == null)
                 {
                     throw new Exception("NOT_FOUND");
@@ -100,7 +99,7 @@ namespace WSCore.Services.TagService
                 dbContext.UpdateAsync(tag);
                 _uow.SaveChanges();
                 return new UpdateTagVM {
-                    Data = tag
+                    Tag = tag
                 };
             }
             catch (Exception ex)
@@ -118,7 +117,7 @@ namespace WSCore.Services.TagService
             {
                 List<Tag> tags = new List<Tag>();
                 var dbContext = _uow.GetRepository<Tag>();
-                var rs = await dbContext.GetByAsync(q => q.IsActive == true);
+                var rs = await dbContext.GetByAsync(q => q.IsActive == true, orderBy: o => o.OrderByDescending(v => v.CreatedTime));
                 return tags = rs?.ToList();
             }
             catch (Exception ex)
@@ -152,23 +151,25 @@ namespace WSCore.Services.TagService
         #endregion Get
 
         #region Delete
-        public async Task DeleteTagByIdAsync(string id)
+        public async Task<Tag> DeleteTagByIdAsync(string id)
         {
             try
             {
                 var dbContext = _uow.GetRepository<Tag>();
                 Tag tag = null;
-                tag = await dbContext.GetByIdAsync(id);
+                tag = dbContext.GetById(id);
 
                 if (tag != null)
                 {
                     // Delete tag
-                    dbContext.Delete(tag);
+                    _uow.GetRepository<Tag>().Delete(tag);
 
                     // Delete ObjectTags relate Deleted tagId
                     await _objectTagService.DeleteAllObjectTagRelateToTagIdDeletedAsync(tagId: id, false);
                 }
                 _uow.SaveChanges();
+
+                return tag;
             }
             catch (Exception ex)
             {
@@ -207,15 +208,30 @@ namespace WSCore.Services.TagService
         /// </summary>
         /// <param name="title"></param>
         /// <param name="alias"></param>
-        protected void CleanObjecAndBuildtTitleAndAliasDto(ref string title, ref string alias)
+        protected void CleanObjecAndBuildtTitleAndAliasDto(ref string title, ref string alias, bool isEdit)
         {
-            if(title.Length >= 3)
+            string originalAlias = alias;
+            if (title?.Length >= 3)
                 title = StringHelper.CleanTagHtmlForTitle(title.ToString().Trim());
-            if(alias.Length >= 3)
+            if(alias?.Length >= 3)
                 alias = StringHelper.CleanTagHtmlForTitle(alias.ToString().Trim());
 
-            NameAndAliasVM rs = BGetNameAndAliasVM(title, alias);
-            string newAlias = BGetNewAliasAsync(rs.Alias, f => f.Alias.StartsWith(rs.Alias), s => s.Alias);
+            NameAndAliasVM rs = new NameAndAliasVM();
+            rs = BGetNameAndAliasVM(title, alias);
+            string newAlias = rs.Alias;
+
+            if (isEdit)
+            {
+                if (!string.Equals(originalAlias, alias))
+                {
+                    newAlias = BGetNewAliasAsync(rs.Alias, f => f.Alias.StartsWith(rs.Alias), s => s.Alias);
+                }
+            }
+            else
+            {
+                newAlias = BGetNewAliasAsync(rs.Alias, f => f.Alias.StartsWith(rs.Alias), s => s.Alias);
+            }
+
             title = rs.Name;
             alias = newAlias;
         }

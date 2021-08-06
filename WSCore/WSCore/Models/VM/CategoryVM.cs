@@ -22,6 +22,24 @@ namespace WSCore.Models.VM
 
     public class CategoryLogicVM
     {
-        public Category category { get; set; }
+        public Category Category { get; set; }
+        public Media Media { get; set; }
+    }
+
+    public class CategoriesVM
+    {
+        public string Id { set; get; }
+        public string Title { set; get; }
+        public string Alias { set; get; }
+        public string Excerpt { set; get; }
+        public string ParentId { set; get; }
+        public string Type { set; get; }
+        public MediasVM Media { get; set; }
+    }
+
+    public class CategoryInfoVM
+    {
+        public Category Category { get; set; }
+        public Media Media { get; set; }
     }
 }

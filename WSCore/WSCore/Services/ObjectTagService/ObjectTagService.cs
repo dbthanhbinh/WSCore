@@ -141,7 +141,6 @@ namespace WSCore.Services.ObjectTagService
         {
             try
             {
-                var dbContext = _uow.GetRepository<ObjectTag>();
                 List<ObjectTag> objectTags = await GetObjectTagByTagIdAsync(tagId);
 
                 // Delete objectTags related to this tagId

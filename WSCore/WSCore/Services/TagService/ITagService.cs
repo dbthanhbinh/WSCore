@@ -14,7 +14,7 @@ namespace WSCore.Services.TagService
         #endregion Create
 
         #region Update
-        Task<UpdateTagVM> UpdateTagLogicAsync(UpdateTagModel updateTagModel);
+        Task<UpdateTagVM> UpdateTagLogicAsync(UpdateTagModel updateTagModel, string tagId);
         #endregion Update
 
         #region Get
@@ -24,7 +24,7 @@ namespace WSCore.Services.TagService
         #endregion Get
 
         #region Delete
-        Task DeleteTagByIdAsync(string id);
+        Task<Tag> DeleteTagByIdAsync(string id);
         #endregion Delete
     }
 }

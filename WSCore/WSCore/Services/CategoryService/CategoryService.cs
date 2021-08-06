@@ -63,7 +63,6 @@ namespace WSCore.Services.CategoryService
         /// <returns></returns>
         public async Task<CategoryLogicVM> CreateCategoryLogicAsync(CategoryLogicDto categoryLogicDto)
         {
-            string categoryId = "73d337a4";
             //// Get user Permissions
             //ClientActVM userPermissions = _userService.GetUserPermissions(userId);
             //List<ModulesWithPackageIdVM> modulesWithPackageIdVMs = userPermissions.PackageModules;
@@ -97,9 +96,20 @@ namespace WSCore.Services.CategoryService
             };
             await CreateCategory(category, false);
 
+            string mediaId = "";
             // Upload thumbnail/Media
-            if(categoryLogicDto.File != null)
-                await _mediaService.CreateSingleMediaAsync(categoryLogicDto.File, category.Id, controllerObj, attachedThumb, true); //Upload(categoryLogicDto.File, "categories");
+            Media media = new Media();
+            if (categoryLogicDto.File != null)
+            {
+                media = await _mediaService.CreateOrUpdateSingleMediaAsync(
+                    categoryLogicDto.File,
+                    category.Id, controllerObj,
+                    attachedThumb,
+                    mediaId,
+                    true,
+                    false
+                );
+            }
 
             // Create Tags
             List<string> tagIds = categoryLogicDto.TagIds;
@@ -112,7 +122,8 @@ namespace WSCore.Services.CategoryService
 
             return new CategoryLogicVM
             {
-                category = category
+                Category = category,
+                Media = media
             };
         }
         #endregion Create
@@ -133,14 +144,23 @@ namespace WSCore.Services.CategoryService
                 CleanObjecAndBuildExcerptDto(ref content, ref excerpt);
 
                 var dbContext = _uow.GetRepository<Category>();
-                Category category = await GetCategoryByIdAsync(id);
-                if(category != null)
+                CategoryInfoVM categoryInfo = GetCategoryByIdAsync(id);
+
+                Category category = new Category();
+                Media media = new Media();
+                if (categoryInfo != null)
                 {
+                    category = categoryInfo.Category;
                     category.Title = title;
                     category.Alias = alias;
                     category.Excerpt = excerpt;
                     category.Content = content;
+                    category.SeoTitle = categoryLogicDto.SeoTitle;
+                    category.SeoContent = categoryLogicDto.SeoContent;
+                    category.SeoKeyWord = categoryLogicDto.SeoKeyWord;
                     category.ParentId = categoryLogicDto.ParentId;
+                    category.LastSavedUserId = GetUserId();
+                    category.LastSavedTime = DateTime.UtcNow;
 
                     // Update single category
                     dbContext.UpdateAsync(category);
@@ -149,12 +169,29 @@ namespace WSCore.Services.CategoryService
                     List<string> tagIds = categoryLogicDto.TagIds;
                     _objectTagService.UpdateObjectTagsInObject(tagIds, objectId: id, objectType: category.Type, "category", false);
 
+                    media = categoryInfo.Media;
+                    // Upload thumbnail/Media
+                    if (categoryLogicDto.File != null)
+                    {
+                        string mediaId = media?.Id;
+                        media = await _mediaService.CreateOrUpdateSingleMediaAsync(
+                            categoryLogicDto.File,
+                            category.Id, controllerObj,
+                            attachedThumb,
+                            mediaId,
+                            true,
+                            true
+                        );
+                    }
+
+
                     _uow.SaveChanges();
                 }
 
                 return new CategoryLogicVM
                 {
-                    category = category
+                    Category = category,
+                    Media = media
                 };
             }
             catch (Exception ex)
@@ -168,17 +205,44 @@ namespace WSCore.Services.CategoryService
 
         #region Get
 
-        public async Task<List<Category>> GetListCategoriesAsync()
+        public List<CategoriesVM> GetListCategoriesAsync()
         {
             try
             {
                 List<Category> tags = new List<Category>();
                 var dbContext = _uow.GetRepository<Category>();
-                var rs = await dbContext.GetByAsync(
-                        q => q.IsActive == true,
-                        o => o.OrderByDescending(Category => Category.CreatedTime)
-                    );
-                return tags = rs?.ToList();
+                var dbContext2 = _uow.GetRepository<Media>();
+
+                var rs = from cat in dbContext.GetEntities(x => x.IsActive == true)
+                         join med in dbContext2.GetEntities(x => x.IsActive == true)
+                         on cat.Id equals med.ObjectId into leftGroup
+                         from media in leftGroup.DefaultIfEmpty()
+                         select new CategoriesVM
+                         {
+                            Id = cat.Id,
+                            Title = cat.Title,
+                            Alias = cat.Alias,
+                            Excerpt = cat.Excerpt,
+                            ParentId = cat.ParentId,
+                            Type = cat.Type,
+                            Media = media == null ? null : new MediasVM
+                            {
+                                FileId = media.FileId,
+                                Title = media.Title,
+                                Alt = media.Alt,
+                                Caption = media.Caption,
+                                Path = media.Path,
+                                ObjectId = media.ObjectId,
+                                ObjectType = media.ObjectType,
+                                MediaType = media.MediaType,
+                                AttachedType = media.AttachedType,
+                                Small = media.Small,
+                                Medium = media.Medium,
+                                Large = media.Large
+                            }
+                         };
+
+                return rs?.ToList();
             }
             catch (Exception ex)
             {
@@ -191,12 +255,25 @@ namespace WSCore.Services.CategoryService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Category> GetCategoryByIdAsync(string id)
+        public CategoryInfoVM GetCategoryByIdAsync(string id)
         {
             try
             {
                 var dbContext = _uow.GetRepository<Category>();
-                return await dbContext.GetByIdAsync(id);
+                var dbContext2 = _uow.GetRepository<Media>();
+
+                var rs = from cat in dbContext.GetEntities(x => x.IsActive == true && x.Id == id, o => o.OrderByDescending(a => a.CreatedTime))
+                         join media in dbContext2.GetEntities(m => m.IsActive == true)
+                         on cat.Id equals media.ObjectId into relatedMedia
+                         from a in relatedMedia.DefaultIfEmpty()
+                         select new CategoryInfoVM
+                         {
+                             Category = cat,
+                             Media = a == null ? null : a
+                         };
+
+                var re = rs?.FirstOrDefault();
+                return re;
             }
             catch (Exception ex)
             {
@@ -242,6 +319,8 @@ namespace WSCore.Services.CategoryService
 
         #endregion Mapping
 
+
+        #region Library
         /// <summary>
         /// Clean html tags and build frienly alias from title or not
         /// </summary>
@@ -295,5 +374,7 @@ namespace WSCore.Services.CategoryService
                 excerpt = StringHelper.GenerateLimitCharacter(content, 150, false);
             }
         }
+
+        #endregion Library
     }
 }
