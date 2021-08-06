@@ -1,70 +1,109 @@
 import {Form, Input, TextArea, Button} from 'semantic-ui-react'
 import _ from 'lodash'
 import { ImageUpload } from '../../components/ImageUpload'
+import {BuildField} from '../../form/fields/field'
 
 const CategoryForm = (props) => {
-    let {model, isLoading, handleChange, isFormValid, onHandleAction, customErrorRemain, currentCategory} = props
-    
-    const showFieldError = (item) => {
-        if(item){
-            if(!item.isInitModel && !item.isValid)
-                return true
-        }
-        return false
-    }
-
-    const showFieldErrorRemain = (item, customErrorRemain) => {
-        if(customErrorRemain && typeof customErrorRemain === 'function')
-            customErrorRemain(item)
-        else if(item && !item.isValid && item.message && !isLoading){
-            return <span className="error-remain">{item.message?.toString()}</span>
-        }
-    }
+    let {
+        onShowFieldError,
+        onShowFieldErrorRemain,
+        model,
+        isLoading,
+        handleChange,
+        isFormValid,
+        onHandleAction,
+        customErrorRemain,
+        currentCategory
+    } = props
+    let media = _.get(currentCategory, 'media')
 
     return (
         <Form>
-            <Form.Field>
-                <label>Title</label>
+            <BuildField
+                fieldItem = {_.get(model, 'title')}
+                fieldType = 'text'
+                handleChange = {handleChange}
+                isLoading = {isLoading}
+                customErrorRemain = {customErrorRemain}
+                onShowFieldError = {onShowFieldError}
+                onShowFieldErrorRemain = {onShowFieldErrorRemain}
+            />
+
+            {/* <Form.Field>
+                <label>{_.get(model, 'title')?.label}</label>
                 <Input name={'title'}
-                error={showFieldError(_.get(model, 'title'))}
+                error={onShowFieldError(_.get(model, 'title'))}
                 disabled={!!isLoading}
-                value={_.get(model, 'title').value}
-                onChange={handleChange} placeholder='Title ...' />
-                {/* Error remain */}
-                {showFieldErrorRemain(_.get(model, 'title'), customErrorRemain)}
-            </Form.Field>
+                value={_.get(model, 'title').value || ''}
+                onChange={handleChange} placeholder={`${_.get(model, 'title')?.label} ...`} />
+                
+                {onShowFieldErrorRemain(_.get(model, 'title'), customErrorRemain, isLoading)}
+            </Form.Field> */}
             <Form.Field>
-                <label>Alias</label>
+                <label>{_.get(model, 'alias')?.label}</label>
                 <Input name={'alias'}
-                error={showFieldError(_.get(model, 'alias'))}
+                error={onShowFieldError(_.get(model, 'alias'))}
                 disabled={!!isLoading}
-                value={_.get(model, 'alias').value}
-                onChange={handleChange} placeholder='Alias ...' />
+                value={_.get(model, 'alias').value || ''}
+                onChange={handleChange} placeholder={`${_.get(model, 'alias')?.label} ...`} />
                 {/* Error remain */}
-                {showFieldErrorRemain(_.get(model, 'alias'), customErrorRemain)}
+                {onShowFieldErrorRemain(_.get(model, 'alias'), customErrorRemain, isLoading)}
             </Form.Field>
             <Form.Field>
-                <label>Content</label>
+                <label>{_.get(model, 'content')?.label}</label>
                 <TextArea name={'content'}
-                className={showFieldError(_.get(model, 'content')) ? 'error' : ''}
+                className={onShowFieldError(_.get(model, 'content')) ? 'error' : ''}
                 disabled={!!isLoading}
-                value={_.get(model, 'content').value}
-                onChange={handleChange} placeholder='Content ...' />
+                value={_.get(model, 'content').value || ''}
+                onChange={handleChange} placeholder={`${_.get(model, 'content')?.label} ...`} />
                 {/* Error remain */}
-                {showFieldErrorRemain(_.get(model, 'content'), customErrorRemain)}
+                {onShowFieldErrorRemain(_.get(model, 'content'), customErrorRemain, isLoading)}
             </Form.Field>
             <Form.Field>
-                <label>Excerpt</label>
+                <label>{_.get(model, 'excerpt')?.label}</label>
                 <TextArea name={'excerpt'}
-                className={showFieldError(_.get(model, 'excerpt')) ? 'error' : ''}
+                className={onShowFieldError(_.get(model, 'excerpt')) ? 'error' : ''}
                 disabled={!!isLoading}
-                value={_.get(model, 'excerpt').value}
-                onChange={handleChange} placeholder='Description ...' />
+                value={_.get(model, 'excerpt').value || ''}
+                onChange={handleChange} placeholder={`${_.get(model, 'excerpt')?.label} ...`} />
                 {/* Error remain */}
-                {showFieldErrorRemain(_.get(model, 'excerpt'), customErrorRemain)}
+                {onShowFieldErrorRemain(_.get(model, 'excerpt'), customErrorRemain, isLoading)}
             </Form.Field>
             <Form.Field>
-                <ImageUpload handleChange = {handleChange}/>
+                <label>{_.get(model, 'seoTitle')?.label}</label>
+                <Input name={'seoTitle'}
+                error={onShowFieldError(_.get(model, 'seoTitle'))}
+                disabled={!!isLoading}
+                value={_.get(model, 'seoTitle').value || ''}
+                onChange={handleChange} placeholder={`${_.get(model, 'seoTitle')?.label} ...`} />
+                {/* Error remain */}
+                {onShowFieldErrorRemain(_.get(model, 'seoTitle'), customErrorRemain, isLoading)}
+            </Form.Field>
+            <Form.Field>
+                <label>{_.get(model, 'seoContent')?.label}</label>
+                <TextArea name={'seoContent'}
+                className={onShowFieldError(_.get(model, 'seoContent')) ? 'error' : ''}
+                disabled={!!isLoading}
+                value={_.get(model, 'seoContent')?.value || ''}
+                onChange={handleChange} placeholder={`${_.get(model, 'seoContent')?.label} ...`} />
+                {/* Error remain */}
+                {onShowFieldErrorRemain(_.get(model, 'seoContent'), customErrorRemain, isLoading)}
+            </Form.Field>
+            <Form.Field>
+                <label>{_.get(model, 'seoKeyWord')?.label}</label>
+                <TextArea name={'seoKeyWord'}
+                className={onShowFieldError(_.get(model, 'seoKeyWord')) ? 'error' : ''}
+                disabled={!!isLoading}
+                value={_.get(model, 'seoKeyWord')?.value || ''}
+                onChange={handleChange} placeholder={`${_.get(model, 'seoKeyWord')?.label} ...`} />
+                {/* Error remain */}
+                {onShowFieldErrorRemain(_.get(model, 'seoKeyWord'), customErrorRemain, isLoading)}
+            </Form.Field>
+            <Form.Field>
+                <ImageUpload
+                    handleChange = {handleChange}
+                    currentImg = {media?.small || null}
+                />
             </Form.Field>
             <Form.Field>
                 <Button

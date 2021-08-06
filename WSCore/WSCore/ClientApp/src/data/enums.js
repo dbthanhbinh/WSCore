@@ -84,5 +84,8 @@ export const storedName = {
 }
 
 // regex special characters escape 
-export const regexEscape  = /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/g
-export const notAllowSpecial= /[`~,.<>;':"\/\[\]\|{}()]/g;
+export const regexEscape  = /^[a-zA-Z0-9!@#$%^&*)(+=._-]+$/g
+export const notAllowSpecial= /[`~,.<>;':"/[\]|{}()]/g;
+
+// Media assets
+export const uploadedAssets = 'uploads'

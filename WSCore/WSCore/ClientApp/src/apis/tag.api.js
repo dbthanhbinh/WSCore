@@ -5,8 +5,20 @@ class TagAPI extends BaseAPI {
         return await this.getFrom(payload)
     }
 
+    async getTagById (payload) {
+        return await this.getFrom(payload)
+    }
+
     async createTag(payload){
         return await this.postTo(payload)
+    }
+
+    async updateTag(payload){
+        return await this.putTo(payload)
+    }
+
+    async deleteTagBy(payload){
+        return await this.delTo(payload)
     }
 }
 

@@ -1,10 +1,13 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {Icon, Button} from 'semantic-ui-react'
+import {uploadedAssets as uploaded} from '../../data/enums'
 export const ImageUpload = (props) => {
     const [imageData, setImageData] = useState({
         imagePreviewUrl: null,
         imageFile: null,
-        imageFileName: null
+        imageFileName: null,
+        isHasFileChange: false,
+        isDeleteImage: false
     })
 
     const fileChange = (e) => {
@@ -17,18 +20,38 @@ export const ImageUpload = (props) => {
             setImageData({
                 imagePreviewUrl: reader.result,
                 imageFile: file,
-                imageFileName: fileName
+                imageFileName: fileName,
+                isHasFileChange: true
             })
             props.handleChange(this, {name: 'file', value: file})
         }
     }
 
+    //useEffect
+    useEffect(() => {
+        if(props.currentImg){
+            let src = uploaded + `/` + props.currentImg
+            setImageData({imagePreviewUrl: src})
+        }
+    },[props.currentImg]);
+
+    const removeCurrentPreview = () => {
+        setImageData({
+            imagePreviewUrl: null,
+            imageFile: null,
+            imageFileName: null,
+            isHasFileChange: true,
+            isDeleteImage: true
+        })
+    }
+
     return (
         <div>
             {
-                imageData.imagePreviewUrl
+                (imageData.imagePreviewUrl)
                 ? <div className='image-preview-thumb'>
-                    <img src={imageData.imagePreviewUrl} alt='' />
+                    <img src={imageData.imagePreviewUrl} alt={props.alt} />
+                    <span onClick={removeCurrentPreview}><Icon name='remove' /></span>
                 </div>
                 : <div>
                     <label>Thumbnail & upload </label>

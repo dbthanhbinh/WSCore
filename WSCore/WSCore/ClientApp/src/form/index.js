@@ -15,6 +15,8 @@ const WithFormBehavior = (WrappedComponent, rawModel) => {
             this.handleSubmit = this.handleSubmit.bind(this)
             this.handleMultipleChange = this.handleMultipleChange.bind(this)
             this.reValidModel = this.reValidModel.bind(this)
+            this.showFieldErrorRemain = this.showFieldErrorRemain.bind(this)
+            this.showFieldError = this.showFieldError.bind(this)
         }
 
         handleChange = (e, data) => {
@@ -50,6 +52,22 @@ const WithFormBehavior = (WrappedComponent, rawModel) => {
             }
         }
 
+        showFieldError = (item) => {
+            if(item){
+                if(!item.isInitModel && !item.isValid)
+                    return true
+            }
+            return false
+        }
+    
+        showFieldErrorRemain = (item, customErrorRemain, isLoading) => {
+            if(customErrorRemain && typeof customErrorRemain === 'function')
+                return customErrorRemain(item)
+            else if(item && !item.isValid && item.message && !isLoading && !item?.isInitModel){
+                return <span className="error-remain">{item.message?.toString()}</span>
+            }
+        }
+
         render() {
             let { isFormValid, model } = this.state
             return <WrappedComponent
@@ -60,6 +78,8 @@ const WithFormBehavior = (WrappedComponent, rawModel) => {
                 reValidModel = {this.reValidModel}
                 handleSubmit = { this.handleSubmit }
                 handleMultipleChange = { this.handleMultipleChange }
+                showFieldError = { this.showFieldError }
+                showFieldErrorRemain = { this.showFieldErrorRemain }
             />
         }
     }

@@ -2,14 +2,24 @@ var InitModel = {
     title: {
         name: 'title',
         label: 'Title',
-        value: null,
-        validators: []
+        value: '',
+        validators: [
+            {
+                required: true,
+                isCheckLenString: true,
+                isCheckAllowSpecial: true
+            }
+        ]
     },
     alias: {
         name: 'alias',
         label: 'Alias',
-        value: null,
-        validators: []
+        value: '',
+        validators: [
+            {
+                isCheckMaxString: true
+            }
+        ]
     }
 }
 export default InitModel

@@ -2,8 +2,7 @@ import {Component, React} from 'react'
 import {unwrapResult} from '@reduxjs/toolkit'
 import _ from 'lodash'
 import {connect} from 'react-redux'
-import {Container, Grid, Form, Table, Rating, Icon, Input, TextArea, Button} from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
+import {Container, Grid} from 'semantic-ui-react'
 import {WithFormBehavior} from '../../form'
 import {actions} from '../../data/enums'
 import CategoryModel from './category.model'
@@ -21,9 +20,6 @@ import {getListTags} from '../../reduxStore/actions/tag.actions'
 import ListItems from './listItems'
 import CategoryForm from './form'
 
-import { ImageUpload } from '../../components/ImageUpload'
-import MultipleSelected from '../../components/selected/multiple.selected'
-
 class Category extends Component {
     constructor(props){
         super(props)
@@ -33,15 +29,15 @@ class Category extends Component {
         this.currentModel = actions.EDIT
         this.currentId = null
         this.handleUpdateCategory = this.handleUpdateCategory.bind(this)
+        this.deleteCategoryBy = this.deleteCategoryBy.bind(this)
     }
 
     async componentDidMount() {
-        // get list tags all
-        let payload = {
-            url: 'tag/tags',
-            body: {}
-        }
-        unwrapResult(await this.props.getListTags(payload))
+        // // get list tags all
+        // unwrapResult(await this.props.getListTags( {
+        //     url: 'tags',
+        //     body: {}
+        // }))
 
         // get list category all
         this.getCategories()
@@ -62,7 +58,7 @@ class Category extends Component {
     async getCategories(){
         // get list category all
         unwrapResult(await this.props.getListCategories({
-            url: 'category/categories',
+            url: 'categories',
             body: {}
         }))
     }
@@ -83,18 +79,26 @@ class Category extends Component {
         let { model, isFormValid } = initModel(this.state.model, true)
         if(isFormValid){
             let payload = {
+                url: `categories/${this.currentId}`,
                 categoryId: this.currentId,
                 body: {
                     title: _.get(model, 'title')?.value,
                     alias: _.get(model, 'alias')?.value,
-                    file: _.get(model, 'file')?.value
+                    content: _.get(model, 'content')?.value,
+                    excerpt: _.get(model, 'excerpt')?.value,
+                    seotitle: _.get(model, 'seoTitle')?.value,
+                    seocontent: _.get(model, 'seoContent')?.value,
+                    seokeyword: _.get(model, 'seoKeyWord')?.value,
+                    file: _.get(model, 'file')?.value || null
                 }
             }
-            let updated = await this.props.updateCategory(payload)
-            let {currentCategories} = this.props
-            if(updated.payload?.statusCode === 200){
-                let result = updated.payload?.result?.category
-                let newCategories = this.updateItemInList(currentCategories, result, this.currentId)
+            let {error, result} = unwrapResult(await this.props.updateCategory(payload))
+            if(error) return
+
+            if(result){
+                let {currentCategories} = this.props
+                let res = result?.category
+                let newCategories = this.updateItemInList(currentCategories, res, this.currentId)
                 this.props.setCurrentCategories(newCategories)
             }
         }
@@ -118,15 +122,13 @@ class Category extends Component {
 
         this.currentModel = actions.EDIT
         this.currentId = id
-        let category = await this.props.getCategoryBy({
-            url: `categories/${id}`,
-            categoryId: id,
-            body: {}
-        })
-        if(category.payload?.statusCode === 200){
-            let result = category.payload?.result
+        let {error, result} = unwrapResult(await this.props.getCategoryBy({url: `categories/${id}`}))
+        if(error) return
+
+        if(result){
+            let res = result?.category
             Object.keys(this.state.model).forEach((key) => {
-                this.state.model[key].value = result[key] || ''
+                this.state.model[key].value = (res && res[key]) ? res[key] : ""
             })
             // Re-Initi validate Model
             let {reValidModel} = this.props
@@ -136,20 +138,25 @@ class Category extends Component {
     }
 
     async deleteCategoryBy(categoryId){
-        await this.props.deleteCategoryBy({
-            url: `categories/${categoryId}`,
-            categoryId: categoryId,
-            body: {}
-        })
+        await this.props.deleteCategoryBy({url: `categories/${categoryId}`})
+
         // Get refresh categories
         this.getCategories()
     }
 
     render(){
-        let {handleChange, currentTags, model, currentCategories, isLoading, isFormValid, currentCategory} = this.props
-        // currentTags = this.buildOptions(currentTags)
+        // let {model} = this.state
+        let {
+            showFieldError,
+            showFieldErrorRemain,
+            handleChange,
+            model,
+            currentCategories,
+            isLoading,
+            isFormValid,
+            currentCategory
+        } = this.props
 
-        console.log('=======aaaaa:', model)
         return(
             <Container>
                 <Grid>
@@ -163,6 +170,8 @@ class Category extends Component {
                                 isFormValid = {isFormValid}
                                 actions = {actions.EDIT}
                                 onHandleAction = {this.handleUpdateCategory}
+                                onShowFieldError = { showFieldError }
+                                onShowFieldErrorRemain = { showFieldErrorRemain }
                             />
                         </Grid.Column>
 
@@ -171,6 +180,7 @@ class Category extends Component {
                                 currentCategories={currentCategories}
                                 isLoading={isLoading}
                                 currentId={this.currentId}
+                                onDeleteCategoryBy = {this.deleteCategoryBy}
                             />
                         </Grid.Column>
                     </Grid.Row>

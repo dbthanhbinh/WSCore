@@ -169,7 +169,7 @@ function checkValidAllowSpecialText(str, allowPattern, name = 'Title') {
 
 function checkValidMaxLengthText(str, maxLength, name = null) {
     if(!maxLength) maxLength = textLength.textMax
-    if(str.length > maxLength) {
+    if(str?.length > maxLength) {
         return { isValid: false, message: sprintf(validMsg.field_not_allowed_max, name, maxLength) }
     }
      

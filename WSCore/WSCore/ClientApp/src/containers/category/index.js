@@ -25,15 +25,17 @@ class Category extends Component {
         this.currentModel = actions.ADD
         this.currentId = null
         this.handleCreateCategory = this.handleCreateCategory.bind(this)
+        this.deleteCategoryBy = this.deleteCategoryBy.bind(this)
     }
 
     async componentDidMount(){
         // get list category all
         this.getCategories()
+
     }
 
     async getCategories(){
-        unwrapResult(await this.props.getListCategories({url: 'category/categories'}))
+        unwrapResult(await this.props.getListCategories({url: 'categories'}))
     }
     
     async handleCreateCategory(e){
@@ -41,7 +43,7 @@ class Category extends Component {
         e.preventDefault();
 
         let {error, result } = unwrapResult(await this.props.createCategory({
-            url: 'category/categories',
+            url: 'categories',
             body: {
                 title: _.get(model, 'title')?.value,
                 alias: _.get(model, 'alias')?.value,
@@ -82,17 +84,23 @@ class Category extends Component {
     }
 
     async deleteCategoryBy(categoryId){
-        await this.props.deleteCategoryBy({
-            url: `categories/${categoryId}`,
-            categoryId: categoryId,
-            body: {}
-        })
+        await this.props.deleteCategoryBy({url: `categories/${categoryId}`})
+
+        // Get refresh categories
+        this.getCategories()
     }
 
     render(){
         let {model} = this.state
-        let {handleChange, currentCategories, isLoading, isFormValid} = this.props
-        console.log('======currentCategories:', this.props)
+        let {
+            showFieldError,
+            showFieldErrorRemain,
+            handleChange,
+            currentCategories,
+            isLoading,
+            isFormValid
+        } = this.props
+        
         return(
             <Container>
                 <Grid>
@@ -106,6 +114,8 @@ class Category extends Component {
                                 actions = {actions.ADD}
                                 customErrorRemain = {this.showFieldErrorRemain}
                                 onHandleAction = {this.handleCreateCategory}
+                                onShowFieldError = { showFieldError }
+                                onShowFieldErrorRemain = { showFieldErrorRemain }
                             />
                         </Grid.Column>
 
@@ -114,6 +124,7 @@ class Category extends Component {
                                 currentCategories={currentCategories}
                                 isLoading={isLoading}
                                 currentId={this.currentId}
+                                onDeleteCategoryBy = {this.deleteCategoryBy}
                             />
                         </Grid.Column>
                     </Grid.Row>
@@ -124,7 +135,7 @@ class Category extends Component {
 }
 
 const mapStateToProps = (state) => {
-    let {category, tag} = state
+    let {category} = state
     return {
         currentCategory: category.currentCategory,
         currentCategories: category.currentCategories,

@@ -9,6 +9,7 @@ const preFixAction = 'Category'
 export const getDetailCategory = createAsyncThunk(
     `${preFixAction}/getDetailCategory`,
     async (payload) => {
+        payload.url = `${preFixAction}/${payload.url}`
         const response = await Category.getDetailCategory(payload)
         return response
     }
@@ -17,6 +18,7 @@ export const getDetailCategory = createAsyncThunk(
 export const getCategoryBy = createAsyncThunk(
     `${preFixAction}/getCategoryBy`,
     async (payload) => {
+        payload.url = `${preFixAction}/${payload.url}`
         const response = await Category.getDetailCategory(payload)
         return response
     }
@@ -26,6 +28,7 @@ export const getCategoryBy = createAsyncThunk(
 export const getListCategories = createAsyncThunk(
     `${preFixAction}/getListCategories`,
     async (payload) => {
+        payload.url = `${preFixAction}/${payload.url}`
         return await Category.getListCategories(payload)
     }
 )
@@ -33,6 +36,7 @@ export const getListCategories = createAsyncThunk(
 export const createCategory = createAsyncThunk(
     `${preFixAction}/createCategory`,
     async (payload) => {
+        payload.url = `${preFixAction}/${payload.url}`
         const response = await Category.createCategory(payload)
         return response
     }
@@ -41,6 +45,7 @@ export const createCategory = createAsyncThunk(
 export const updateCategory = createAsyncThunk(
     `${preFixAction}/updateCategory`,
     async (payload) => {
+        payload.url = `${preFixAction}/${payload.url}`
         const response = await Category.updateCategory(payload)
         return response
     }
@@ -49,6 +54,7 @@ export const updateCategory = createAsyncThunk(
 export const deleteCategoryBy = createAsyncThunk(
     `${preFixAction}/deleteCategoryBy`,
     async (payload) => {
+        payload.url = `${preFixAction}/${payload.url}`
         const response = await Category.deleteCategoryBy(payload)
         return response
     }

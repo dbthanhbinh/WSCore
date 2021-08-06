@@ -1,6 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit'
-import { actions } from '../../data/enums'
-import {getDetailCategory, getListCategories, getCategoryBy, createCategory, updateCategory, deleteCategoryBy} from '../actions/category.actions'
+import {
+    getDetailCategory,
+    getListCategories,
+    getCategoryBy,
+    createCategory,
+    updateCategory,
+    deleteCategoryBy
+} from '../actions/category.actions'
 
 const initialState = {
     currentCategory: {},
@@ -34,11 +40,11 @@ const categorySlice = createSlice({
             state.currentCategories = action?.payload?.result
         },
         [createCategory.fulfilled]: (state, action) => {
-            state.currentCategory = action?.payload?.result?.category
+            state.currentCategory = action?.payload?.result
         },
         [updateCategory.fulfilled]: (state, action) => {
             state.isLoading = true
-            state.currentCategory = action?.payload?.result?.category
+            state.currentCategory = action?.payload?.result
         },
         [deleteCategoryBy.pending]: (state, action) => {
             state.isLoading = true
