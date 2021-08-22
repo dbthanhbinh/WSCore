@@ -4,20 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WSCore.Common.Business;
 using WSCore.Infrastructure.UnitOfWork;
+using WSCore.Services;
 using WSCore.SimCard.Models;
 
 namespace WSCore.SimCard.Business
 {
-    public class SimCardService : BaseService<Sim>, ISimCardService
+    public class SimCardService : BasicService<Sim>, ISimCardService
     {
-        public readonly IUnitOfWork _uow;
-
-        public SimCardService(IUnitOfWork uow)
-        {
-            _uow = uow;
-        }
+        public SimCardService(IUnitOfWork uow) : base(uow){}
         public void AddLogicAsync()
         {
             try

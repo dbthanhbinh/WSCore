@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WSCore.Common.Business;
 using WSCore.Model;
 
 namespace WSCore.Services.ObjectTagService
 {
-    public interface IObjectTagService : IBaseService<ObjectTag>
+    public interface IObjectTagService : IBasicService<ObjectTag>
     {
         #region Create
         Task<ObjectTag> CreateObjectTagAsync(ObjectTag objectTag);

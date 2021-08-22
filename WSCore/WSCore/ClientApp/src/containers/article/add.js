@@ -2,39 +2,84 @@ import {Component, React} from 'react'
 import {unwrapResult} from '@reduxjs/toolkit'
 import _ from 'lodash'
 import {connect} from 'react-redux'
-import {Container, Grid, Form, Input, TextArea, Button} from 'semantic-ui-react'
+import  { Redirect } from 'react-router-dom'
+import {Container, Grid, Form, Button} from 'semantic-ui-react'
 import {WithFormBehavior} from '../../form'
 import {actions} from '../../data/enums'
 import ArticleModel from './article.model'
+import ArticleForm from './form'
+import { ImageUpload } from '../../components/ImageUpload'
+import MultipleSelected from '../../components/selected/multiple.selected'
+import SingleSelected from '../../components/selected/single.selected'
 import {
     getListArticles,
     createArticle,
-    updateArticle,
-    deleteArticleBy
+    updateArticle
 } from '../../reduxStore/actions/article.actions'
-import {BuildField} from '../../form/fields/field'
-import { ImageUpload } from '../../components/ImageUpload'
+
+import {
+    getListCategories
+} from '../../reduxStore/actions/category.actions'
+
+import {
+    getListTags,
+    createTag
+} from '../../reduxStore/actions/tag.actions'
+
+import {
+    getListObjectTags
+} from '../../reduxStore/actions/objecttag.actions'
 
 class AddArticle extends Component {
     constructor(props){
         super(props)
         this.state = {
-            model: props?.model
+            model: props?.model,
+            currentTagList: [],
+            currentCategoryList: []
         }
         this.currentModel = actions.ADD
+        this.posttype = 'post'
         this.currentId = null
         this.handleCreateArticle = this.handleCreateArticle.bind(this)
-        this.deleteArticleBy = this.deleteArticleBy.bind(this)
+        this.handleChangeSingleSelected = this.handleChangeSingleSelected.bind(this)
+        this.handleChangeMultipleSelected = this.handleChangeMultipleSelected.bind(this)
     }
 
     async componentDidMount(){
-        // get list category all
-        this.getArticles()
+        let type = this.props.match.params.type
+        if(!type) return
+        this.posttype = type
 
+        // get list category all
+        let categories = await this.getListCategories()
+        let tags = await this.getListTags()
+        this.setState({
+            currentTagList: tags || [],
+            currentCategoryList: categories || []
+        })
     }
 
-    async getArticles(){
-        unwrapResult(await this.props.getListArticles({url: 'categories'}))
+    async getListCategories(){
+        let {error, result} = unwrapResult(await this.props.getListCategories({url: 'categories'}))
+        if(error) return false
+
+        if(result && result.length > 0){
+            return this.buildOptions(result)
+        } else {
+            return false
+        }
+    }
+
+    async getListTags(){
+        let {error, result} = unwrapResult(await this.props.getListTags({url: 'tags'}))
+        if(error) return false
+
+        if(result && result.length > 0){
+            return this.buildOptions(result)
+        } else {
+            return false
+        }
     }
     
     async handleCreateArticle(e){
@@ -42,19 +87,35 @@ class AddArticle extends Component {
         e.preventDefault();
 
         let {error, result } = unwrapResult(await this.props.createArticle({
-            url: 'categories',
+            url: 'articles',
             body: {
                 title: _.get(model, 'title')?.value,
                 alias: _.get(model, 'alias')?.value,
-                file: _.get(model, 'file')?.value
+                excerpt: _.get(model, 'excerpt')?.value,
+                content: _.get(model, 'content')?.value,
+                seoTitle: _.get(model, 'seoTitle')?.value,
+                seoContent: _.get(model, 'seoContent')?.value,
+                seoKeyWord: _.get(model, 'seoKeyWord')?.value,
+                categoryId: _.get(model, 'categoryId')?.value,
+                tagIds: _.get(model, 'tagIds')?.value,
+                file: _.get(model, 'file')?.value,
+                type: this.posttype,
+                parentId: ''
             }
         }))
-
         if(error) return
+
         if(result){
-            // get list category all
-            this.getArticles()   
+            this.props.history.push(`/article/edit/${result?.article?.id}`);
         }
+    }
+
+    handleChangeSingleSelected(e, data){
+        this.props.handleDropdownChange('categoryId', data)
+    }
+
+    handleChangeMultipleSelected(e, data){
+        this.props.handleDropdownChange('tagIds', data)
     }
 
     buildOptions = (currentList = []) => {
@@ -68,29 +129,8 @@ class AddArticle extends Component {
         return options
     }
 
-    showFieldError = (item) => {
-        if(item){
-            if(!item.isInitModel && !item.isValid)
-                return true
-        }
-        return false
-    }
-
-    showFieldErrorRemain = (item) => {
-        if(item && item.message && !item.isInitModel){
-            return <span className="error-remain">{item.message?.toString()}</span>
-        }
-    }
-
-    async deleteArticleBy(categoryId){
-        await this.props.deleteArticleBy({url: `categories/${categoryId}`})
-
-        // Get refresh categories
-        this.getArticles()
-    }
-
     render(){
-        let {model} = this.state
+        let {model, currentCategoryList, currentTagList} = this.state
         let {
             showFieldError,
             showFieldErrorRemain,
@@ -98,95 +138,26 @@ class AddArticle extends Component {
             isLoading,
             isFormValid
         } = this.props
-        
-        let customErrorRemain = null
 
         return(
             <Container>
                 <Grid>
                     <Grid.Row>
-                        <Grid.Column width={6}>
-                            <Form>
-                                <BuildField
-                                    fieldItem = {_.get(model, 'title')}
-                                    fieldType = 'text'
-                                    handleChange = {handleChange}
-                                    isLoading = {isLoading}
-                                    customErrorRemain = {customErrorRemain}
-                                    onShowFieldError = {showFieldError}
-                                    onShowFieldErrorRemain = {showFieldErrorRemain}
-                                />
+                        <Grid.Column width={11}>
+                            <ArticleForm
+                                handleChange = {handleChange}
+                                currentItem = {null}
+                                model = {model}
+                                isLoading = {isLoading}
+                                isFormValid = {isFormValid}
+                                actions = {actions.EDIT}
+                                onShowFieldError = { showFieldError }
+                                onShowFieldErrorRemain = { showFieldErrorRemain }
+                            />
+                        </Grid.Column>
 
-                                {/* <Form.Field>
-                                    <label>{_.get(model, 'title')?.label}</label>
-                                    <Input name={'title'}
-                                    error={showFieldError(_.get(model, 'title'))}
-                                    disabled={!!isLoading}
-                                    value={_.get(model, 'title').value || ''}
-                                    onChange={handleChange} placeholder={`${_.get(model, 'title')?.label} ...`} />
-                                    
-                                    {showFieldErrorRemain(_.get(model, 'title'), customErrorRemain, isLoading)}
-                                </Form.Field> */}
-                                <Form.Field>
-                                    <label>{_.get(model, 'alias')?.label}</label>
-                                    <Input name={'alias'}
-                                    error={showFieldError(_.get(model, 'alias'))}
-                                    disabled={!!isLoading}
-                                    value={_.get(model, 'alias').value || ''}
-                                    onChange={handleChange} placeholder={`${_.get(model, 'alias')?.label} ...`} />
-                                    {/* Error remain */}
-                                    {showFieldErrorRemain(_.get(model, 'alias'), customErrorRemain, isLoading)}
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>{_.get(model, 'content')?.label}</label>
-                                    <TextArea name={'content'}
-                                    className={showFieldError(_.get(model, 'content')) ? 'error' : ''}
-                                    disabled={!!isLoading}
-                                    value={_.get(model, 'content').value || ''}
-                                    onChange={handleChange} placeholder={`${_.get(model, 'content')?.label} ...`} />
-                                    {/* Error remain */}
-                                    {showFieldErrorRemain(_.get(model, 'content'), customErrorRemain, isLoading)}
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>{_.get(model, 'excerpt')?.label}</label>
-                                    <TextArea name={'excerpt'}
-                                    className={showFieldError(_.get(model, 'excerpt')) ? 'error' : ''}
-                                    disabled={!!isLoading}
-                                    value={_.get(model, 'excerpt').value || ''}
-                                    onChange={handleChange} placeholder={`${_.get(model, 'excerpt')?.label} ...`} />
-                                    {/* Error remain */}
-                                    {showFieldErrorRemain(_.get(model, 'excerpt'), customErrorRemain, isLoading)}
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>{_.get(model, 'seoTitle')?.label}</label>
-                                    <Input name={'seoTitle'}
-                                    error={showFieldError(_.get(model, 'seoTitle'))}
-                                    disabled={!!isLoading}
-                                    value={_.get(model, 'seoTitle').value || ''}
-                                    onChange={handleChange} placeholder={`${_.get(model, 'seoTitle')?.label} ...`} />
-                                    {/* Error remain */}
-                                    {showFieldErrorRemain(_.get(model, 'seoTitle'), customErrorRemain, isLoading)}
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>{_.get(model, 'seoContent')?.label}</label>
-                                    <TextArea name={'seoContent'}
-                                    className={showFieldError(_.get(model, 'seoContent')) ? 'error' : ''}
-                                    disabled={!!isLoading}
-                                    value={_.get(model, 'seoContent')?.value || ''}
-                                    onChange={handleChange} placeholder={`${_.get(model, 'seoContent')?.label} ...`} />
-                                    {/* Error remain */}
-                                    {showFieldErrorRemain(_.get(model, 'seoContent'), customErrorRemain, isLoading)}
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>{_.get(model, 'seoKeyWord')?.label}</label>
-                                    <TextArea name={'seoKeyWord'}
-                                    className={showFieldError(_.get(model, 'seoKeyWord')) ? 'error' : ''}
-                                    disabled={!!isLoading}
-                                    value={_.get(model, 'seoKeyWord')?.value || ''}
-                                    onChange={handleChange} placeholder={`${_.get(model, 'seoKeyWord')?.label} ...`} />
-                                    {/* Error remain */}
-                                    {showFieldErrorRemain(_.get(model, 'seoKeyWord'), customErrorRemain, isLoading)}
-                                </Form.Field>
+                        <Grid.Column width={5}>
+                            <Form>
                                 <Form.Field>
                                     <ImageUpload
                                         handleChange = {handleChange}
@@ -194,17 +165,34 @@ class AddArticle extends Component {
                                     />
                                 </Form.Field>
                                 <Form.Field>
+                                    <label>Select Category</label>
+                                    {
+                                        <SingleSelected
+                                            currentValue={null}
+                                            options={currentCategoryList}
+                                            onHandleChange={this.handleChangeSingleSelected}
+                                        />
+                                    }
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>Select tags</label>
+                                    {
+                                        <MultipleSelected
+                                            currentValues={null}
+                                            options={currentTagList}
+                                            onHandleChange={this.handleChangeMultipleSelected}
+                                            handleAddition={this.handleAddition}
+                                        />
+                                    }
+                                </Form.Field>
+                                <Form.Field>
                                     <Button
                                         disabled={!isFormValid || !!isLoading}
                                         loading={!!isLoading}
-                                        onClick={isFormValid ? null : null}
+                                        onClick={isFormValid ? this.handleCreateArticle : null}
                                         type='submit'>Save changed</Button>
                                 </Form.Field>
                             </Form>
-                        </Grid.Column>
-
-                        <Grid.Column width={10}>
-                            
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
@@ -214,19 +202,23 @@ class AddArticle extends Component {
 }
 
 const mapStateToProps = (state) => {
-    let {category} = state
+    let {tag, category, article, objecttag} = state
     return {
-        currentArticle: category.currentArticle,
-        currentArticles: category.currentArticles,
-        isLoading: category.isLoading
+        currentCategories: category.currentCategories,
+        currentTags: tag.currentTags,
+        currentObjectTags: objecttag.currentObjectTags,
+        isLoading: article.isLoading
     }
 }
 
 const mapDispatchToProps = {
     getListArticles,
-    deleteArticleBy,
     createArticle,
-    updateArticle
+    updateArticle,
+    getListCategories,
+    getListTags,
+    createTag,
+    getListObjectTags
 }
 
 export default connect(

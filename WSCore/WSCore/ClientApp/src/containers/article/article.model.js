@@ -64,6 +64,18 @@ var InitModel = {
             label: 'File',
             value: '',
             validators: []
+        },
+        categoryId: {
+            name: 'categoryId',
+            label: 'Category',
+            value: '',
+            validators: []
+        },
+        tagIds: {
+            name: 'tagIds',
+            label: 'Tags',
+            value: '',
+            validators: []
         }
       }
       return fields

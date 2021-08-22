@@ -22,11 +22,16 @@ namespace WSCore.Models.Dto
 
         [StringLength(11)]
         public string ParentId { set; get; }
+        public string CategoryId { set; get; }
 
         [StringLength(50)]
         public string Type { set; get; }
 
+        public virtual string SeoTitle { set; get; }
+        public virtual string SeoContent { set; get; }
+        public virtual string SeoKeyWord { set; get; }
+
         public virtual IFormFile File { get; set; }
-        public virtual List<string> TagIds { set; get; }
+        public virtual string TagIds { set; get; }
     }
 }

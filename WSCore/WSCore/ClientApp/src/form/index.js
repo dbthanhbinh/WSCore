@@ -17,11 +17,19 @@ const WithFormBehavior = (WrappedComponent, rawModel) => {
             this.reValidModel = this.reValidModel.bind(this)
             this.showFieldErrorRemain = this.showFieldErrorRemain.bind(this)
             this.showFieldError = this.showFieldError.bind(this)
+            this.handleDropdownChange = this.handleDropdownChange.bind(this)
         }
 
         handleChange = (e, data) => {
             const { name, value } = getInputData(e, data)
 
+            this.setState((prevState)=>{
+                let { model, isFormValid } = setFieldValue(name, value, prevState.model)
+                return { model, isFormValid }
+            })
+        }
+
+        handleDropdownChange = (name, value) => {
             this.setState((prevState)=>{
                 let { model, isFormValid } = setFieldValue(name, value, prevState.model)
                 return { model, isFormValid }
@@ -78,6 +86,7 @@ const WithFormBehavior = (WrappedComponent, rawModel) => {
                 reValidModel = {this.reValidModel}
                 handleSubmit = { this.handleSubmit }
                 handleMultipleChange = { this.handleMultipleChange }
+                handleDropdownChange = {this.handleDropdownChange}
                 showFieldError = { this.showFieldError }
                 showFieldErrorRemain = { this.showFieldErrorRemain }
             />

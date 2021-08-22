@@ -8,6 +8,8 @@ namespace WSCore.Models.VM
 {
     public class ArticleVM
     {
+        public virtual bool Error { get; set; } = false;
+        public virtual string Message { get; set; }
         public Article Article { get; set; }
         public Media Media { get; set; }
     }
@@ -27,5 +29,15 @@ namespace WSCore.Models.VM
     {
         public Article Article { get; set; }
         public Media Media { get; set; }
+        public Seo Seo { get; set; }
+        public ObjectTag ObjectTag { set; get; }
+    }
+
+    public class EditArticleInfoVM
+    {
+        public Article Article { get; set; }
+        public Media Media { get; set; }
+        public Seo Seo { get; set; }
+        public List<ObjectTag> ObjectTags { set; get; }
     }
 }

@@ -6,10 +6,21 @@ export const setCurrentArticles = createAction('article/setCurrentArticles')
 
 const preFixAction = 'article'
 // Async actions
-export const getListArticles = createAsyncThunk(`${preFixAction}/getListArticles`, async (payload) => {
-    return await Article.getListArticles(payload)
-})
+export const getListArticles = createAsyncThunk(
+    `${preFixAction}/getListArticles`,
+    async (payload) => {
+        payload.url = `${preFixAction}/${payload.url}`
+        return await Article.getListArticles(payload)
+    }
+)
 
+export const getListArticlesByType = createAsyncThunk(
+    `${preFixAction}/getListArticlesByType`,
+    async (payload) => {
+        payload.url = `${preFixAction}/${payload.url}`
+        return await Article.getListArticlesByType(payload)
+    }
+)
 
 export const getDetailArticle = createAsyncThunk(
     `${preFixAction}/getDetailArticle`,
@@ -20,11 +31,11 @@ export const getDetailArticle = createAsyncThunk(
     }
 )
 
-export const getArticleBy = createAsyncThunk(
-    `${preFixAction}/getArticleBy`,
+export const getArticleById = createAsyncThunk(
+    `${preFixAction}/getArticleById`,
     async (payload) => {
         payload.url = `${preFixAction}/${payload.url}`
-        const response = await Article.getArticleBy(payload)
+        const response = await Article.getArticleById(payload)
         return response
     }
 )
@@ -47,11 +58,11 @@ export const updateArticle = createAsyncThunk(
     }
 )
 
-export const deleteArticleBy = createAsyncThunk(
-    `${preFixAction}/deleteArticleBy`,
+export const deleteArticleById = createAsyncThunk(
+    `${preFixAction}/deleteArticleById`,
     async (payload) => {
         payload.url = `${preFixAction}/${payload.url}`
-        const response = await Article.deleteArticleBy(payload)
+        const response = await Article.deleteArticleById(payload)
         return response
     }
 )

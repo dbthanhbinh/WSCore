@@ -8,9 +8,9 @@ using WSCore.Models.Dto;
 using WSCore.Models.VM;
 using WSCore.Services.ObjectTagService;
 using WSCore.Services.UserService;
-using WSCore.Services.UploadService;
 using WSCore.Services.MediaService;
 using System.Linq;
+using WSCore.Services.SeoService;
 
 namespace WSCore.Services.CategoryService
 {
@@ -19,16 +19,19 @@ namespace WSCore.Services.CategoryService
         private readonly IObjectTagService _objectTagService;
         private readonly IUserService _userService;
         private readonly IMediaService _mediaService;
-        
+        private readonly ISeoService _seoService;
+
         public CategoryService(
             IUnitOfWork uow,
             IUserService userService,
             IObjectTagService objectTagService,
-            IMediaService mediaService
-        ) : base(uow, userService, objectTagService, mediaService) {
+            IMediaService mediaService,
+            ISeoService seoService
+        ) : base(uow, userService, objectTagService, mediaService, seoService) {
             _objectTagService = objectTagService;
             _userService = userService;
             _mediaService = mediaService;
+            _seoService = seoService;
             controllerObj = "category";
         }
 
@@ -155,9 +158,6 @@ namespace WSCore.Services.CategoryService
                     category.Alias = alias;
                     category.Excerpt = excerpt;
                     category.Content = content;
-                    category.SeoTitle = categoryLogicDto.SeoTitle;
-                    category.SeoContent = categoryLogicDto.SeoContent;
-                    category.SeoKeyWord = categoryLogicDto.SeoKeyWord;
                     category.ParentId = categoryLogicDto.ParentId;
                     category.LastSavedUserId = GetUserId();
                     category.LastSavedTime = DateTime.UtcNow;

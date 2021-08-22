@@ -1,39 +1,45 @@
-import { Component } from 'react'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { useEffect, useState } from 'react'
 import {Dropdown} from 'semantic-ui-react'
 
-class MultipleSelected extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            options: props.items
+const MultipleSelected = (props) => {
+    const [currentValues, setCurrentValues] = useState([])
+    const [currentList, setCurrentList] = useState([])
+
+    useEffect(() => {
+        setCurrentList(props.options)
+        setCurrentValues(props.currentValues)
+    }, [props.currentValues, props.options])
+
+    const handleAddition = (e, { value }) => {
+        if(value){
+            props.handleAddition && typeof props.handleAddition === 'function' && props.handleAddition(value)
+            setCurrentList(currentList)
         }
+
+        // currentList.push({ key: value, text: value, value })
+        // setCurrentList(currentList)
     }
 
-    handleAddition = (e, { value }) => {
-        this.setState((prevState) => ({
-          options: [{ key: value, text: value, value, }, ...prevState.options],
-        }))
+    const handleChange = (e, { value }) => {
+        setCurrentValues(value)
+        props.onHandleChange && typeof props.onHandleChange === 'function' && props.onHandleChange(e, value)
     }
 
-    handleChange = (e, { value }) => this.setState({ currentValues: value })
-
-    render(){
-        let {currentValues, options} = this.state
-        return (
-            <Dropdown
-            options={options}
-            placeholder='Choose tags'
-            search
-            selection
-            fluid
-            multiple
-            allowAdditions
-            value={currentValues || []}
-            onAddItem={this.handleAddition}
-            onChange={this.handleChange}
-          />
-        )
-    }
+    return (
+        <Dropdown
+        options={currentList}
+        placeholder='Choose tags'
+        search
+        selection
+        fluid
+        multiple
+        allowAdditions
+        value={currentValues || []}
+        onAddItem={handleAddition}
+        onChange={handleChange}
+      />
+    )
 }
 
 export default MultipleSelected

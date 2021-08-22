@@ -51,12 +51,20 @@ namespace WSCore.Controllers.V1
         #endregion Update
 
         #region Get
-        [HttpGet("articles")]
-        public ActionResult GetArticles()
+        [HttpGet("articles/{type}/{page}")]
+        public ActionResult GetArticlesByType(string type, int page)
         {
-            var rs = _articleService.GetListArticle();
+            var rs = _articleService.GetArticlesByTypeWithPagingAsync(type, page);
             return Ok(new ApiResponse(rs));
         }
+
+        [HttpGet("articles/edit/{articleId}")]
+        public ActionResult GetArticleById(string articleId)
+        {
+            var rs = _articleService.EditArticleByIdAsync(articleId);
+            return Ok(new ApiResponse(rs));
+        }
+
         #endregion Get
 
         #region Delete

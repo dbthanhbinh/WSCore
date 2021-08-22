@@ -200,15 +200,9 @@ namespace WSCore.Services.ObjectTagService
                 // Find tags need to deleted
                 foreach ( var objectTag in objectTags.Result)
                 {
-                    if (!tagIds.Contains(objectTag.Id))
+                    if (!tagIds.Contains(objectTag.TagId))
                     {
-                        ObjectTag objectTag1 = new ObjectTag {
-                            ObjId = objectId,
-                            ObjName = objectTag.ObjName,
-                            ObjType = objectTag.ObjType,
-                            TagId = objectTag.Id
-                        };
-                        objectTagsDeleted.Add(objectTag1);
+                        objectTagsDeleted.Add(objectTag);
                     }
                 }
 
@@ -217,7 +211,7 @@ namespace WSCore.Services.ObjectTagService
                 {
                     foreach (var tagid in tagIds)
                     {
-                        var fn = objectTags.Result.Find(f => f.Id == tagid);
+                        var fn = objectTags.Result.Find(f => f.TagId == tagid);
                         if (fn == null)
                         {
                             ObjectTag objectTag2 = new ObjectTag
@@ -225,7 +219,9 @@ namespace WSCore.Services.ObjectTagService
                                 ObjId = objectId,
                                 ObjName = objectName,
                                 ObjType = objectType,
-                                TagId = tagid
+                                TagId = tagid,
+                                CreatedUserId = GetUserId(),
+                                LastSavedUserId = GetUserId()
                             };
 
                             objectTagsAdded.Add(objectTag2);

@@ -21,6 +21,7 @@ namespace WSCore.Model
 
         [StringLength(11)]
         public string ParentId { set; get; }
+        public string CategoryId { set; get; }
 
         [StringLength(50)]
         public string Type { set; get; }

@@ -2,11 +2,11 @@ import {createSlice} from '@reduxjs/toolkit'
 import {
     getDetailArticle,
     getListArticles,
-    getArticleBy,
+    getArticleById,
     createArticle,
     updateArticle,
-    deleteArticleBy
-} from '../actions/category.actions'
+    deleteArticleById
+} from '../actions/article.actions'
 
 const initialState = {
     currentArticle: {},
@@ -28,10 +28,10 @@ const articleSlice = createSlice({
         [getDetailArticle.fulfilled]: (state, action) => {
           state.currentArticle = action?.payload?.result
         },
-        [getArticleBy.pending]: (state, action) => {
+        [getArticleById.pending]: (state, action) => {
             state.isLoading = true
         },
-        [getArticleBy.fulfilled]: (state, action) => {
+        [getArticleById.fulfilled]: (state, action) => {
             state.currentArticle = action?.payload?.result
             state.isLoading = false
         },
@@ -41,14 +41,17 @@ const articleSlice = createSlice({
         [createArticle.fulfilled]: (state, action) => {
             state.currentArticle = action?.payload?.result
         },
-        [updateArticle.fulfilled]: (state, action) => {
+        [updateArticle.pending]: (state, action) => {
             state.isLoading = true
+        },
+        [updateArticle.fulfilled]: (state, action) => {
+            state.isLoading = false
             state.currentArticle = action?.payload?.result
         },
-        [deleteArticleBy.pending]: (state, action) => {
+        [deleteArticleById.pending]: (state, action) => {
             state.isLoading = true
         },
-        [deleteArticleBy.fulfilled]: (state, action) => {
+        [deleteArticleById.fulfilled]: (state, action) => {
             state.currentArticle = action?.payload?.result
             state.isLoading = false
         }

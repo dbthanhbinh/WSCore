@@ -18,6 +18,7 @@
     <ProjectReference Include="..\WSCore.Common\WSCore.Common.csproj" />
     <ProjectReference Include="..\WSCore.Infrastructure\WSCore.Infrastructure.csproj" />
     <ProjectReference Include="..\WSCore.Model\WSCore.Model.csproj" />
+    <ProjectReference Include="..\WSCore\WSCore.csproj" />
   </ItemGroup>
 
 

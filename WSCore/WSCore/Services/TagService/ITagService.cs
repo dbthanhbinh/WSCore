@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using WSCore.Common.Business;
 using WSCore.Model;
 using WSCore.Models.Dto;
 
 namespace WSCore.Services.TagService
 {
-    public interface ITagService : IBaseService<Tag>
+    public interface ITagService : IBasicService<Tag>
     {
         #region Create
         Task<Tag> AddTagAsync(Tag tagEntity);

@@ -12,6 +12,7 @@ using WSCore.Services.ArticleService;
 using WSCore.Services.CategoryService;
 using WSCore.Services.MediaService;
 using WSCore.Services.ObjectTagService;
+using WSCore.Services.SeoService;
 using WSCore.Services.TagService;
 using WSCore.Services.UploadService;
 using WSCore.Services.UserService;
@@ -58,7 +59,8 @@ namespace WSCore
             services.AddScoped<IUploadService, UploadService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IArticleService, ArticleService>();
-
+            services.AddScoped<ISeoService, SeoService>();
+            
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

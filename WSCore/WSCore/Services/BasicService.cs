@@ -11,6 +11,7 @@ using WSCore.Services.ObjectTagService;
 using WSCore.Services.UserService;
 using WSCore.Services.UploadService;
 using WSCore.Services.MediaService;
+using WSCore.Services.SeoService;
 
 namespace WSCore.Services
 {
@@ -21,6 +22,12 @@ namespace WSCore.Services
         protected readonly string attachedThumb = "thumbnail";
         protected readonly string attachedAttachment = "attachment";
         protected readonly string attachedPhotos = "photos";
+
+        protected int toTalPages = 0;
+        protected int page = 1;
+        protected int pageSize = 2;
+        protected int takeNumber = 2; // pageSize
+        protected int skipIdx = 0;
 
         public readonly IUnitOfWork _uow;
 
@@ -59,7 +66,13 @@ namespace WSCore.Services
             GetPermissions(userId);
         }
 
-        public BasicService(IUnitOfWork uow, IUserService userService, IObjectTagService objectTagService, IMediaService mediaService)
+        public BasicService(
+            IUnitOfWork uow,
+            IUserService userService,
+            IObjectTagService objectTagService,
+            IMediaService mediaService,
+            ISeoService seoService
+        )
         {
             _uow = uow;
 
@@ -201,5 +214,35 @@ namespace WSCore.Services
 
         }
         #endregion Delete entity
+    }
+
+    public class BasePagingResponse
+    {
+        public int TotalRecords { get; set; }
+        public int TotalPages { get; set; }
+        public int CurrentPage { get; set; }
+        public int PageSize { get; set; }
+        public bool IsPaging { get; set; }
+
+        public BasePagingResponse(int totalPages, int totalRecords, int currentPage, int pageSize, bool isPaging)
+        {
+            TotalPages = totalPages;
+            TotalRecords = totalRecords;
+            CurrentPage = currentPage;
+            PageSize = pageSize;
+            IsPaging = isPaging;
+        }
+    }
+
+    public class PagingResponse
+    {
+        public BasePagingResponse Paging { get; set; }
+        public object Data { get; set; }
+
+        public PagingResponse(object data, int toTalPages, int totalRecords, int currentPage, int pageSize)
+        {
+            Paging = new BasePagingResponse(toTalPages, totalRecords, currentPage, pageSize, true);
+            Data = data;
+        }
     }
 }

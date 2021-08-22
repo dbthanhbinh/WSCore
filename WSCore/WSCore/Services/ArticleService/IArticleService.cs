@@ -8,11 +8,14 @@ using WSCore.Models.VM;
 
 namespace WSCore.Services.ArticleService
 {
-    public interface IArticleService
+    public interface IArticleService : IBasicService<Article>
     {
         Task<ArticleVM> CreateArticleLogicAsync(ArticleDto articleDto);
-        Task<ArticleVM> UpdateArticleLogicAsync(ArticleDto articleDto, string id);
-        List<ArticlesVM> GetListArticle();
+        Task<EditArticleInfoVM> UpdateArticleLogicAsync(ArticleDto articleDto, string id);
+        List<ArticlesVM> GetArticles();
+        PagingResponse GetArticlesByTypeWithPagingAsync(string type, int currentPage);
+        ArticleInfoVM GetArticleByIdAsync(string id);
+        EditArticleInfoVM EditArticleByIdAsync(string id);
         Article DeleteArticleById(string id);
     }
 }

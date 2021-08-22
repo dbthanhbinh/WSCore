@@ -7,12 +7,12 @@ import CategoryEdit from './containers/category/edit'
 import Tag from './containers/tag'
 import TagEdit from './containers/tag/edit'
 import AddArticle from './containers/article/add'
+import Article from './containers/article'
+import ArticleEdit from './containers/article/edit'
 
 function App() {
   return (
     <div className="app-main">
-        
-
         <BrowserRouter>
         <nav>
           <ul>
@@ -20,23 +20,27 @@ function App() {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/category">Category</Link>
+              <Link to="/categories">Category</Link>
             </li>
             <li>
-              <Link to="/tag">Tag</Link>
+              <Link to="/tags">Tag</Link>
             </li>
             <li>
-              <Link to="/article">Article</Link>
+              <Link to="/articles">Article</Link>
             </li>
           </ul>
         </nav>
           <Switch>
             <Route exact path="/" component={Category} />
-            <Route exact path="/category" component={Category} />
-            <Route exact path="/category/edit/:id" component={CategoryEdit} />
-            <Route exact path="/tag" component={Tag} />
-            <Route exact path="/tag/edit/:id" component={TagEdit} />
-            <Route exact path="/article" component={AddArticle} />
+            <Route exact path="/categories" component={Category} />
+            <Route exact path="/categories/edit/:id" component={CategoryEdit} />
+            <Route exact path="/tags" component={Tag} />
+            <Route exact path="/tags/edit/:id" component={TagEdit} />
+
+            <Route exact path="/articles/:type" component={Article} />
+            <Route exact path="/articles/:type/:page" component={Article} />
+            <Route exact path="/articles/add/:type" component={AddArticle} />
+            <Route exact path="/articles/edit/:id" component={ArticleEdit} />
             {/* <Route path="/contact" component={Contact} />
             <Route component={NotFound}/> */}
           </Switch>

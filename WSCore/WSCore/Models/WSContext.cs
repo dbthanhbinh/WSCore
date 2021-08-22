@@ -23,5 +23,6 @@ namespace WSCore.Models
         DbSet<PackageModule> PackageModules { set; get; }
         DbSet<Role> Roles { set; get; }
         DbSet<UserModuleAct> UserModuleActs { get; set; }
+        DbSet<Seo> Seos { set; get; }
     }
 }

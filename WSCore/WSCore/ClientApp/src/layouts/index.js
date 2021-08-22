@@ -1,17 +1,12 @@
-import {Container, Grid, Image} from 'semantic-ui-react'
-import ShowArticle from '../containers/posts'
-
-function MainLayout() {
+import {Container, Grid} from 'semantic-ui-react'
+function MainLayout(props) {
     return (
       <div className="app-main">
         <Container>
-          <Grid columns={2} divided>
+          <Grid columns={1} divided>
             <Grid.Row>
-              <Grid.Column width={4}>
-                <Image src='/images/wireframe/media-paragraph.png' />
-              </Grid.Column>
-              <Grid.Column  width={12}>
-                <ShowArticle />
+              <Grid.Column  width={16}>
+                {props.children}
               </Grid.Column>
             </Grid.Row>
           </Grid>

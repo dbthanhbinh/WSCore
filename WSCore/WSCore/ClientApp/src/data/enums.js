@@ -9,6 +9,11 @@ export const actions = {
     READONLY: 'Readonly'
 }
 
+export const objectDefault = {
+    ARTICLE: 'post',
+    CATEGORY: 'category'
+}
+
 // User action on module
 export const userActions = [
     {
@@ -60,10 +65,10 @@ export const validMsg = {
 }
 
 export const controlled = {
-    ARTICLE: 'Article',
-    CATEGORY: 'Category',
-    TAG: 'Tag',
-    MEDIA: 'Media'
+    ARTICLES: 'articles',
+    CATEGORIES: 'categories',
+    TAGS: 'tags',
+    MEDIAS: 'medias'
 }
 
 export const storedKey = {
