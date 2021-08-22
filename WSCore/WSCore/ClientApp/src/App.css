@@ -59,3 +59,7 @@
   color: #ff0000;
 }
 
+
+.image-preview-thumb img {
+  max-width: 100%;
+}

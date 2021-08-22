@@ -4,7 +4,6 @@ import _ from 'lodash'
 import {connect} from 'react-redux'
 import {Container, Grid} from 'semantic-ui-react'
 import {WithFormBehavior} from '../../form'
-import {actions} from '../../data/enums'
 import CategoryModel from './category.model'
 import { initModel} from '../../form/common'
 import {
@@ -19,6 +18,7 @@ import {
 import {getListTags} from '../../reduxStore/actions/tag.actions'
 import ListItems from './listItems'
 import CategoryForm from './form'
+import {controlled, actions, objectDefault} from '../../data/enums'
 
 class Category extends Component {
     constructor(props){
@@ -27,6 +27,7 @@ class Category extends Component {
             model: props?.model
         }
         this.currentModel = actions.EDIT
+        this.posttype = objectDefault.CATEGORY
         this.currentId = null
         this.handleUpdateCategory = this.handleUpdateCategory.bind(this)
         this.deleteCategoryBy = this.deleteCategoryBy.bind(this)
@@ -57,9 +58,12 @@ class Category extends Component {
 
     async getCategories(){
         // get list category all
+        let type = this.props.match.params.type
+        if(type)
+            this.posttype = type
+
         unwrapResult(await this.props.getListCategories({
-            url: 'categories',
-            body: {}
+            url: `${controlled.CATEGORIES}/${this.posttype}`
         }))
     }
 
@@ -122,7 +126,7 @@ class Category extends Component {
 
         this.currentModel = actions.EDIT
         this.currentId = id
-        let {error, result} = unwrapResult(await this.props.getCategoryBy({url: `categories/${id}`}))
+        let {error, result} = unwrapResult(await this.props.getCategoryBy({url: `categories/edit/${id}`}))
         if(error) return
 
         if(result){

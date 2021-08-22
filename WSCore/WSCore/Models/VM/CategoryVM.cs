@@ -41,5 +41,6 @@ namespace WSCore.Models.VM
     {
         public Category Category { get; set; }
         public Media Media { get; set; }
+        public Seo Seo { get; set; }
     }
 }

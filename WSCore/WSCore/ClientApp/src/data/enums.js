@@ -9,6 +9,13 @@ export const actions = {
     READONLY: 'Readonly'
 }
 
+export const controlled = {
+    ARTICLES: 'articles',
+    CATEGORIES: 'categories',
+    TAGS: 'tags',
+    MEDIAS: 'medias'
+}
+
 export const objectDefault = {
     ARTICLE: 'post',
     CATEGORY: 'category'
@@ -62,13 +69,6 @@ export const validMsg = {
     field_not_allowed_min: '%s không nhỏ hơn %d ký tự',
     field_not_allowed_max: '%s không lớn hơn %d ký tự',
     field_not_allowed_special: '%s không cho phép ký tự đặc biệt'
-}
-
-export const controlled = {
-    ARTICLES: 'articles',
-    CATEGORIES: 'categories',
-    TAGS: 'tags',
-    MEDIAS: 'medias'
 }
 
 export const storedKey = {

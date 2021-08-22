@@ -47,7 +47,7 @@ class ListItems extends Component{
     }
 
     renderLinkItem = (id) => {
-        return <Link to={`/article/edit/${id}`}>Edit</Link>
+        return <Link to={`/articles/edit/${id}`}>Edit</Link>
     }
 
     renderRemoveItem = (id) => {

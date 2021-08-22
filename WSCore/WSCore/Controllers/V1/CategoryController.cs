@@ -15,17 +15,17 @@ namespace WSCore.Controllers.V1
             _categoryService = categoryService;
         }
 
-        [HttpGet("categories")]
-        public ActionResult GetCategories()
+        [HttpGet("categories/{type}")]
+        public ActionResult GetCategoriesByType(string type)
         {
-            var rs = _categoryService.GetListCategoriesAsync();
+            var rs = _categoryService.GetListCategoriesByTypeAsync(type);
             return Ok(new ApiResponse(rs));
         }
 
-        [HttpGet("categories/{categoryId}")]
-        public ActionResult GetCategoryById(string categoryId)
+        [HttpGet("categories/edit/{categoryId}")]
+        public ActionResult EditCategoryByIdAsync(string categoryId)
         {
-            var rs = _categoryService.GetCategoryByIdAsync(categoryId);
+            var rs = _categoryService.EditCategoryByIdAsync(categoryId);
             return Ok(new ApiResponse(rs));
         }
 

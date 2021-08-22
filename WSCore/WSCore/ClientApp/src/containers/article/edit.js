@@ -2,7 +2,7 @@ import {Component, React} from 'react'
 import {unwrapResult} from '@reduxjs/toolkit'
 import _ from 'lodash'
 import {connect} from 'react-redux'
-import {Container, Grid, Form, Button} from 'semantic-ui-react'
+import {Grid, Form, Button} from 'semantic-ui-react'
 import {WithFormBehavior} from '../../form'
 import ArticleModel from './article.model'
 import ArticleForm from './form'
@@ -10,6 +10,7 @@ import { ImageUpload } from '../../components/ImageUpload'
 import MultipleSelected from '../../components/selected/multiple.selected'
 import SingleSelected from '../../components/selected/single.selected'
 import {controlled, actions, objectDefault} from '../../data/enums'
+import MainLayout from '../../layouts'
 
 import {
     getArticleById,
@@ -85,7 +86,7 @@ class AddArticle extends Component {
         // fetch data
         this.currentModel = actions.EDIT
         this.currentId = id
-        let {error, result} = unwrapResult(await this.props.getArticleById({url: `${controlled.ARTICLES}/${id}`}))
+        let {error, result} = unwrapResult(await this.props.getArticleById({url: `${controlled.ARTICLES}/edit/${id}`}))
         if(error) return
 
         let {currentTagValues, model} = this.state
@@ -245,70 +246,65 @@ class AddArticle extends Component {
             isFormValid,
             currentArticle
         } = this.props
-        
-        console.log('=====model: ', model)
 
         return(
-            <Container>
-                <Grid>
-                    <Grid.Row>
-                        
-                            <Grid.Column width={11}>
-                                <ArticleForm
-                                    handleChange = {handleChange}
-                                    currentItem = {currentArticle}
-                                    model = {model}
-                                    isLoading = {isLoading}
-                                    isFormValid = {isFormValid}
-                                    actions = {actions.EDIT}
-                                    onHandleAction = {this.handleUpdateArticle}
-                                    onShowFieldError = { showFieldError }
-                                    onShowFieldErrorRemain = { showFieldErrorRemain }
-                                />
-                            </Grid.Column>
-
-                            <Grid.Column width={5}>
-                                <Form>
-                                    <Form.Field>
-                                        <ImageUpload
-                                            handleChange = {handleChange}
-                                            currentImg = {currentImg || null}
+            <MainLayout>
+                <Grid.Row>
+                    <Grid columns={1} divided>
+                        <Grid.Column width={12}>
+                            <ArticleForm
+                                handleChange = {handleChange}
+                                currentItem = {currentArticle}
+                                model = {model}
+                                isLoading = {isLoading}
+                                isFormValid = {isFormValid}
+                                actions = {actions.EDIT}
+                                onHandleAction = {this.handleUpdateArticle}
+                                onShowFieldError = { showFieldError }
+                                onShowFieldErrorRemain = { showFieldErrorRemain }
+                            />
+                        </Grid.Column>
+                        <Grid.Column width={4}>
+                            <Form>
+                                <Form.Field>
+                                    <ImageUpload
+                                        handleChange = {handleChange}
+                                        currentImg = {currentImg || null}
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>Select Category</label>
+                                    {
+                                        currentCategoryList && <SingleSelected
+                                            currentValue={currentArticle?.article?.categoryId}
+                                            options={currentCategoryList}
+                                            onHandleChange={this.handleChangeSingleSelected}
                                         />
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <label>Select Category</label>
-                                        {
-                                            currentCategoryList && <SingleSelected
-                                                currentValue={currentArticle?.article?.categoryId}
-                                                options={currentCategoryList}
-                                                onHandleChange={this.handleChangeSingleSelected}
-                                            />
-                                        }
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <label>Select tags</label>
-                                        {
-                                            currentTagList && <MultipleSelected
-                                                currentValues={_.get(model, 'tagIds').value || ''}
-                                                options={currentTagList}
-                                                onHandleChange={this.handleChangeMultipleSelected}
-                                                handleAddition={this.handleAddition}
-                                            />
-                                        }
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <Button
-                                            disabled={!isFormValid || !!isLoading}
-                                            loading={!!isLoading}
-                                            onClick={isFormValid ? this.handleUpdateArticle : null}
-                                            type='submit'>Save changed</Button>
-                                    </Form.Field>
-                                </Form>
-                            </Grid.Column>
-                        
-                    </Grid.Row>
-                </Grid>
-            </Container>
+                                    }
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>Select tags</label>
+                                    {
+                                        currentTagList && <MultipleSelected
+                                            currentValues={_.get(model, 'tagIds').value || ''}
+                                            options={currentTagList}
+                                            onHandleChange={this.handleChangeMultipleSelected}
+                                            handleAddition={this.handleAddition}
+                                        />
+                                    }
+                                </Form.Field>
+                                <Form.Field>
+                                    <Button
+                                        disabled={!isFormValid || !!isLoading}
+                                        loading={!!isLoading}
+                                        onClick={isFormValid ? this.handleUpdateArticle : null}
+                                        type='submit'>Save changed</Button>
+                                </Form.Field>
+                            </Form>
+                        </Grid.Column>
+                    </Grid>
+                </Grid.Row>
+            </MainLayout>
         )
     }
 }

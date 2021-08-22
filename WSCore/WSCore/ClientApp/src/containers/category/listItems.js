@@ -8,7 +8,7 @@ const ListItems = (props) => {
     let currentId = props.currentId || null
 
     const renderLinkItem = (id) => {
-        return (id === currentId) ? <span>Edit</span> : <Link to={`/category/edit/${id}`}>Edit</Link>
+        return (id === currentId) ? <span>Edit</span> : <Link to={`/categories/edit/${id}`}>Edit</Link>
     }
 
     const renderRemoveItem = (id) => {

@@ -94,31 +94,41 @@ namespace WSCore.Services.CategoryService
                 Alias = alias,
                 Excerpt = excerpt,
                 Content = content,
+                ParentId = categoryLogicDto.ParentId,
+                Type = categoryLogicDto.Type,
                 CreatedUserId = GetUserId(),
                 LastSavedUserId = GetUserId()
             };
             await CreateCategory(category, false);
 
-            string mediaId = "";
+            // Create Seo
+            string seoTitle = (categoryLogicDto.SeoTitle != null) ? categoryLogicDto.SeoTitle : title;
+            string seoContent = (categoryLogicDto.SeoContent != null) ? categoryLogicDto.SeoContent : excerpt;
+            string seoKeyWord = (categoryLogicDto.SeoKeyWord != null) ? categoryLogicDto.SeoKeyWord : title;
+            SeoDto seoDto = new SeoDto
+            {
+                ObjectId = category.Id,
+                ObjectType = category.Type,
+                SeoTitle = seoTitle,
+                SeoContent = seoContent,
+                SeoKeyWord = seoKeyWord
+            };
+            await _seoService.AddSeoLogicAsync(seoDto);
+
             // Upload thumbnail/Media
+            string mediaId = "";
             Media media = new Media();
             if (categoryLogicDto.File != null)
             {
                 media = await _mediaService.CreateOrUpdateSingleMediaAsync(
                     categoryLogicDto.File,
-                    category.Id, controllerObj,
+                    category.Id,
+                    category.Type,
                     attachedThumb,
                     mediaId,
                     true,
                     false
                 );
-            }
-
-            // Create Tags
-            List<string> tagIds = categoryLogicDto.TagIds;
-            if (tagIds != null)
-            {
-
             }
 
             _uow.SaveChanges();
@@ -147,11 +157,11 @@ namespace WSCore.Services.CategoryService
                 CleanObjecAndBuildExcerptDto(ref content, ref excerpt);
 
                 var dbContext = _uow.GetRepository<Category>();
-                CategoryInfoVM categoryInfo = GetCategoryByIdAsync(id);
+                CategoryInfoVM categoryInfo = _EditCategoryByIdAsync(id);
 
                 Category category = new Category();
                 Media media = new Media();
-                if (categoryInfo != null)
+                if (categoryInfo != null && categoryInfo.Category != null)
                 {
                     category = categoryInfo.Category;
                     category.Title = title;
@@ -165,26 +175,40 @@ namespace WSCore.Services.CategoryService
                     // Update single category
                     dbContext.UpdateAsync(category);
 
-                    // Update tags
-                    List<string> tagIds = categoryLogicDto.TagIds;
-                    _objectTagService.UpdateObjectTagsInObject(tagIds, objectId: id, objectType: category.Type, "category", false);
+                    // Update Seo
+                    Seo seoInfo = await _seoService.GetSeoByObjectAsync(category.Id, category.Type);
+                    if (
+                        seoInfo != null && 
+                        (
+                            !string.Equals(categoryLogicDto.SeoTitle, seoInfo.SeoTitle) ||
+                            !string.Equals(categoryLogicDto.SeoContent, seoInfo.SeoContent) ||
+                            !string.Equals(categoryLogicDto.SeoKeyWord, seoInfo.SeoKeyWord)
+                        )
+                    )
+                    {
+                        seoInfo.SeoTitle = categoryLogicDto.SeoTitle;
+                        seoInfo.SeoContent = categoryLogicDto.SeoContent;
+                        seoInfo.SeoKeyWord = categoryLogicDto.SeoKeyWord;
+                        seoInfo.LastSavedUserId = GetUserId();
+                        seoInfo.LastSavedTime = DateTime.UtcNow;
+                        await _seoService.UpdateSeoEntityAsync(seoInfo, false);
+                    }
 
-                    media = categoryInfo.Media;
                     // Upload thumbnail/Media
+                    media = categoryInfo.Media;
                     if (categoryLogicDto.File != null)
                     {
                         string mediaId = media?.Id;
                         media = await _mediaService.CreateOrUpdateSingleMediaAsync(
                             categoryLogicDto.File,
-                            category.Id, controllerObj,
+                            category.Id,
+                            category.Type,
                             attachedThumb,
                             mediaId,
                             true,
                             true
                         );
                     }
-
-
                     _uow.SaveChanges();
                 }
 
@@ -204,18 +228,38 @@ namespace WSCore.Services.CategoryService
 
 
         #region Get
-
-        public List<CategoriesVM> GetListCategoriesAsync()
+        public List<CategoriesVM> GetListCategoriesByTypeAsync(string type)
         {
             try
             {
                 List<Category> tags = new List<Category>();
-                var dbContext = _uow.GetRepository<Category>();
-                var dbContext2 = _uow.GetRepository<Media>();
-
-                var rs = from cat in dbContext.GetEntities(x => x.IsActive == true)
-                         join med in dbContext2.GetEntities(x => x.IsActive == true)
-                         on cat.Id equals med.ObjectId into leftGroup
+                var rs = from cat in _uow.GetRepository<Category>().GetEntities(
+                            x => x.IsActive == true && x.Type == type
+                         ).Select(s1 => new {
+                             s1.Id,
+                             s1.Title,
+                             s1.Alias,
+                             s1.Excerpt,
+                             s1.ParentId,
+                             s1.Type
+                         })
+                         join med in _uow.GetRepository<Media>().GetEntities(
+                             x => x.IsActive == true
+                         ).Select(s2 => new {
+                             s2.FileId,
+                             s2.Title,
+                             s2.Alt,
+                             s2.Caption,
+                             s2.Path,
+                             s2.ObjectId,
+                             s2.ObjectType,
+                             s2.MediaType,
+                             s2.AttachedType,
+                             s2.Small,
+                             s2.Medium,
+                             s2.Large
+                         })
+                            on cat.Id equals med.ObjectId into leftGroup
                          from media in leftGroup.DefaultIfEmpty()
                          select new CategoriesVM
                          {
@@ -250,26 +294,36 @@ namespace WSCore.Services.CategoryService
             }
         }
 
+        public CategoryInfoVM EditCategoryByIdAsync(string id)
+        {
+            return _EditCategoryByIdAsync(id);
+        }
+
         /// <summary>
         /// Get single Category by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public CategoryInfoVM GetCategoryByIdAsync(string id)
+        private CategoryInfoVM _EditCategoryByIdAsync(string id)
         {
             try
             {
-                var dbContext = _uow.GetRepository<Category>();
-                var dbContext2 = _uow.GetRepository<Media>();
+                var rs = from cat in _uow.GetRepository<Category>().GetEntities(
+                            x => x.IsActive == true && x.Id == id,
+                            o => o.OrderByDescending(a => a.CreatedTime)
+                         )
+                         join media in _uow.GetRepository<Media>().GetEntities(m => m.IsActive == true)
+                            on cat.Id equals media.ObjectId into group1
+                         from g1 in group1.DefaultIfEmpty()
 
-                var rs = from cat in dbContext.GetEntities(x => x.IsActive == true && x.Id == id, o => o.OrderByDescending(a => a.CreatedTime))
-                         join media in dbContext2.GetEntities(m => m.IsActive == true)
-                         on cat.Id equals media.ObjectId into relatedMedia
-                         from a in relatedMedia.DefaultIfEmpty()
+                         join seo in _uow.GetRepository<Seo>().GetEntities(s => s.IsActive == true)
+                            on id equals seo.ObjectId into group2
+                         from g2 in group2.DefaultIfEmpty()
                          select new CategoryInfoVM
                          {
                              Category = cat,
-                             Media = a == null ? null : a
+                             Media = g1 == null ? null : g1,
+                             Seo = g2 == null ? null : g2
                          };
 
                 var re = rs?.FirstOrDefault();

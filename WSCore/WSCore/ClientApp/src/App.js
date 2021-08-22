@@ -14,31 +14,15 @@ function App() {
   return (
     <div className="app-main">
         <BrowserRouter>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/categories">Category</Link>
-            </li>
-            <li>
-              <Link to="/tags">Tag</Link>
-            </li>
-            <li>
-              <Link to="/articles">Article</Link>
-            </li>
-          </ul>
-        </nav>
           <Switch>
             <Route exact path="/" component={Category} />
-            <Route exact path="/categories" component={Category} />
+            <Route exact path="/categories/:type" component={Category} />
             <Route exact path="/categories/edit/:id" component={CategoryEdit} />
+            
             <Route exact path="/tags" component={Tag} />
             <Route exact path="/tags/edit/:id" component={TagEdit} />
 
             <Route exact path="/articles/:type" component={Article} />
-            <Route exact path="/articles/:type/:page" component={Article} />
             <Route exact path="/articles/add/:type" component={AddArticle} />
             <Route exact path="/articles/edit/:id" component={ArticleEdit} />
             {/* <Route path="/contact" component={Contact} />

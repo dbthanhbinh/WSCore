@@ -40,6 +40,5 @@ namespace WSCore.Models.Dto
 
     public class CategoryLogicDto : CategoryDto
     {
-        public List<string> TagIds { set; get; }
     }
 }
