@@ -25,6 +25,8 @@ function App() {
             <Route exact path="/articles/:type" component={Article} />
             <Route exact path="/articles/add/:type" component={AddArticle} />
             <Route exact path="/articles/edit/:id" component={ArticleEdit} />
+
+            <Route exact path="/users" component={Tag} />
             {/* <Route path="/contact" component={Contact} />
             <Route component={NotFound}/> */}
           </Switch>

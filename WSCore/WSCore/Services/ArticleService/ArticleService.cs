@@ -114,7 +114,7 @@ namespace WSCore.Services.ArticleService
                     SeoContent = seoContent,
                     SeoKeyWord = seoKeyWord
                 };
-                await _seoService.AddSeoLogicAsync(seoDto);
+                await _seoService.AddSeoLogicAsync(seoDto, false);
 
                 // Create Media/ Media Related
                 string mediaId = ""; // for Edit media
@@ -442,7 +442,10 @@ namespace WSCore.Services.ArticleService
             try
             {
                 int totalRecords = GetCountTotalArticlesByType(type); // Total
-                if(totalRecords <= pageSize)
+                if(totalRecords < 1)
+                    return new PagingResponse(null, 0, 0, currentPage, pageSize);
+
+                if (totalRecords <= pageSize)
                 {
                     skipIdx = 0;
                     takeNumber = totalRecords;

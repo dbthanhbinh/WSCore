@@ -19,6 +19,7 @@ import {getListTags} from '../../reduxStore/actions/tag.actions'
 import ListItems from './listItems'
 import CategoryForm from './form'
 import {controlled, actions, objectDefault} from '../../data/enums'
+import MainLayout from '../../layouts'
 
 class Category extends Component {
     constructor(props){
@@ -34,14 +35,8 @@ class Category extends Component {
     }
 
     async componentDidMount() {
-        // // get list tags all
-        // unwrapResult(await this.props.getListTags( {
-        //     url: 'tags',
-        //     body: {}
-        // }))
-
         // get list category all
-        this.getCategories()
+        // this.getCategories()
 
         let id = this.props.match.params.id
         if(!id) return
@@ -56,9 +51,8 @@ class Category extends Component {
         }
     }
 
-    async getCategories(){
+    async getCategories(type){
         // get list category all
-        let type = this.props.match.params.type
         if(type)
             this.posttype = type
 
@@ -88,7 +82,7 @@ class Category extends Component {
                 body: {
                     title: _.get(model, 'title')?.value,
                     alias: _.get(model, 'alias')?.value,
-                    content: _.get(model, 'content')?.value,
+                    content: _.get(model, 'content')?.value || '',
                     excerpt: _.get(model, 'excerpt')?.value,
                     seotitle: _.get(model, 'seoTitle')?.value,
                     seocontent: _.get(model, 'seoContent')?.value,
@@ -101,8 +95,18 @@ class Category extends Component {
 
             if(result){
                 let {currentCategories} = this.props
-                let res = result?.category
-                let newCategories = this.updateItemInList(currentCategories, res, this.currentId)
+                let res = result.category
+                let newCategories = this.updateItemInList(currentCategories,
+                    {
+                        id: res.id,
+                        title: res.title,
+                        alias: res.alias,
+                        excerpt: res.excerpt,
+                        parentId: res.parentId,
+                        type: res.type,
+                        media: result.media
+                    }
+                    , this.currentId)
                 this.props.setCurrentCategories(newCategories)
             }
         }
@@ -120,6 +124,7 @@ class Category extends Component {
     }
 
     async getCategoryBy(categoryId){
+        let {model} = this.state
         // fetch data
         let id = categoryId
         if(!id) return
@@ -134,10 +139,19 @@ class Category extends Component {
             Object.keys(this.state.model).forEach((key) => {
                 this.state.model[key].value = (res && res[key]) ? res[key] : ""
             })
+
+            // Update Seo
+            let seoRes = result?.seo
+            model['seoTitle'].value = (seoRes && seoRes['seoTitle']) ? seoRes['seoTitle'] : ""
+            model['seoContent'].value = (seoRes && seoRes['seoTitle']) ? seoRes['seoContent'] : ""
+            model['seoKeyWord'].value = (seoRes && seoRes['seoTitle']) ? seoRes['seoKeyWord'] : ""
+
             // Re-Initi validate Model
             let {reValidModel} = this.props
             reValidModel(this.state.model, true)
             this.setState({model: this.state.model})
+
+            this.getCategories(result?.category?.type)
         }
     }
 
@@ -162,9 +176,9 @@ class Category extends Component {
         } = this.props
 
         return(
-            <Container>
-                <Grid>
-                    <Grid.Row>
+            <MainLayout>
+                <Grid.Row>
+                    <Grid columns={1} divided>
                         <Grid.Column width={5}>
                             <CategoryForm
                                 handleChange = {handleChange}
@@ -178,7 +192,6 @@ class Category extends Component {
                                 onShowFieldErrorRemain = { showFieldErrorRemain }
                             />
                         </Grid.Column>
-
                         <Grid.Column width={11}>
                             <ListItems
                                 currentCategories={currentCategories}
@@ -187,9 +200,9 @@ class Category extends Component {
                                 onDeleteCategoryBy = {this.deleteCategoryBy}
                             />
                         </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Container>
+                    </Grid>
+                </Grid.Row>
+            </MainLayout>
         )
     }
 }

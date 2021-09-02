@@ -23,12 +23,12 @@ var InitModel = {
                 }
             ]
         },
-        content: {
-            name: 'content',
-            label: 'Content',
-            value: '',
-            validators: []
-        },
+        // content: {
+        //     name: 'content',
+        //     label: 'Content',
+        //     value: '',
+        //     validators: []
+        // },
         excerpt: {
             name: 'excerpt',
             label: 'Excerpt',
@@ -40,6 +40,14 @@ var InitModel = {
                     isCheckMaxString: true
                 }
             ]
+        },
+        parentId: {
+            name: 'parentId',
+            label: 'Parent Id',
+            value: '',
+            minLength: 3,
+            maxLength: 255,
+            validators: []
         },
         seoTitle: {
             name: 'seoTitle',

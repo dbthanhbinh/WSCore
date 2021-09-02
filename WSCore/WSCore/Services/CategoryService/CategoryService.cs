@@ -113,7 +113,7 @@ namespace WSCore.Services.CategoryService
                 SeoContent = seoContent,
                 SeoKeyWord = seoKeyWord
             };
-            await _seoService.AddSeoLogicAsync(seoDto);
+            await _seoService.AddSeoLogicAsync(seoDto, false);
 
             // Upload thumbnail/Media
             string mediaId = "";
@@ -143,7 +143,7 @@ namespace WSCore.Services.CategoryService
 
         #region Update
 
-        public async Task<CategoryLogicVM> UpdateCategoryLogicAsync(string id, CategoryLogicDto categoryLogicDto)
+        public async Task<CategoryInfoVM> UpdateCategoryLogicAsync(string id, CategoryLogicDto categoryLogicDto)
         {
             try
             {
@@ -161,6 +161,7 @@ namespace WSCore.Services.CategoryService
 
                 Category category = new Category();
                 Media media = new Media();
+                Seo seoInfo = new Seo();
                 if (categoryInfo != null && categoryInfo.Category != null)
                 {
                     category = categoryInfo.Category;
@@ -176,7 +177,7 @@ namespace WSCore.Services.CategoryService
                     dbContext.UpdateAsync(category);
 
                     // Update Seo
-                    Seo seoInfo = await _seoService.GetSeoByObjectAsync(category.Id, category.Type);
+                    seoInfo = await _seoService.GetSeoByObjectAsync(category.Id, category.Type);
                     if (
                         seoInfo != null && 
                         (
@@ -212,10 +213,11 @@ namespace WSCore.Services.CategoryService
                     _uow.SaveChanges();
                 }
 
-                return new CategoryLogicVM
+                return new CategoryInfoVM
                 {
                     Category = category,
-                    Media = media
+                    Media = media,
+                    Seo = seoInfo
                 };
             }
             catch (Exception ex)
@@ -223,18 +225,16 @@ namespace WSCore.Services.CategoryService
                 throw ex;
             }
         }
-
         #endregion Update
 
-
         #region Get
-        public List<CategoriesVM> GetListCategoriesByTypeAsync(string type)
+        public List<CategoriesVM> GetCategoriesAsync()
         {
             try
             {
                 List<Category> tags = new List<Category>();
                 var rs = from cat in _uow.GetRepository<Category>().GetEntities(
-                            x => x.IsActive == true && x.Type == type
+                            x => x.IsActive == true
                          ).Select(s1 => new {
                              s1.Id,
                              s1.Title,
@@ -284,6 +284,72 @@ namespace WSCore.Services.CategoryService
                                 Medium = media.Medium,
                                 Large = media.Large
                             }
+                         };
+
+                return rs?.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<CategoriesVM> GetListCategoriesByTypeAsync(string type)
+        {
+            try
+            {
+                List<Category> tags = new List<Category>();
+                var rs = from cat in _uow.GetRepository<Category>().GetEntities(
+                            x => x.IsActive == true && x.Type == type
+                         ).Select(s1 => new {
+                             s1.Id,
+                             s1.Title,
+                             s1.Alias,
+                             s1.Excerpt,
+                             s1.ParentId,
+                             s1.Type
+                         })
+                         join med in _uow.GetRepository<Media>().GetEntities(
+                             x => x.IsActive == true
+                         ).Select(s2 => new {
+                             s2.FileId,
+                             s2.Title,
+                             s2.Alt,
+                             s2.Caption,
+                             s2.Path,
+                             s2.ObjectId,
+                             s2.ObjectType,
+                             s2.MediaType,
+                             s2.AttachedType,
+                             s2.Small,
+                             s2.Medium,
+                             s2.Large
+                         })
+                            on cat.Id equals med.ObjectId into leftGroup
+                         from media in leftGroup.DefaultIfEmpty()
+                         select new CategoriesVM
+                         {
+                             Id = cat.Id,
+                             Title = cat.Title,
+                             Alias = cat.Alias,
+                             Excerpt = cat.Excerpt,
+                             ParentId = cat.ParentId,
+                             Type = cat.Type,
+                             Media = media == null ? null : new MediasVM
+                             {
+                                 FileId = media.FileId,
+                                 Title = media.Title,
+                                 Alt = media.Alt,
+                                 Caption = media.Caption,
+                                 Path = media.Path,
+                                 ObjectId = media.ObjectId,
+                                 ObjectType = media.ObjectType,
+                                 MediaType = media.MediaType,
+                                 AttachedType = media.AttachedType,
+                                 Small = media.Small,
+                                 Medium = media.Medium,
+                                 Large = media.Large
+                             }
                          };
 
                 return rs?.ToList();

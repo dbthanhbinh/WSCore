@@ -19,11 +19,12 @@ namespace WSCore.Services.CategoryService
         #endregion Create
 
         #region Update
-        Task<CategoryLogicVM> UpdateCategoryLogicAsync(string id, CategoryLogicDto categoryLogicDto);
+        Task<CategoryInfoVM> UpdateCategoryLogicAsync(string id, CategoryLogicDto categoryLogicDto);
         #endregion Update
 
         #region Get
         List<CategoriesVM> GetListCategoriesByTypeAsync(string type);
+        List<CategoriesVM> GetCategoriesAsync();
         CategoryInfoVM EditCategoryByIdAsync(string id);
         #endregion Get
 

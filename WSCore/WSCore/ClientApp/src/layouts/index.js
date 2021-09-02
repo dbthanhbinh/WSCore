@@ -14,13 +14,16 @@ function MainLayout(props) {
                       <Link to="/">Home</Link>
                     </li>
                     <li>
-                      <Link to="/categories">Category</Link>
+                      <Link to="/categories/category">Category</Link>
                     </li>
                     <li>
                       <Link to="/tags">Tag</Link>
                     </li>
                     <li>
                       <Link to="/articles/news">Article</Link>
+                    </li>
+                    <li>
+                      <Link to="/users">Users</Link>
                     </li>
                   </ul>
                 </nav>

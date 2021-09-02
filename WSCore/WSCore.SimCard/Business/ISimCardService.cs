@@ -1,9 +1,9 @@
-﻿using WSCore.Common.Business;
+﻿using WSCore.Services;
 using WSCore.SimCard.Models;
 
 namespace WSCore.SimCard.Business
 {
-    public interface ISimCardService : IBaseService<Sim>
+    public interface ISimCardService : IBasicService<Sim>
     {
         void AddLogicAsync();
         void ImportFile();

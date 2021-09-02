@@ -6,7 +6,7 @@ namespace WSCore.Services.SeoService
 {
     public interface ISeoService : IBasicService<Seo>
     {
-        Task<Seo> AddSeoLogicAsync(SeoDto seoDto);
+        Task<Seo> AddSeoLogicAsync(SeoDto seoDto, bool isSaveChanged);
         Task<Seo> UpdateSeoLogicAsync(SeoDto seoDto, string seoId);
         Task<Seo> UpdateSeoEntityAsync(Seo seo, bool isSaveChanged);
         Task<Seo> GetSeoByObjectAsync(string objectId, string objectType);

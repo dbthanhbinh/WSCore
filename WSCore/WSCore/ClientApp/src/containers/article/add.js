@@ -2,15 +2,15 @@ import {Component, React} from 'react'
 import {unwrapResult} from '@reduxjs/toolkit'
 import _ from 'lodash'
 import {connect} from 'react-redux'
-import  { Redirect } from 'react-router-dom'
 import {Container, Grid, Form, Button} from 'semantic-ui-react'
 import {WithFormBehavior} from '../../form'
-import {actions} from '../../data/enums'
+import {controlled, actions, objectDefault} from '../../data/enums'
 import ArticleModel from './article.model'
 import ArticleForm from './form'
 import { ImageUpload } from '../../components/ImageUpload'
 import MultipleSelected from '../../components/selected/multiple.selected'
 import SingleSelected from '../../components/selected/single.selected'
+import MainLayout from '../../layouts'
 import {
     getListArticles,
     createArticle,
@@ -39,7 +39,7 @@ class AddArticle extends Component {
             currentCategoryList: []
         }
         this.currentModel = actions.ADD
-        this.posttype = 'post'
+        this.posttype = objectDefault.ARTICLE
         this.currentId = null
         this.handleCreateArticle = this.handleCreateArticle.bind(this)
         this.handleChangeSingleSelected = this.handleChangeSingleSelected.bind(this)
@@ -47,10 +47,6 @@ class AddArticle extends Component {
     }
 
     async componentDidMount(){
-        let type = this.props.match.params.type
-        if(!type) return
-        this.posttype = type
-
         // get list category all
         let categories = await this.getListCategories()
         let tags = await this.getListTags()
@@ -61,7 +57,11 @@ class AddArticle extends Component {
     }
 
     async getListCategories(){
-        let {error, result} = unwrapResult(await this.props.getListCategories({url: 'categories'}))
+        let type = this.props.match.params.type
+        if(type)
+            this.posttype = type
+
+        let {error, result} = unwrapResult(await this.props.getListCategories({url: `${controlled.CATEGORIES}/${this.posttype}`}))
         if(error) return false
 
         if(result && result.length > 0){
@@ -87,7 +87,7 @@ class AddArticle extends Component {
         e.preventDefault();
 
         let {error, result } = unwrapResult(await this.props.createArticle({
-            url: 'articles',
+            url: `${controlled.ARTICLES}`,
             body: {
                 title: _.get(model, 'title')?.value,
                 alias: _.get(model, 'alias')?.value,
@@ -106,7 +106,7 @@ class AddArticle extends Component {
         if(error) return
 
         if(result){
-            this.props.history.push(`/article/edit/${result?.article?.id}`);
+            this.props.history.push(`/${controlled.ARTICLES}/edit/${result?.article?.id}`);
         }
     }
 
@@ -140,9 +140,9 @@ class AddArticle extends Component {
         } = this.props
 
         return(
-            <Container>
-                <Grid>
-                    <Grid.Row>
+            <MainLayout>
+                <Grid.Row>
+                    <Grid columns={1} divided>
                         <Grid.Column width={11}>
                             <ArticleForm
                                 handleChange = {handleChange}
@@ -155,7 +155,6 @@ class AddArticle extends Component {
                                 onShowFieldErrorRemain = { showFieldErrorRemain }
                             />
                         </Grid.Column>
-
                         <Grid.Column width={5}>
                             <Form>
                                 <Form.Field>
@@ -194,9 +193,9 @@ class AddArticle extends Component {
                                 </Form.Field>
                             </Form>
                         </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Container>
+                    </Grid>
+                </Grid.Row>
+            </MainLayout>
         )
     }
 }

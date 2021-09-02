@@ -318,11 +318,11 @@ namespace WSCore.Services.UserService
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                            new Claim(ClaimTypes.Sid, userLoggedIn.Id.ToString()),
-                            new Claim(ClaimTypes.Email, userLoggedIn.Email.ToString()),
-                            new Claim(ClaimTypes.Role, "SupperAdmin"),
-                            new Claim(ClaimTypes.MobilePhone, userLoggedIn.Phone.ToString()),
-                            new Claim("LoginName", userLoggedIn.LoginName.ToString())
+                        new Claim(ClaimTypes.Sid, userLoggedIn.Id.ToString()),
+                        new Claim(ClaimTypes.Email, userLoggedIn.Email.ToString()),
+                        new Claim(ClaimTypes.Role, "SupperAdmin"),
+                        new Claim(ClaimTypes.MobilePhone, userLoggedIn.Phone.ToString()),
+                        new Claim("LoginName", userLoggedIn.LoginName.ToString())
                     }),
                     Expires = DateTime.UtcNow.AddDays(2),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

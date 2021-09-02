@@ -4,6 +4,7 @@ import _ from 'lodash'
 import {connect} from 'react-redux'
 import {WithFormBehavior} from '../../form'
 import TabModel from './tag.model'
+import MainLayout from '../../layouts'
 import {
     getListTags,
     getTagById,
@@ -71,9 +72,9 @@ class Tag extends Component{
         } = this.props
 
         return(
-            <Container>
-                <Grid>
-                    <Grid.Row>
+            <MainLayout>
+                <Grid.Row>
+                    <Grid columns={1}>
                         <Grid.Column width={5}>
                             <TagForm 
                                 isFormValid = {isFormValid}
@@ -86,7 +87,6 @@ class Tag extends Component{
                                 onHandleAction = {this.handleSubmitData}
                             />
                         </Grid.Column>
-
                         <Grid.Column width={11}>
                             <ListItems
                                 currentTags={currentTags}
@@ -95,9 +95,9 @@ class Tag extends Component{
                                 onDeleteItemBy = {this.deleteTagBy}
                             />
                         </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Container>
+                    </Grid>
+                </Grid.Row>
+            </MainLayout>
         )
     }
 }

@@ -16,6 +16,7 @@ import ListItems from './tag.list'
 import {actions} from '../../data/enums'
 import TagForm from './form'
 import { initModel} from '../../form/common'
+import MainLayout from '../../layouts'
 
 class Tag extends Component{
     constructor(props){
@@ -129,9 +130,9 @@ class Tag extends Component{
         console.log('=====: ', this.props)
 
         return(
-            <Container>
-                <Grid>
-                    <Grid.Row>
+            <MainLayout>
+                <Grid.Row>
+                    <Grid columns={1}>
                         <Grid.Column width={5}>
                             <TagForm 
                                 isFormValid = {isFormValid}
@@ -144,7 +145,6 @@ class Tag extends Component{
                                 onHandleAction = {this.handleUpdateData}
                             />
                         </Grid.Column>
-
                         <Grid.Column width={11}>
                             <ListItems
                                 currentTags={currentTags}
@@ -153,9 +153,9 @@ class Tag extends Component{
                                 onDeleteItemBy = {this.deleteTagBy}
                             />
                         </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Container>
+                    </Grid>
+                </Grid.Row>
+            </MainLayout>
         )
     }
 }

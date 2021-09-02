@@ -19,7 +19,7 @@ namespace WSCore.Services.SeoService
         /// </summary>
         /// <param name="seoDto"></param>
         /// <returns></returns>
-        public async Task<Seo> AddSeoLogicAsync(SeoDto seoDto)
+        public async Task<Seo> AddSeoLogicAsync(SeoDto seoDto, bool isSaveChanged)
         {
             try
             {
@@ -34,7 +34,8 @@ namespace WSCore.Services.SeoService
                     LastSavedUserId = GetUserId()
                 };
                 await _uow.GetRepository<Seo>().AddAsync(newEntity);
-                _uow.SaveChanges();
+                if (isSaveChanged)
+                    _uow.SaveChanges();
                 return newEntity;
 
             }

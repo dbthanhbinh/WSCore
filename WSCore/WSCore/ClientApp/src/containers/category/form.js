@@ -2,6 +2,7 @@ import {Form, Input, TextArea, Button} from 'semantic-ui-react'
 import _ from 'lodash'
 import { ImageUpload } from '../../components/ImageUpload'
 import {BuildField} from '../../form/fields/field'
+import SingleSelected from '../../components/selected/single.selected'
 
 const CategoryForm = (props) => {
     let {
@@ -13,7 +14,9 @@ const CategoryForm = (props) => {
         isFormValid,
         onHandleAction,
         customErrorRemain,
-        currentCategory
+        currentCategory,
+        currentCategories,
+        onHandleChange
     } = props
     let media = _.get(currentCategory, 'media')
 
@@ -49,16 +52,16 @@ const CategoryForm = (props) => {
                 {/* Error remain */}
                 {onShowFieldErrorRemain(_.get(model, 'alias'), customErrorRemain, isLoading)}
             </Form.Field>
-            <Form.Field>
+            {/* <Form.Field>
                 <label>{_.get(model, 'content')?.label}</label>
                 <TextArea name={'content'}
                 className={onShowFieldError(_.get(model, 'content')) ? 'error' : ''}
                 disabled={!!isLoading}
                 value={_.get(model, 'content').value || ''}
                 onChange={handleChange} placeholder={`${_.get(model, 'content')?.label} ...`} />
-                {/* Error remain */}
+                
                 {onShowFieldErrorRemain(_.get(model, 'content'), customErrorRemain, isLoading)}
-            </Form.Field>
+            </Form.Field> */}
             <Form.Field>
                 <label>{_.get(model, 'excerpt')?.label}</label>
                 <TextArea name={'excerpt'}
@@ -69,6 +72,18 @@ const CategoryForm = (props) => {
                 {/* Error remain */}
                 {onShowFieldErrorRemain(_.get(model, 'excerpt'), customErrorRemain, isLoading)}
             </Form.Field>
+
+            <Form.Field>
+                <label>Select parrent</label>
+                {
+                    currentCategories && <SingleSelected
+                        currentValue={null}
+                        options={currentCategories}
+                        onHandleChange={onHandleChange}
+                    />
+                }
+            </Form.Field>
+
             <Form.Field>
                 <label>{_.get(model, 'seoTitle')?.label}</label>
                 <Input name={'seoTitle'}

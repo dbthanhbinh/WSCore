@@ -15,6 +15,23 @@ namespace WSCore.Controllers.V1
             _categoryService = categoryService;
         }
 
+        /// <summary>
+        /// Get all categories
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        [HttpGet("categories")]
+        public ActionResult GetCategoriesAsync(string type)
+        {
+            var rs = _categoryService.GetCategoriesAsync();
+            return Ok(new ApiResponse(rs));
+        }
+
+        /// <summary>
+        /// Get all categories by type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         [HttpGet("categories/{type}")]
         public ActionResult GetCategoriesByType(string type)
         {

@@ -118,7 +118,7 @@ class AddArticle extends Component {
 
             let catOptions = null
             let catRes = unwrapResult(await this.props.getListCategories({url: `${controlled.CATEGORIES}`}))
-            if(catRes && catRes.result.length >0){
+            if(catRes && catRes.result?.length >0){
                 catOptions = this.buildOptions(catRes.result)
             }
 

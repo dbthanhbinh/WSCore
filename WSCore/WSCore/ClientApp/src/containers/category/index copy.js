@@ -1,8 +1,8 @@
-import {Component, Fragment, React} from 'react'
+import {Component, React} from 'react'
 import {unwrapResult} from '@reduxjs/toolkit'
 import _ from 'lodash'
 import {connect} from 'react-redux'
-import {Grid, Table} from 'semantic-ui-react'
+import {Grid} from 'semantic-ui-react'
 import {
     getListCategories,
     createCategory,
@@ -15,7 +15,6 @@ import CategoryModel from './category.model'
 import {WithFormBehavior} from '../../form'
 import CategoryForm from './form'
 import {controlled, actions, objectDefault} from '../../data/enums'
-import ListItems from './listItems'
 
 class Category extends Component {
     constructor(props){
@@ -105,6 +104,80 @@ class Category extends Component {
     handleChangeSingleSelected(e, data){
         this.props.handleDropdownChange('parentId', data)
     }
+
+
+    // =========================================
+    buildMultipleLevel(currentList = []){
+        let newList = []
+        currentList.forEach((item) => {
+            newList.push({
+                id: item.id,
+                parentId: item.parentId,
+                title: item.title
+            })
+        })
+        return newList
+    }
+
+    buildListOptions(currentList, currentId, parentId = null){
+        let newList = this.getListByParentId(currentList, parentId = null)
+        return this.renderSubmenu(newList, currentId, currentId, 'false')
+    }
+
+    /**
+     * Build multiple level menus
+     * @param {*} currentList 
+     * @param {*} currentId 
+     * @param {*} parentId 
+     * @returns 
+     */
+    renderSubmenu (currentList, currentId, parentId) {
+        return currentList && currentList.length > 0 && currentList.map((item) => {
+            item.hasChilds = false
+            item.isDisable = false
+            let _parentId = currentId
+            if (item.childs && item.childs.length > 0) {
+                item.hasChilds = true
+            }
+            if (currentId && item.id === currentId) {
+                item.isDisable = true
+                if(item.hasChilds)
+                    _parentId = item.id
+            } else {
+                if(parentId && item.parentId === parentId){
+                    item.isDisable = true
+                    if(item.hasChilds)
+                        _parentId = item.id
+                } else {
+                    item.isDisable = false
+                }
+            }
+
+            return (
+                <li key={item.id.toString()}>
+                    <span aria-disabled={true}>{item.title} - <b>{item.isDisable ? 'Yes' : 'no'}</b></span>
+                    {
+                        item.hasChilds &&
+                        <ul className="has-childs">
+                            {this.renderSubmenu(item.childs, currentId, _parentId)}
+                        </ul>
+                    }
+                </li>
+            )
+        })
+    }
+
+
+    getListByParentId(currentList, parentId = null){
+        let newList = null
+        newList = currentList.filter((item) => item.parentId === parentId)
+        if(newList && newList.length > 0){
+            newList.forEach((item) => {
+                item.childs = this.getListByParentId(currentList, item.id)
+            })
+        }
+        return newList
+    }
     
     render(){
         let {model, allCategoryList} = this.state
@@ -118,12 +191,12 @@ class Category extends Component {
         } = this.props
         
         let currentId = null
-        // let sortList = this.buildMultipleLevel(currentCategories)
-        // // 84: d842ad48, 82: c31d82dd, 73: f5c1a66c, 71: a2409702
-        // // 70: 1df84cf0, 75: 39dffbe5, 77: 3be2b775, 02: 91ceb122
-        // // 81: 323cc32e, 73: f5c1a66c, 01: ab91c0fb, 735: 6feb052e
-        // // 87: 8e353319
-        // let buildOptioned = this.buildListOptions(sortList, currentId, null)
+        let sortList = this.buildMultipleLevel(currentCategories)
+        // 84: d842ad48, 82: c31d82dd, 73: f5c1a66c, 71: a2409702
+        // 70: 1df84cf0, 75: 39dffbe5, 77: 3be2b775, 02: 91ceb122
+        // 81: 323cc32e, 73: f5c1a66c, 01: ab91c0fb, 735: 6feb052e
+        // 87: 8e353319
+        let buildOptioned = this.buildListOptions(sortList, currentId, null)
 
         return(
             <MainLayout>
@@ -145,12 +218,15 @@ class Category extends Component {
                             />
                         </Grid.Column>
                         <Grid.Column width={11}>
-                            <ListItems
+                            <ul>
+                                {buildOptioned}
+                            </ul>
+                            {/* <ListItems
                                 currentCategories={currentCategories}
                                 isLoading={isLoading}
                                 currentId={this.currentId}
                                 onDeleteCategoryBy = {this.deleteCategoryBy}
-                            />
+                            /> */}
                         </Grid.Column>
                     </Grid>
                 </Grid.Row>
