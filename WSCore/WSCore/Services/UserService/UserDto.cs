@@ -10,16 +10,20 @@ namespace WSCore.Services.UserService
     public class UserDto
     {
         [Required]
+        [StringLength(100)]
+        public string FullName { set; get; }
+        [Required]
         [StringLength(50)]
         public string Phone { set; get; }
-
-        [Required]
-        [StringLength(100)]
-        public string Email { set; get; }
-
         [Required]
         [StringLength(300)]
         public string Password { set; get; }
+        [Required]
+        [StringLength(300)]
+        public string Repassword { set; get; }
+
+        [Required]
+        public bool Iagree { set; get; }
     }
 
     public class EditUserDto

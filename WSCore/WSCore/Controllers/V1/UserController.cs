@@ -44,13 +44,21 @@ namespace WSCore.Controllers.V1
             return Ok(new ApiResponse(rs));
         }
 
+        #region Get
+        [HttpGet("users")]
+        public async Task<ActionResult> GetUsers()
+        {
+            var rs = await _userService.GetUsersAsync();
+            return Ok(new ApiResponse(rs));
+        }
+
         [HttpGet("users/{userId}")]
         public ActionResult GetDetailUser(string userId)
         {
             if (userId == null)
                 return BadRequest();
             object rs = null;
-            rs = _userService.GetExistedUserById(userId);
+            rs = _userService.GetEditUserByIdAsync(userId);
             return Ok(new ApiResponse(rs));
         }
 
@@ -63,5 +71,6 @@ namespace WSCore.Controllers.V1
             rs = _userService.GetUserPermissions(userId);
             return Ok(new ApiResponse(rs));
         }
+        #endregion Get
     }
 }

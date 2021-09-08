@@ -7,7 +7,7 @@ import ObjectTagAPI from './objecttag.api'
 
 export const Content = new ContentAPI()
 export const Article = new ArticleAPI()
-export const User = new UserAPI()
+export const UserApi = new UserAPI()
 export const Category = new CategoryAPI()
 export const TagApi = new TagAPI()
 export const ObjectTagApi = new ObjectTagAPI()

@@ -17,7 +17,7 @@ namespace WSCore.Services
 {
     public class BasicService<T> where T : class
     {
-        public readonly string userId = "469cf3e1";
+        public readonly string userId = "a45180e5";
         protected string controllerObj = "";
         protected readonly string attachedThumb = "thumbnail";
         protected readonly string attachedAttachment = "attachment";

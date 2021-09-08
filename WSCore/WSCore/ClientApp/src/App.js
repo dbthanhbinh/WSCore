@@ -1,6 +1,7 @@
 import './App.css'
 import { BrowserRouter, Switch, Route, Link, NavLink } from "react-router-dom"
 
+import Users from './containers/members/index'
 import EditUser from './containers/members/editUser'
 import Category from './containers/category'
 import CategoryEdit from './containers/category/edit'
@@ -26,7 +27,8 @@ function App() {
             <Route exact path="/articles/add/:type" component={AddArticle} />
             <Route exact path="/articles/edit/:id" component={ArticleEdit} />
 
-            <Route exact path="/users" component={Tag} />
+            <Route exact path="/users" component={Users} />
+            <Route exact path="/users/edit/:id" component={EditUser} />
             {/* <Route path="/contact" component={Contact} />
             <Route component={NotFound}/> */}
           </Switch>

@@ -98,6 +98,7 @@ class ListModule extends Component {
 
     checkBoxItems = (items) => {
         let {ListModules} = this.state
+        
         return ListModules && ListModules.length > 0 && ListModules.map((item, i) => {
             let refdata = {
                 type: 'module',
@@ -129,17 +130,19 @@ class ListModule extends Component {
         items && items.length > 0 && items.forEach((elm, i) => {
             let moduleItem = userPackageModuleActs && userPackageModuleActs.length > 0
                 && userPackageModuleActs.find((ch) => ch.moduleId === elm.moduleId && ch.packageId === elm.packageId)
-            
+            let acts = typeof moduleItem !== 'undefined' ? ((moduleItem.acts && moduleItem.acts.length > 0) ? moduleItem.acts.split(',') : []) : [] 
+
             ListModules.push({
                 itemId: elm.moduleId,
                 moduleId: elm.moduleId,
                 moduleTitle: elm.moduleTitle,
                 packageId: elm.packageId,
-                isChecked: typeof moduleItem !== 'undefined' ? true : false,
-                acts: typeof moduleItem !== 'undefined' ? ((moduleItem.acts && moduleItem.acts.length > 0) ? moduleItem.acts.split(',') : []) : [],
+                isChecked: (typeof moduleItem !== 'undefined' || (acts && acts.length)) > 0 ? true : false,
+                acts: acts,
+                hasActs: (acts && acts.length) > 0 ? true : false,
                 limit: typeof moduleItem !== 'undefined' ? moduleItem.limit : 0,
                 itemReadonly: false,
-                actsReadonly: typeof moduleItem !== 'undefined' ? false : true
+                actsReadonly: (typeof moduleItem !== 'undefined' || (acts && acts.length)) > 0 ? false : true,
             })
         })
 

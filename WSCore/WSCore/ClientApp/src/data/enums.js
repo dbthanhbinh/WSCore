@@ -13,7 +13,8 @@ export const controlled = {
     ARTICLES: 'articles',
     CATEGORIES: 'categories',
     TAGS: 'tags',
-    MEDIAS: 'medias'
+    MEDIAS: 'medias',
+    USERS: 'users'
 }
 
 export const objectDefault = {

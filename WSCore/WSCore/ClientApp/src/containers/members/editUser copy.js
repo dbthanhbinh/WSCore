@@ -1,10 +1,9 @@
-import { Component } from "react"
+import { Component, Fragment } from "react"
 import _ from "lodash"
 import { unwrapResult } from '@reduxjs/toolkit'
 import { connect } from 'react-redux'
-import {Grid, Form, Button, Input} from 'semantic-ui-react'
+import {Form, Button} from 'semantic-ui-react'
 
-import MainLayout from "../../layouts"
 import ListModule from './listModule'
 import {WithFormBehavior} from '../../form'
 import EditModel from './editUser.model'
@@ -71,60 +70,27 @@ class EditUser extends Component{
                 Modules: newPayload ? JSON.stringify(newPayload) : null
             }
         }
-        console.log('=====', newModuleIds)
-        // this.props.updateUser(payload)
+        this.props.updateUser(payload)
     }
 
     render(){
-        let {
-            model,
-            showFieldError,
-            handleChange,
-            isLoading,
-            isFormValid,
-            userPermission
-        } = this.props
-
+        const {userPermission} = this.props
         let userModuleActs = _.get(userPermission, "userModuleActs")
-        let packageModules = _.get(userPermission, "packageModules")
-
-        console.log('=====this.state', this.state)
-
         return(
-            <MainLayout>
-                <Grid.Row>
-                    <Grid columns={1} divided>
-                        <Grid.Column width={16}>
-                            <Form>
-                                <Form.Field>
-                                    <label>Full name</label>
-                                    <Input name='fullName'
-                                        error={showFieldError(_.get(model, 'fullName'))}
-                                        onChange={handleChange}
-                                        placeholder='Full name ...' />
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Phone</label>
-                                    <Input name='phone'
-                                        error={showFieldError(_.get(model, 'phone'))}
-                                        onChange={handleChange}
-                                        placeholder='Phone ...' />
-                                </Form.Field>
-                                <Form.Field>
-                                    {
-                                        packageModules && <ListModule
-                                            handleOnChange={this.handleUpdateUserModules}
-                                            items={packageModules}
-                                            userPackageModuleActs={userModuleActs}
-                                        />
-                                    }
-                                </Form.Field>
-                                <Button onClick={this.handleSubmitData} type='submit'>Submit</Button>
-                            </Form>
-                        </Grid.Column>
-                    </Grid>
-                </Grid.Row>
-            </MainLayout>
+            <Fragment>
+                <Form>
+                    <Form.Field>
+                        {
+                            userModuleActs && <ListModule
+                                handleOnChange={this.handleUpdateUserModules}
+                                items={_.get(userPermission, "packageModules")}
+                                userPackageModuleActs={userModuleActs}
+                            />
+                        }
+                    </Form.Field>
+                    <Button onClick={this.handleSubmitData} loading type='submit'>Submit</Button>
+                </Form>
+            </Fragment>
         )
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -29,7 +30,7 @@ namespace WSCore.Services.UserService
                 if (userDto == null)
                     throw new ArgumentNullException("Null");
 
-                var existedUser = GetExistedUserBy(userDto.Email, userDto.Phone);
+                var existedUser = GetExistedUserBy(userDto.Phone);
 
                 if (existedUser)
                     throw new ArgumentNullException("ex");
@@ -38,7 +39,60 @@ namespace WSCore.Services.UserService
                 User userEntity = new User
                 {
                     Phone = userDto.Phone,
-                    Email = userDto.Email,
+                    Email = "email",
+                    LoginName = userDto.Phone,
+                    CreatedUserId = "469cf3e1",
+                    LastSavedUserId = "469cf3e1"
+                };
+
+                UserSecret userSecret = new UserSecret
+                {
+                    Password = hashedPassword,
+                    Token = "",
+                    UserId = userEntity.Id,
+                    CreatedUserId = "469cf3e1",
+                    LastSavedUserId = "469cf3e1"
+                };
+
+                UserProfile userProfile = new UserProfile
+                {
+                    UserId = userEntity.Id,
+                    CreatedUserId = "469cf3e1",
+                    LastSavedUserId = "469cf3e1",
+                    RoleId = "469cf3e1",
+                    RoleType = "Member"
+                };
+
+                await _uow.GetRepository<User>().AddAsync(userEntity);
+                await _uow.GetRepository<UserSecret>().AddAsync(userSecret);
+                await _uow.GetRepository<UserProfile>().AddAsync(userProfile);
+
+                _uow.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString(), ex);
+            }
+        }
+
+        /*
+        public async Task CreateUserAsync(UserDto userDto)
+        {
+            try
+            {
+                if (userDto == null)
+                    throw new ArgumentNullException("Null");
+
+                var existedUser = GetExistedUserBy(userDto.Phone);
+
+                if (existedUser)
+                    throw new ArgumentNullException("ex");
+
+                string hashedPassword = UserHelper.Hash(userDto.Password);
+                User userEntity = new User
+                {
+                    Phone = userDto.Phone,
+                    Email = "email",
                     LoginName = userDto.Phone,
                     CreatedUserId = "469cf3e1",
                     LastSavedUserId = "469cf3e1"
@@ -97,7 +151,7 @@ namespace WSCore.Services.UserService
 
                 // GetPermissions("469cf3e1");
 
-                //await _uow.GetRepository<User>().AddAsync(userEntity);
+                await _uow.GetRepository<User>().AddAsync(userEntity);
                 //await _uow.GetRepository<UserSecret>().AddAsync(userSecret);
                 //await _uow.GetRepository<UserProfile>().AddAsync(userProfile);
 
@@ -108,6 +162,7 @@ namespace WSCore.Services.UserService
                 throw new Exception(ex.Message.ToString(), ex);
             }
         }
+        */
 
         #region Update
         public async Task UpdateAsync(EditUserDto editUserDto)
@@ -182,20 +237,38 @@ namespace WSCore.Services.UserService
         #endregion Update
 
         #region Get
+        public async Task<List<User>> GetUsersAsync()
+        {
+            try
+            {
+                List<User> users = new List<User>();
+                var rs = await _uow.GetRepository<User>().GetByAsync(
+                    q => q.IsActive == true,
+                    orderBy: o => o.OrderByDescending(v => v.CreatedTime)
+                );
+                return rs?.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         /// <summary>
         /// Get Existed user by email , phone
         /// </summary>
         /// <param name="email"></param>
         /// <param name="phone"></param>
         /// <returns></returns>
-        private bool GetExistedUserBy(string email, string phone)
+        private bool GetExistedUserBy(string phone)
         {
             try
             {
-                var x = (from u in _uow.GetRepository<User>().GetEntities(x => x.Phone == phone && x.Email == email).Select(s => new { s.Id, s.Email, s.Phone })
+                var x = (from u in _uow.GetRepository<User>().GetEntities(x => x.Phone == phone)
+                            .Select(s => new { s.Id, s.Email, s.Phone })
                          join
                             us in _uow.GetRepository<UserSecret>().GetEntities().Select(s => new { s.Id, s.UserId }) on u.Id equals us.UserId
-                         where u.Email == email && u.Phone == phone
+                         where u.Phone == phone
                          select new {
                              u.Phone,
                              u.Email,
@@ -204,6 +277,36 @@ namespace WSCore.Services.UserService
                      ).FirstOrDefault();
 
                 return x != null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public EditUserVM GetEditUserByIdAsync(string userId)
+        {
+            try
+            {
+                List<UserModuleAct> userModuleActs = _uow.GetRepository<UserModuleAct>().GetEntities(ua => ua.UserId == userId).ToList();
+
+                var rs = (
+                        from u in _uow.GetRepository<User>().GetEntities(
+                            x => x.Id == userId && x.IsActive == true
+                         )
+                         join
+                            us in _uow.GetRepository<UserProfile>().GetEntities()
+                            on u.Id equals us.UserId
+                         where u.Id == userId
+                         select new EditUserVM
+                         {
+                             User = u,
+                             UserProfile = us,
+                             UserModuleActs = userModuleActs
+                         }
+                     ).FirstOrDefault();
+
+                return rs;
             }
             catch (Exception ex)
             {
@@ -288,7 +391,7 @@ namespace WSCore.Services.UserService
             ClientActVM clientAct = new ClientActVM
             {
                 PackageModules = modulesWithPackageIds,
-                ClientTypeRole = existedUserPermissionVM.PackageId,
+                ClientTypeRole = existedUserPermissionVM?.PackageId,
                 UserModuleActs = userModuleActs,
                 ClientOtherActs = otherAdminActs
             };
@@ -423,6 +526,13 @@ namespace WSCore.Services.UserService
         public string UserId { get; set; }
         public string RoleId { get; set; }
         public string PackageId { get; set; }
+    }
+
+    public class EditUserVM
+    {
+        public User User { get; set; }
+        public UserProfile UserProfile { get; set; }
+        public List<UserModuleAct> UserModuleActs { get; set; }
     }
 
     public class ModulesWithPackageIdVM
