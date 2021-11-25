@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -5,10 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using WSCore.Infrastructure.Repository;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Models;
 using WSCore.Services.ArticleService;
+using WSCore.Services.AuthorService;
 using WSCore.Services.CategoryService;
 using WSCore.Services.MediaService;
 using WSCore.Services.ObjectTagService;
@@ -45,13 +49,37 @@ namespace WSCore
 
             services.AddControllersWithViews();
 
+            // Configure strongly typed settings objects
+            // var audienceConfig = Configuration.GetSection("Audience");
+            // Add configs
+            // services.Configure<UserService.Audience>(audienceConfig);
+
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("Y2F0Y2hlciUyMHdvbmclMjBsb3ZlJTIwLm5ldA=="));
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = signingKey,
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
             string ConnectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<WSContext>(options =>
             options.UseSqlServer(ConnectionString));
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<,>));
             services.AddScoped<IUnitOfWork, UnitOfWork<WSContext>>();
-
+            services.AddScoped<IAuthenService, AuthenService>();
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IObjectTagService, ObjectTagService>();
@@ -60,7 +88,7 @@ namespace WSCore
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ISeoService, SeoService>();
-            
+                        
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -87,7 +115,8 @@ namespace WSCore
             app.UseSpaStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

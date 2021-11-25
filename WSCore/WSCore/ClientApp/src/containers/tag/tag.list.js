@@ -1,5 +1,6 @@
-import {Table, Rating, Icon} from 'semantic-ui-react'
+import {Table, Icon} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
+import {convertDatetimeUtcnowTo} from '../../utilities/untils'
 
 const ListItems = (props) => {
     let currentTags = props.currentTags || []
@@ -21,9 +22,8 @@ const ListItems = (props) => {
                 <Table.Row>
                     <Table.HeaderCell singleLine>Title</Table.HeaderCell>
                     <Table.HeaderCell>Alias</Table.HeaderCell>
-                    <Table.HeaderCell>IsActive</Table.HeaderCell>
-                    <Table.HeaderCell>Consensus</Table.HeaderCell>
-                    <Table.HeaderCell>ACTs</Table.HeaderCell>
+                    <Table.HeaderCell>Created</Table.HeaderCell>
+                    <Table.HeaderCell>Actions</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
 
@@ -34,12 +34,8 @@ const ListItems = (props) => {
                         return <Table.Row key={idx}>
                             <Table.Cell>{item.title}</Table.Cell>
                             <Table.Cell singleLine>{item.alias}</Table.Cell>
-                            <Table.Cell>
-                            <Rating icon='star' defaultRating={3} maxRating={3} />
-                            </Table.Cell>
                             <Table.Cell textAlign='right'>
-                            80% <br />
-                            <a href='#'>18 studies</a>
+                                {convertDatetimeUtcnowTo(item.createdTime)}
                             </Table.Cell>
                             <Table.Cell>
                                 {renderLinkItem(item.id)}

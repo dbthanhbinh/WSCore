@@ -30,6 +30,7 @@ namespace WSCore.Services
         protected int skipIdx = 0;
 
         public readonly IUnitOfWork _uow;
+        private readonly IUserService _userService;
 
         public BasicService(IUnitOfWork uow)
         {
@@ -41,7 +42,7 @@ namespace WSCore.Services
         public BasicService(IUnitOfWork uow, IUserService userService)
         {
             _uow = uow;
-
+            _userService = userService;
             GetPermissions(userId);
         }
 
@@ -62,7 +63,7 @@ namespace WSCore.Services
         public BasicService(IUnitOfWork uow, IUserService userService, IObjectTagService objectTagService)
         {
             _uow = uow;
-
+            _userService = userService;
             GetPermissions(userId);
         }
 
@@ -75,7 +76,7 @@ namespace WSCore.Services
         )
         {
             _uow = uow;
-
+            _userService = userService;
             GetPermissions(userId);
         }
 
@@ -87,6 +88,30 @@ namespace WSCore.Services
         protected bool GetPermissions(string userId)
         {
             return true;
+        }
+
+        protected bool CheckPermission(string moduleName, string action)
+        {
+            // Check user permissions
+            ClientActVM userPermissions = _userService.GetUserPermissions(userId);
+            if (userPermissions != null)
+            {
+                var packageModuleItem = userPermissions?.PackageModules.Find(
+                        s => s.UserId == userId &&
+                            s.ModuleAlias == moduleName
+                    );
+                var userModuleActItem = userPermissions?.UserModuleActs.Find(
+                        s1 => s1.UserId == userId &&
+                                s1.ModuleId == packageModuleItem.ModuleId &&
+                                s1.PackageId == packageModuleItem.PackageId
+                    );
+
+                var acts = userModuleActItem?.Acts;
+                var act = acts?.Split(',');
+                return act.Contains(action);
+            }
+            else
+                return false;
         }
 
         protected DateTime GetLastSavedTime()

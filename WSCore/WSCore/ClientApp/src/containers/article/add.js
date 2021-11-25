@@ -2,7 +2,9 @@ import {Component, React} from 'react'
 import {unwrapResult} from '@reduxjs/toolkit'
 import _ from 'lodash'
 import {connect} from 'react-redux'
-import {Container, Grid, Form, Button} from 'semantic-ui-react'
+import {Grid, Form, Button} from 'semantic-ui-react'
+import eventEmitter from '../../utilities/eventEmitter'
+import {flashType} from '../../data/enums'
 import {WithFormBehavior} from '../../form'
 import {controlled, actions, objectDefault} from '../../data/enums'
 import ArticleModel from './article.model'
@@ -12,7 +14,6 @@ import MultipleSelected from '../../components/selected/multiple.selected'
 import SingleSelected from '../../components/selected/single.selected'
 import MainLayout from '../../layouts'
 import {
-    getListArticles,
     createArticle,
     updateArticle
 } from '../../reduxStore/actions/article.actions'
@@ -86,6 +87,11 @@ class AddArticle extends Component {
         let {model} = this.state
         e.preventDefault();
 
+        let notify = {
+            title: 'Create article!',
+            type: flashType.SUCCESS,
+            msg: 'Success!'
+        }
         let {error, result } = unwrapResult(await this.props.createArticle({
             url: `${controlled.ARTICLES}`,
             body: {
@@ -103,10 +109,19 @@ class AddArticle extends Component {
                 parentId: ''
             }
         }))
-        if(error) return
+        if(error){
+            notify.type = flashType.ERROR
+            notify.msg = error.msg
+            eventEmitter.emit('item-actions-notification', notify)
+            return false
+        }
+        
 
         if(result){
-            this.props.history.push(`/${controlled.ARTICLES}/edit/${result?.article?.id}`);
+            eventEmitter.emit('item-actions-notification', notify)
+            setTimeout(function(){
+                this.props.history.push(`/${controlled.ARTICLES}/edit/${result?.article?.id}`);
+            }.bind(this), 4000)
         }
     }
 
@@ -211,7 +226,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    getListArticles,
     createArticle,
     updateArticle,
     getListCategories,

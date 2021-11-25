@@ -346,7 +346,7 @@ namespace WSCore.Services.UserService
             {
                 var x = (from u in _uow.GetRepository<PackageModule>()
                          .GetEntities(x => x.PackageId == packageId && x.IsActive == true)
-                         .Select(s => new { s.Id, s.PackageId, s.ModuleId })
+                         .Select(s => new { s.Id, s.PackageId, s.ModuleId, s.UserId })
                          join
                             us in _uow.GetRepository<Module>()
                             .GetEntities()
@@ -358,7 +358,8 @@ namespace WSCore.Services.UserService
                              ModuleId = u.ModuleId,
                              PackageId = u.PackageId,
                              ModuleTitle = us.Title,
-                             ModuleAlias = us.Alias
+                             ModuleAlias = us.Alias,
+                             UserId = u.UserId
                          }
                      ).ToList();
 
@@ -544,5 +545,6 @@ namespace WSCore.Services.UserService
         public string ModuleId { get; set; }
 
         public string PackageId { get; set; }
+        public string UserId { get; set; }
     }
 }

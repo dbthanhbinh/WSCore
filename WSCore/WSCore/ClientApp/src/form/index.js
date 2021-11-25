@@ -1,5 +1,5 @@
 import React from 'react'
-import { getInputData, initModel, reInitModel, setFieldValue, validatorModel } from './common'
+import { getInputData, initModel, reInitModel, setFieldValue, validatorModel, resetModel } from './common'
 
 const WithFormBehavior = (WrappedComponent, rawModel) => {
     return class extends React.Component {
@@ -18,6 +18,7 @@ const WithFormBehavior = (WrappedComponent, rawModel) => {
             this.showFieldErrorRemain = this.showFieldErrorRemain.bind(this)
             this.showFieldError = this.showFieldError.bind(this)
             this.handleDropdownChange = this.handleDropdownChange.bind(this)
+            this.resetModel = this.resetModel.bind(this)
         }
 
         handleChange = (e, data) => {
@@ -39,6 +40,14 @@ const WithFormBehavior = (WrappedComponent, rawModel) => {
         reValidModel = (reModel) => {
             this.setState((prevState)=>{
                 let { model, isFormValid } = reInitModel(reModel, false)
+                return { model, isFormValid }
+            })
+        }
+
+        // reset model after created item success
+        resetModel = (reModel) => {
+            this.setState((prevState)=>{
+                let { model, isFormValid } = resetModel(reModel, true)
                 return { model, isFormValid }
             })
         }
@@ -84,6 +93,7 @@ const WithFormBehavior = (WrappedComponent, rawModel) => {
                 isFormValid = { isFormValid }
                 handleChange = { this.handleChange }
                 reValidModel = {this.reValidModel}
+                resetModel = {this.resetModel}
                 handleSubmit = { this.handleSubmit }
                 handleMultipleChange = { this.handleMultipleChange }
                 handleDropdownChange = {this.handleDropdownChange}

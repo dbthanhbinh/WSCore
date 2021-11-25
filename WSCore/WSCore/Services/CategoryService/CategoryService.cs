@@ -11,13 +11,13 @@ using WSCore.Services.UserService;
 using WSCore.Services.MediaService;
 using System.Linq;
 using WSCore.Services.SeoService;
+using WSCore.Services.Constants;
 
 namespace WSCore.Services.CategoryService
 {
     public class CategoryService : BasicService<Category>, ICategoryService
     {
         private readonly IObjectTagService _objectTagService;
-        private readonly IUserService _userService;
         private readonly IMediaService _mediaService;
         private readonly ISeoService _seoService;
 
@@ -29,7 +29,6 @@ namespace WSCore.Services.CategoryService
             ISeoService seoService
         ) : base(uow, userService, objectTagService, mediaService, seoService) {
             _objectTagService = objectTagService;
-            _userService = userService;
             _mediaService = mediaService;
             _seoService = seoService;
             controllerObj = "category";
@@ -147,6 +146,15 @@ namespace WSCore.Services.CategoryService
         {
             try
             {
+                // Check permission
+                bool hasPermission = CheckPermission("category", "Edit");
+                if (!hasPermission)
+                    return new CategoryInfoVM
+                    {
+                        Error = true,
+                        Message = MsgConstants.DONOT_HAVE_PERMISSION
+                    };
+
                 string title = categoryLogicDto.Title;
                 string alias = categoryLogicDto.Alias;
                 // Clean Obj
@@ -162,6 +170,14 @@ namespace WSCore.Services.CategoryService
                 Category category = new Category();
                 Media media = new Media();
                 Seo seoInfo = new Seo();
+
+                if(categoryInfo == null)
+                    return new CategoryInfoVM
+                    {
+                        Error = true,
+                        Message = MsgConstants.DONOT_FOUND_ITEM
+                    };
+
                 if (categoryInfo != null && categoryInfo.Category != null)
                 {
                     category = categoryInfo.Category;
@@ -362,7 +378,14 @@ namespace WSCore.Services.CategoryService
 
         public CategoryInfoVM EditCategoryByIdAsync(string id)
         {
-            return _EditCategoryByIdAsync(id);
+            try
+            {
+                return _EditCategoryByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -409,23 +432,35 @@ namespace WSCore.Services.CategoryService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Category DeleteCategoryAsync(string id)
+        public DeleteCategoryVM DeleteCategoryAsync(string id)
         {
             try
             {
                 Category category = null;
                 category = _uow.GetRepository<Category>().GetById(id);
 
-                if (category != null)
+                // Check permission
+                bool hasPermission = CheckPermission("category", "Delete");
+                if (!hasPermission)
+                    return new DeleteCategoryVM
+                    {
+                        Error = true,
+                        Message = MsgConstants.DONOT_HAVE_PERMISSION
+                    };
+
+                if (hasPermission && category != null)
                 {
                     // Delete single category
                     _uow.GetRepository<Category>().Delete(category);
 
                     // Delete ObjectTags relate Deleted tagId
                     // await _objectTagService.DeleteAllObjectTagRelateToObjectDeletedAsync(objectId: id, objectType: category.Type, false);
+
+                    _uow.SaveChanges();
                 }
-                _uow.SaveChanges();
-                return category;
+                return new DeleteCategoryVM {
+                    Category = category
+                };
             }
             catch (Exception ex)
             {

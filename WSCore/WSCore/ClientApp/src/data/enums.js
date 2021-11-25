@@ -1,12 +1,5 @@
 export const cookiesDefault = {
-    key: 'app_core_cookies'
-}
-
-export const actions = {
-    ADD: 'Add',
-    EDIT: 'Edit',
-    DELETE: 'Delete',
-    READONLY: 'Readonly'
+    key: 'ws_core_cookies'
 }
 
 export const controlled = {
@@ -14,7 +7,8 @@ export const controlled = {
     CATEGORIES: 'categories',
     TAGS: 'tags',
     MEDIAS: 'medias',
-    USERS: 'users'
+    USERS: 'users',
+    AUTHEN: 'authen'
 }
 
 export const objectDefault = {
@@ -22,27 +16,41 @@ export const objectDefault = {
     CATEGORY: 'category'
 }
 
+export const actions = {
+    ADD: 'Add',
+    EDIT: 'Edit',
+    UPDATE: 'Update',
+    DELETE: 'Delete',
+    READONLY: 'Readonly'
+}
+
+
 // User action on module
 export const userActions = [
     {
         name: actions.READONLY,
-        key: 'Readonly',
-        label: 'Readonly'
+        key: actions.READONLY,
+        label: actions.READONLY
     },
     {
         name: actions.ADD,
-        key: 'Add',
-        label: 'Add'
+        key: actions.ADD,
+        label: actions.ADD
     },
     {
         name: actions.EDIT,
-        key: 'Edit',
-        label: 'Edit'
+        key: actions.EDIT,
+        label: actions.EDIT
+    },
+    {
+        name: actions.UPDATE,
+        key: actions.UPDATE,
+        label: actions.UPDATE
     },
     {
         name: actions.DELETE,
-        key: 'Delete',
-        label: 'Delete'
+        key: actions.DELETE,
+        label: actions.DELETE
     }
 ]
 
@@ -95,3 +103,9 @@ export const notAllowSpecial= /[`~,.<>;':"/[\]|{}()]/g;
 
 // Media assets
 export const uploadedAssets = 'uploads'
+
+// Flash notification
+export const flashType = {
+    ERROR: 'Error',
+    SUCCESS: 'Success'
+}

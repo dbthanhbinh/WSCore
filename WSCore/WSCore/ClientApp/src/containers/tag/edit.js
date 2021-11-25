@@ -2,6 +2,8 @@ import { Component } from "react"
 import {unwrapResult} from '@reduxjs/toolkit'
 import _ from 'lodash'
 import {connect} from 'react-redux'
+import eventEmitter from '../../utilities/eventEmitter'
+import {flashType} from '../../data/enums'
 import {WithFormBehavior} from '../../form'
 import TabModel from './tag.model'
 import {
@@ -75,7 +77,11 @@ class Tag extends Component{
 
     async deleteTagBy(tagId){
         unwrapResult(await this.props.deleteTagBy({url: `tags/${tagId}`}))
-        // if(error) return
+        eventEmitter.emit('item-actions-notification', {
+            title: 'Delete tag!',
+            type: flashType.SUCCESS,
+            msg: 'Success!'
+        })
 
         // Get refresh tags
         this.getTags()
@@ -96,6 +102,11 @@ class Tag extends Component{
         e.preventDefault();
         let { model, isFormValid } = initModel(this.state.model, true)
         if(isFormValid){
+            let notify = {
+                title: 'Update tag!',
+                type: flashType.SUCCESS,
+                msg: 'Success!'
+            }
             let payload = {
                 url:`tags/${this.currentId}`,
                 body: {
@@ -104,7 +115,11 @@ class Tag extends Component{
                 }
             }
             let {error, result} = unwrapResult(await this.props.updateTag(payload))
-            if(error) return
+            if(error){
+                notify.type = flashType.ERROR
+                notify.msg = error.msg
+            }
+            eventEmitter.emit('item-actions-notification', notify)
 
             if(result){
                 let {currentTags} = this.props
@@ -126,8 +141,6 @@ class Tag extends Component{
             showFieldError,
             showFieldErrorRemain
         } = this.props
-
-        console.log('=====: ', this.props)
 
         return(
             <MainLayout>
@@ -180,4 +193,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(WithFormBehavior(Tag, TabModel))
+)(WithFormBehavior(Tag, TabModel.init()))

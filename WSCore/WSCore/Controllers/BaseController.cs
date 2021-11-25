@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 
@@ -35,6 +36,5 @@ namespace WSCore.Controllers
 
     public class BaseController : ControllerBase
     {
-
     }
 }

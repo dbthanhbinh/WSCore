@@ -1,10 +1,67 @@
+import React, { Component } from 'react'
+import _ from 'lodash'
+import eventEmitter from '../utilities/eventEmitter'
 import {Container, Grid} from 'semantic-ui-react'
-import { BrowserRouter, Switch, Route, Link, NavLink } from "react-router-dom"
+import {connect} from 'react-redux'
+import { Link } from "react-router-dom"
+import {getAppConfigs, setCurrentPermissions} from '../reduxStore/actions/config.actions'
+import {cookiesDefault} from '../data/enums'
+import { withCookies } from 'react-cookie'
+import TransitionFlash from '../components/flash'
 
-function MainLayout(props) {
+class MainLayout extends Component {
+  constructor(props){
+    super(props)
+    this.state = {}
+    this.isTransitionFlash = false
+    this.handleLoggedout = this.handleLoggedout.bind(this)
+    this.transitionFlash = this.transitionFlash.bind(this)
+  }
+
+  async componentDidMount(){
+    this.props.setCurrentPermissions({})
+
+    // Notification when add item success
+    eventEmitter.on('item-actions-notification', this.transitionFlash)
+  }
+
+  componentWillUnmount(){
+    // Notification when add item success
+    eventEmitter.removeListener('item-actions-notification', this.transitionFlash)
+  }
+
+  transitionFlash(objData) {
+    if(objData) {
+      let hasTransitionFlash = _.has(objData, 'isTransitionFlash')
+      if(hasTransitionFlash) {
+        this.isTransitionFlash = objData.isTransitionFlash
+      }
+    }
+  }
+
+  async handleLoggedout() {
+    let {cookies} = this.props
+    let loggedCookies = {}
+    loggedCookies.loggedData = null
+    loggedCookies.isAuthenticated = false
+    cookies.set(cookiesDefault.key, loggedCookies, { path: '/' })
+    window.location.href = '/login'
+  }
+
+  render(){
+    
     return (
       <div className="app-main">
         <Container>
+          <Grid columns={1}>
+            <Grid.Row>
+              <Grid.Column width={16}>
+                Header |
+                 <span onClick={this.handleLoggedout}>Logout</span>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+              
           <Grid columns={1} divided>
             <Grid.Row>
               <Grid.Column width={3}>
@@ -29,13 +86,32 @@ function MainLayout(props) {
                 </nav>
               </Grid.Column>
               <Grid.Column width={13}>
-                {props.children}
+                {this.props.children}
               </Grid.Column>
             </Grid.Row>
-          </Grid>
+            </Grid>
+            <TransitionFlash />
         </Container>
       </div>
-    );
+    )
   }
-  
-  export default MainLayout
+}
+
+const mapStateToProps = (state) => {
+  let {config} = state
+  return {
+      currentConfigs: config.currentConfigs,
+      currentPermissions: config.currentPermissions,
+      isLoading: config.isLoading
+  }
+}
+
+const mapDispatchToProps = {
+  getAppConfigs,
+  setCurrentPermissions
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withCookies(MainLayout))

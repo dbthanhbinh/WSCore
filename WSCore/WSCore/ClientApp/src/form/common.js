@@ -42,6 +42,18 @@ export function reInitModel(rawModel, isInitModel){
     return { model, isFormValid: !_valid }
 }
 
+export function resetModel(rawModel, isInitModel){
+    let model = rawModel ? rawModel : {}
+    if(model){
+        Object.keys(model).forEach((key) => {
+            model[key].value = ''
+            model[key].isInitModel = isInitModel
+        })
+    }
+    let _valid = _.some(model, { 'isValid': false });
+    return { model, isFormValid: !_valid }
+}
+
 export function setFieldValue(name, value, model){
     if(model && model[name]) {
         model[name].value = value

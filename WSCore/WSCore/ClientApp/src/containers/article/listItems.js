@@ -68,9 +68,8 @@ class ListItems extends Component{
                         <Table.HeaderCell>Image</Table.HeaderCell>
                         <Table.HeaderCell singleLine>Title</Table.HeaderCell>
                         <Table.HeaderCell>Alias</Table.HeaderCell>
-                        <Table.HeaderCell>IsActive</Table.HeaderCell>
-                        <Table.HeaderCell>Consensus</Table.HeaderCell>
-                        <Table.HeaderCell>ACTs</Table.HeaderCell>
+                        <Table.HeaderCell>Category</Table.HeaderCell>
+                        <Table.HeaderCell>Actions</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
 
@@ -83,11 +82,7 @@ class ListItems extends Component{
                                 <Table.Cell>{item.title}</Table.Cell>
                                 <Table.Cell singleLine>{item.alias}</Table.Cell>
                                 <Table.Cell>
-                                <Rating icon='star' defaultRating={3} maxRating={3} />
-                                </Table.Cell>
-                                <Table.Cell textAlign='right'>
-                                80% <br />
-                                <a href='#'>18 studies</a>
+                                    {item.categoryId}
                                 </Table.Cell>
                                 <Table.Cell>
                                     {this.renderLinkItem(item.id)}

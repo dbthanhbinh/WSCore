@@ -2,6 +2,8 @@ import { Component } from "react"
 import {unwrapResult} from '@reduxjs/toolkit'
 import _ from 'lodash'
 import {connect} from 'react-redux'
+import eventEmitter from '../../utilities/eventEmitter'
+import {flashType} from '../../data/enums'
 import {WithFormBehavior} from '../../form'
 import TabModel from './tag.model'
 import MainLayout from '../../layouts'
@@ -11,7 +13,7 @@ import {
     createTag,
     deleteTagBy
 } from '../../reduxStore/actions/tag.actions'
-import {Container, Grid} from 'semantic-ui-react'
+import {Grid} from 'semantic-ui-react'
 import ListItems from './tag.list'
 import {actions} from '../../data/enums'
 import TagForm from './form'
@@ -39,21 +41,41 @@ class Tag extends Component{
 
     async deleteTagBy(tagId){
         await this.props.deleteTagBy({url: `tags/${tagId}`})
-
+       
+        eventEmitter.emit('item-actions-notification', {
+            title: 'Delete tag!',
+            type: flashType.SUCCESS,
+            msg: 'Success!'
+        })
         // Get refresh tags
         this.getTags()
     }
 
+    // Create Item
     async handleSubmitData(e){
         let {model} = this.state
         e.preventDefault();
-        unwrapResult(await this.props.createTag({
+        let notify = {
+            title: 'Create tag!',
+            type: flashType.SUCCESS,
+            msg: 'Success!'
+        }
+        const {error} = unwrapResult(await this.props.createTag({
             url:`tags`,
             body: {
                 title: _.get(model, 'title')?.value,
                 alias: _.get(model, 'alias')?.value
             }
         }))
+
+        if(error){
+            notify.type = flashType.ERROR
+            notify.msg = error.msg
+        }
+        eventEmitter.emit('item-actions-notification', notify)
+
+        // Create Item and Reset model after created item success
+        this.props.resetModel(TabModel.init())
 
         // Get refresh tags
         this.getTags()
@@ -121,4 +143,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(WithFormBehavior(Tag, TabModel))
+)(WithFormBehavior(Tag, TabModel.init()))

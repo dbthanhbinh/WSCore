@@ -37,10 +37,15 @@ namespace WSCore.Models.VM
         public MediasVM Media { get; set; }
     }
 
-    public class CategoryInfoVM
+    public class CategoryInfoVM : BaseVM
     {
         public Category Category { get; set; }
         public Media Media { get; set; }
         public Seo Seo { get; set; }
+    }
+
+    public class DeleteCategoryVM : BaseVM
+    {
+        public Category Category { get; set; }
     }
 }

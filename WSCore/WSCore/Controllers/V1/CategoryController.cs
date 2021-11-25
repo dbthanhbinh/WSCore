@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 using WSCore.Models.Dto;
 using WSCore.Services.CategoryService;
@@ -6,6 +8,7 @@ using WSCore.Services.CategoryService;
 namespace WSCore.Controllers.V1
 {
     [Route("v1/[controller]")]
+    [Authorize]
     [ApiController]
     public class CategoryController : BaseController
     {

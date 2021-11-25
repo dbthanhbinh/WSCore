@@ -29,7 +29,7 @@ namespace WSCore.Services.CategoryService
         #endregion Get
 
         #region Delete
-        Category DeleteCategoryAsync(string id);
+        DeleteCategoryVM DeleteCategoryAsync(string id);
         #endregion Delete
     }
 }
