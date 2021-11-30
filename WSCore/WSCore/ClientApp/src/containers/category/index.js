@@ -1,8 +1,8 @@
-import {Component, Fragment, React} from 'react'
+import React, {Component} from 'react'
 import {unwrapResult} from '@reduxjs/toolkit'
 import _ from 'lodash'
 import {connect} from 'react-redux'
-import {Grid, Table} from 'semantic-ui-react'
+import {Grid} from 'semantic-ui-react'
 import {
     getListCategories,
     createCategory,

@@ -1,4 +1,4 @@
-import {Component, React} from 'react'
+import React, {Component} from 'react'
 import {Checkbox} from 'semantic-ui-react'
 
 class CheckBoxList extends Component {

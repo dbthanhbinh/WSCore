@@ -1,5 +1,5 @@
-import {Fragment, React} from 'react'
-import {Table, Rating, Icon, Image} from 'semantic-ui-react'
+import React, {Fragment} from 'react'
+import {Table, Icon} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import {uploadedAssets as uploaded} from '../../data/enums'
 import Thumbnail from '../../components/thumb'

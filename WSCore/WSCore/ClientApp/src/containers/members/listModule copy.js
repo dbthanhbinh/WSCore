@@ -1,4 +1,4 @@
-import {Component, React} from 'react'
+import React, {Component} from 'react'
 import _ from 'lodash'
 import {Checkbox} from 'semantic-ui-react'
 import {userActions} from '../../data/enums'
