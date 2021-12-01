@@ -5,8 +5,9 @@ import {getAppConfigs, setCurrentPermissions} from '../reduxStore/actions/config
 import {cookiesDefault, layouts} from '../data/enums'
 import { withCookies } from 'react-cookie'
 
+import TopHeader from './topHeaders'
 import Header from './heades'
-import Menu from './menus'
+import PrimaryMenu from './menus'
 import Footer from './footers'
 import Copyright from './copyrights'
 
@@ -82,11 +83,13 @@ class MainLayout extends Component {
   render(){
     return (
       <div className="app-main">
+        {/* TopHeader */}
+        {this.enable.enableTopHeader && <TopHeader />}
         {/* Header */}
         {this.enable.enableHeader && <Header />}
 
         {/* Menu */}
-        {this.enable.enableMenu && <Menu />}
+        {this.enable.enableMenu && <PrimaryMenu />}
 
         {/* Main body */}
         {this.layoutComponent}

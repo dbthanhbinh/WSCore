@@ -1,4 +1,4 @@
-import './App.css'
+import './assets/app.scss'
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 
 import PrivateRoute from './routes'
@@ -27,6 +27,7 @@ function App() {
         <BrowserRouter>
           <Switch>
             <Route exact path='/' component={Home} />
+            
             <Route exact path="/categories/:type" component={Category} />
             <Route exact path="/categories/edit/:id" component={CategoryEdit} />
 

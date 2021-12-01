@@ -1,13 +1,12 @@
 import {Container, Grid} from 'semantic-ui-react'
-function Header(props){
+function TopHeader(props){
     return (
-      <div className='sec-header'>
+      <div className='sec-topheader'>
         <Container>
           <Grid columns={1}>
             <Grid.Row>
               <Grid.Column width={16}>
-                Header |
-                 <span>Logout</span>
+                TOP HEADER ADD ANYTHING HERE OR JUST REMOVE IT....
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -16,4 +15,4 @@ function Header(props){
     )
 }
 
-export default Header
+export default TopHeader

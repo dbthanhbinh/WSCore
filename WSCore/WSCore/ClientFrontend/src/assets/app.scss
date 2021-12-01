@@ -1,0 +1,30 @@
+@import './colors.scss';
+body {
+    margin: 0;
+    font-family: "Lato",sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// sec menu
+.sec-menu {
+    background: $sec-menu-bg;
+    color: $sec-menu-color;
+}
+
+
+// sec footer
+.sec-footer {
+    padding: 20px 0;
+    background: $sec-footer-bg;
+    color: $sec-footer-color;
+    .header {
+        color: $sec-footer-color;
+    }
+}
+
+// copyright
+.sec-copyright {
+    background: $sec-copyright-bg;
+    color: $sec-copyright-color;
+}

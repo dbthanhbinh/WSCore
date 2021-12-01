@@ -1,9 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import 'semantic-ui-css/semantic.min.css'
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './assets/index.scss'
+import App from './App'
+import reportWebVitals from './reportWebVitals'
 
 import store from './reduxStore/store'
 import { Provider } from 'react-redux'
