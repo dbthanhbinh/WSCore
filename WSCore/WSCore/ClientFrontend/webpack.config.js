@@ -1,17 +1,18 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const __src = path.resolve(__dirname, '../src')
-const __public = path.resolve(__dirname, '../public')
+const __src = path.resolve(__dirname, './src')
+const __public = path.resolve(__dirname, './public')
 
 module.exports = {
   // Where files should be sent once they are bundled
  output: {
-   path: path.join(__dirname, '/dist'),
+   path: path.join(__dirname, '/public'),
    filename: 'index.bundle.js'
  },
   // webpack 5 comes with devServer which loads in development mode
  devServer: {
+   historyApiFallback: true,
    port: 3000,
    static: true
  },
@@ -34,8 +35,7 @@ module.exports = {
       use: [
         // Creates `style` nodes from JS strings
         "style-loader",
-        // Translates CSS into CommonJS
-        "css-loader",
+        { loader: 'css-loader', options: { sourceMap: true } },
         // Compiles Sass to CSS
         "sass-loader",
       ],
@@ -47,5 +47,8 @@ module.exports = {
      }
    ]
  },
+  resolve: {
+    extensions: ['*', '.js']
+  },
  plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
 }
