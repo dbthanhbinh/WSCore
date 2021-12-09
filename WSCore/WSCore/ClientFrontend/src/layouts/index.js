@@ -21,7 +21,6 @@ import RightSidebar from './sidebars/rightSidebar'
 // Data
 import {globalConfigs} from '../data/index'
 
-
 class MainLayout extends Component {
   constructor(props){
     super(props)
@@ -100,6 +99,7 @@ class MainLayout extends Component {
         {/* Copyright */}
         {this.enable.enableCopyright && <Copyright />}
 
+        <div id="fb-root"></div>
       </div>
     )
   }

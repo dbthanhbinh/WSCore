@@ -20,6 +20,10 @@ export const layoutColumnsWidth = {
     FULL_WIDTH: 16
 }
 
+export const layoutShowType = {
+    GRID: 'grid',
+    LIST: 'list'
+}
 
 
 

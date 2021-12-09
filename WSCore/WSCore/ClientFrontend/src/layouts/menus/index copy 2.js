@@ -1,5 +1,6 @@
 import {Container, Grid, Dropdown, Menu} from 'semantic-ui-react'
 import {menuData} from '../../data/menuData'
+import { Link } from 'react-router-dom'
 import { Fragment } from 'react'
 
 const buildListOptions = (currentList, currentId, parentId = null, level = 0) => {
@@ -44,14 +45,16 @@ const renderSubmenu = (currentList, currentId, parentId, level) => {
 
       let activeItem = 'home'
       return (
-        <Fragment key={`menu_${item.id.toString()}`}>
+        <Fragment>
         {
           item && item.hasChilds
               ? <Menu.Item
+                  className={`item1 ${item.id.toString()}`}
+                  key={`${item.id.toString()}`}
                   name={item.name}
                   active={activeItem === item.slug}
                 >
-                  <Dropdown item text={item.name}>
+                  <Dropdown item className={`item2 ${item.id.toString()}`} text={item.name}>
                     <Dropdown.Menu>
                     {renderSubHasChild(item, currentId, _parentId, myLevel)}
                     </Dropdown.Menu>
@@ -59,9 +62,11 @@ const renderSubmenu = (currentList, currentId, parentId, level) => {
 
                 </Menu.Item>
               : <Menu.Item
-                  name={item.name}
-                  active={activeItem === item.slug}
-                />
+              className={`item3 ${item.id.toString()}`}
+                key={item.id.toString()}
+                name={item.name}
+                active={activeItem === item.slug}
+              />
         }
         </Fragment>
       )
@@ -83,6 +88,9 @@ function PrimaryMenu(props){
   const activeItem = 'home'
   const {data} = menuData
 
+  // let menus = renderSubmenu(data, null, null, 0)
+
+  // console.log('=====', menus)
   return (
     <div className='sec-menu'>
       <Container>

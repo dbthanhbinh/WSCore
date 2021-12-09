@@ -1,7 +1,9 @@
 import MainLayout from '../../layouts'
 import {Container, Grid, Image} from 'semantic-ui-react'
 import ItemList from '../../components/items/itemList'
-import ItemCard from '../../components/items/itemCard'
+import ItemGrid from '../../components/items/itemGrid'
+import {Items} from '../../data/items'
+
 function Home() {
     return (
         <MainLayout>
@@ -11,7 +13,7 @@ function Home() {
                     <Grid.Column width={16}>
                         {/* This is a Home page */}
                         {/* <ItemList /> */}
-                        <ItemCard />
+                        <ItemGrid dataList={Items} />
                     </Grid.Column>
                     </Grid.Row>
                 </Grid>
