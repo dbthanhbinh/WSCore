@@ -21,7 +21,6 @@ import ArticleEdit from './containers/article/edit'
 function App() {
   const cookies = new Cookies().get(cookiesDefault.key)
   const isAuthenticated = _.get(cookies, 'isAuthenticated')
-  console.log('=====isAuthenticated: ', isAuthenticated)
   return (
     <div className="app-main">
         <BrowserRouter>

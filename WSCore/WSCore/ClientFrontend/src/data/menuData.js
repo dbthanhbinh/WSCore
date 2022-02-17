@@ -4,7 +4,7 @@ export const data = [
     {id: 2, parentId: null,  slug: 'gioi-thieu', url: 'p/gioi-thieu', name: 'Giới thiệu'},
     {id: 3, parentId: null,  slug: 'tin-tuc', url: 'p/tin-tuc', name: 'Tin tức'},
     {id: 4, parentId: null,  slug: 'lien-he', url: 'p/lien-he', name: 'Liên hệ'},
-    {id: 5, parentId: null,  slug: 'bai-viet', url: 'p/bai-viet', name: 'bài viết'},
+    {id: 5, parentId: null,  slug: 'danh-muc-1', url: 'cat/danh-muc-1', name: 'Danh mục'},
     {id: 6, parentId: 2,  slug: 'gioi-thieu', url: 'p/gioi-thieu1', name: 'Giới thiệu1'},
     {id: 7, parentId: 2,  slug: 'gioi-thieu', url: 'p/gioi-thieu2', name: 'Giới thiệu2'},
     {id: 8, parentId: 2,  slug: 'gioi-thieu', url: 'p/gioi-thieu3', name: 'Giới thiệu3'},

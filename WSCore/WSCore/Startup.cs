@@ -15,6 +15,7 @@ using WSCore.Services.ArticleService;
 using WSCore.Services.AuthorService;
 using WSCore.Services.CategoryService;
 using WSCore.Services.MediaService;
+using WSCore.Services.MenuService;
 using WSCore.Services.ObjectTagService;
 using WSCore.Services.SeoService;
 using WSCore.Services.TagService;
@@ -83,12 +84,13 @@ namespace WSCore
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IObjectTagService, ObjectTagService>();
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUploadService, UploadService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ISeoService, SeoService>();
-                        
+            services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<IUserService, UserService>();
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -126,11 +128,11 @@ namespace WSCore
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                // spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }

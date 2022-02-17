@@ -5,6 +5,7 @@ import {Container, Grid} from 'semantic-ui-react'
 import ItemList from '../../components/items/itemList'
 import ItemGrid from '../../components/items/itemGrid'
 import {layoutShowType} from '../../data/enums'
+import {Items} from '../../data/items'
 
 // Archive data
 import { archiveData } from '../../data/archiveData'
@@ -37,9 +38,10 @@ class ArchiveContainer extends Component {
                     <Grid columns={1}>
                         <Grid.Row>
                         <Grid.Column width={16}>
-                            Archive page
-
-                            <ItemList data={data}/>
+                            <div className='archive-content'>
+                                <h1>Archive page</h1>
+                                <ItemGrid dataList={Items}/>
+                            </div>
                         </Grid.Column>
                         </Grid.Row>
                     </Grid>

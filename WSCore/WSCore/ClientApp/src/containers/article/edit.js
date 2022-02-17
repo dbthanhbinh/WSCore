@@ -49,6 +49,8 @@ class AddArticle extends Component {
         this.handleChangeSingleSelected = this.handleChangeSingleSelected.bind(this)
         this.handleChangeMultipleSelected = this.handleChangeMultipleSelected.bind(this)
         this.handleAddition = this.handleAddition.bind(this)
+
+        console.log('=====ArticleModel:', ArticleModel.model());
     }
 
     async componentDidMount(){

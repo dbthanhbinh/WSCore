@@ -29,8 +29,8 @@ const popularItems = [
 
 function PopularWidget(){
     return (
-        <Fragment>
-            <Item.Group divided>
+        <div className='widget-section'>
+            <Item.Group className='popular-container'>
                 <Item.Header><h3>Header</h3></Item.Header>
                     {
                         popularItems && popularItems.length > 0 && popularItems.map(elm => {
@@ -38,7 +38,7 @@ function PopularWidget(){
                         })
                     }
             </Item.Group>
-        </Fragment>
+        </div>
     )
 }
 

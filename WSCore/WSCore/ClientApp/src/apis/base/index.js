@@ -156,9 +156,12 @@ class BaseAPI {
             options.method = methods.POST
             options.body = formData
             options.headers = new Headers({
-                // "Content-Type": "multipart/form-data",
-                // "Authorization": this.bearerToken
+                "Authorization": this.bearerToken
             })
+            // options.headers = new Headers({
+            //     // "Content-Type": "multipart/form-data",
+            //     // "Authorization": this.bearerToken
+            // })
 
         return await this._fetch2(url, options)
     }

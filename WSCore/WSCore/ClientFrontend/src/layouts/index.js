@@ -33,10 +33,12 @@ class MainLayout extends Component {
 
   initLayout(){
     if(this.layout){
-      this.layout = layouts.RIGHT_SB
+      this.layout = layouts.RIGHT_SB // layouts.FULL
       switch(this.layout){
         case layouts.FULL:
-          this.layoutComponent = <FullWidth />
+          this.layoutComponent = <FullWidth 
+              mainbody = {this.props.children}
+            />
           break
         case layouts.LEFT_SB:
           this.layoutComponent = <LeftLayout
@@ -64,6 +66,7 @@ class MainLayout extends Component {
     } else {
       this.layout = layouts.FULL
     }
+    return this.layout
   }
 
   async componentDidMount(){

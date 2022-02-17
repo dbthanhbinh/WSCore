@@ -1,3 +1,4 @@
+import SeoModel from '../seo/seo.model'
 var InitModel = {
     model: function () {
       let fields = {
@@ -49,24 +50,6 @@ var InitModel = {
             maxLength: 255,
             validators: []
         },
-        seoTitle: {
-            name: 'seoTitle',
-            label: 'Seo title',
-            value: '',
-            validators: []
-        },
-        seoContent: {
-            name: 'seoContent',
-            label: 'Seo content',
-            value: '',
-            validators: []
-        },
-        seoKeyWord: {
-            name: 'seoKeyWord',
-            label: 'Seo keyword',
-            value: '',
-            validators: []
-        },
         file: {
             name: 'file',
             label: 'File',
@@ -74,7 +57,7 @@ var InitModel = {
             validators: []
         }
       }
-      return fields
+      return Object.assign(fields, SeoModel.model())
     },
     initModel: function (initRaw) {
         

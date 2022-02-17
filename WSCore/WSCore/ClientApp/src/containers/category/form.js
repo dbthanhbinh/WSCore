@@ -3,6 +3,7 @@ import _ from 'lodash'
 import { ImageUpload } from '../../components/ImageUpload'
 import {BuildField} from '../../form/fields/field'
 import SingleSelected from '../../components/selected/single.selected'
+import SeoForm from '../seo'
 
 const CategoryForm = (props) => {
     let {
@@ -32,17 +33,6 @@ const CategoryForm = (props) => {
                 onShowFieldError = {onShowFieldError}
                 onShowFieldErrorRemain = {onShowFieldErrorRemain}
             />
-
-            {/* <Form.Field>
-                <label>{_.get(model, 'title')?.label}</label>
-                <Input name={'title'}
-                error={onShowFieldError(_.get(model, 'title'))}
-                disabled={!!isLoading}
-                value={_.get(model, 'title').value || ''}
-                onChange={handleChange} placeholder={`${_.get(model, 'title')?.label} ...`} />
-                
-                {onShowFieldErrorRemain(_.get(model, 'title'), customErrorRemain, isLoading)}
-            </Form.Field> */}
             <Form.Field>
                 <label>{_.get(model, 'alias')?.label}</label>
                 <Input name={'alias'}
@@ -53,16 +43,6 @@ const CategoryForm = (props) => {
                 {/* Error remain */}
                 {onShowFieldErrorRemain(_.get(model, 'alias'), customErrorRemain, isLoading)}
             </Form.Field>
-            {/* <Form.Field>
-                <label>{_.get(model, 'content')?.label}</label>
-                <TextArea name={'content'}
-                className={onShowFieldError(_.get(model, 'content')) ? 'error' : ''}
-                disabled={!!isLoading}
-                value={_.get(model, 'content').value || ''}
-                onChange={handleChange} placeholder={`${_.get(model, 'content')?.label} ...`} />
-                
-                {onShowFieldErrorRemain(_.get(model, 'content'), customErrorRemain, isLoading)}
-            </Form.Field> */}
             <Form.Field>
                 <label>{_.get(model, 'excerpt')?.label}</label>
                 <TextArea name={'excerpt'}
@@ -85,36 +65,13 @@ const CategoryForm = (props) => {
                 }
             </Form.Field>
 
-            <Form.Field>
-                <label>{_.get(model, 'seoTitle')?.label}</label>
-                <Input name={'seoTitle'}
-                error={onShowFieldError(_.get(model, 'seoTitle'))}
-                disabled={!!isLoading}
-                value={_.get(model, 'seoTitle').value || ''}
-                onChange={handleChange} placeholder={`${_.get(model, 'seoTitle')?.label} ...`} />
-                {/* Error remain */}
-                {onShowFieldErrorRemain(_.get(model, 'seoTitle'), customErrorRemain, isLoading)}
-            </Form.Field>
-            <Form.Field>
-                <label>{_.get(model, 'seoContent')?.label}</label>
-                <TextArea name={'seoContent'}
-                className={onShowFieldError(_.get(model, 'seoContent')) ? 'error' : ''}
-                disabled={!!isLoading}
-                value={_.get(model, 'seoContent')?.value || ''}
-                onChange={handleChange} placeholder={`${_.get(model, 'seoContent')?.label} ...`} />
-                {/* Error remain */}
-                {onShowFieldErrorRemain(_.get(model, 'seoContent'), customErrorRemain, isLoading)}
-            </Form.Field>
-            <Form.Field>
-                <label>{_.get(model, 'seoKeyWord')?.label}</label>
-                <TextArea name={'seoKeyWord'}
-                className={onShowFieldError(_.get(model, 'seoKeyWord')) ? 'error' : ''}
-                disabled={!!isLoading}
-                value={_.get(model, 'seoKeyWord')?.value || ''}
-                onChange={handleChange} placeholder={`${_.get(model, 'seoKeyWord')?.label} ...`} />
-                {/* Error remain */}
-                {onShowFieldErrorRemain(_.get(model, 'seoKeyWord'), customErrorRemain, isLoading)}
-            </Form.Field>
+            <SeoForm model={model}
+                onShowFieldError={onShowFieldError}
+                onShowFieldErrorRemain={onShowFieldErrorRemain}
+                customErrorRemain={customErrorRemain}
+                isLoading={isLoading}
+                handleChange={handleChange}
+            />
             <Form.Field>
                 <ImageUpload
                     handleChange = {handleChange}

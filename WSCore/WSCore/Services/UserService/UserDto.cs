@@ -28,6 +28,7 @@ namespace WSCore.Services.UserService
 
     public class EditUserDto
     {  
+        public string UserId { set; get; }
         public string Modules { set; get; }
     }
 

@@ -24,23 +24,37 @@ class EditUser extends Component{
         this.state = {
             isLoading: false,
             userModules: [],
+            ListModules: [],
             model: this.props?.model
         }
-
+        this.currentUserId = null
         this.handleUpdateUserModules = this.handleUpdateUserModules.bind(this)
         this.handleSubmitData = this.handleSubmitData.bind(this)
     }
 
     async componentDidMount() {
-        // For article
+        
+        let id = this.props.match.params.id
+        if(!id) return
+        this.currentUserId = id
         let payload = {
-            userId: 'a45180e5'
+            userId: id
         }
         // List all modules available for this user
-        unwrapResult(await this.props.getDetailUser(payload))
+        let {error, result } =  unwrapResult(await this.props.getDetailUser(payload))
+        if(error) return false
+        if(result) {
+            // Permissions for Modules and Actions
+            unwrapResult(await this.props.getUserPermission(payload))
 
-        // Permissions for Modules and Actions
-        unwrapResult(await this.props.getUserPermission(payload))
+            let {currentUser, userPermission} = this.props
+            let userModuleActs = _.get(userPermission, "userModuleActs")
+            let packageModules = _.get(userPermission, "packageModules")
+            let modules = _.get(currentUser, "modules")
+            
+            const ListModules = this.setModuleCheckedList(modules, packageModules, userModuleActs)
+            this.setState({ListModules})
+        }
     }
 
     handleUpdateUserModules = (listModule = []) => {
@@ -68,10 +82,37 @@ class EditUser extends Component{
 
         let payload = {
             body: {
+                UserId: this.currentUserId,
                 Modules: newPayload ? JSON.stringify(newPayload) : null
             }
         }
         this.props.updateUser(payload)
+    }
+
+    // Set init default
+    setModuleCheckedList = (modules, packageModules, userModuleActs) => {
+        let ListModules = []
+        
+        modules && modules.length > 0 && modules.forEach((elm, i) => {
+            let moduleItem = userModuleActs && userModuleActs.length > 0
+                && userModuleActs.find((ch) => ch.moduleId === elm.id)
+            let acts = typeof moduleItem !== 'undefined' ? ((moduleItem.acts && moduleItem.acts.length > 0) ? moduleItem.acts.split(',') : []) : []
+            const packageModule = packageModules?.find(f => f.moduleId === elm.id)
+
+            ListModules.push({
+                itemId: elm.id,
+                moduleId: elm.id,
+                moduleTitle: elm.title,
+                packageId: packageModule?.packageId,
+                isChecked: (typeof moduleItem !== 'undefined' || (acts && acts.length)) > 0 ? true : false,
+                acts: acts,
+                hasActs: (acts && acts.length) > 0 ? true : false,
+                limit: typeof moduleItem !== 'undefined' ? moduleItem.limit : 0,
+                itemReadonly: false,
+                actsReadonly: (typeof moduleItem !== 'undefined' || (acts && acts.length)) > 0 ? false : true,
+            })
+        })
+        return ListModules
     }
 
     render(){
@@ -81,11 +122,11 @@ class EditUser extends Component{
             handleChange,
             isLoading,
             isFormValid,
+            currentUser,
             userPermission
         } = this.props
 
-        let userModuleActs = _.get(userPermission, "userModuleActs")
-        let packageModules = _.get(userPermission, "packageModules")
+        let {ListModules} = this.state
 
         return(
             <MainLayout>
@@ -109,10 +150,9 @@ class EditUser extends Component{
                                 </Form.Field>
                                 <Form.Field>
                                     {
-                                        packageModules && <ListModule
+                                        ListModules && <ListModule
                                             handleOnChange={this.handleUpdateUserModules}
-                                            items={packageModules}
-                                            userPackageModuleActs={userModuleActs}
+                                            ListModules={ListModules}
                                         />
                                     }
                                 </Form.Field>

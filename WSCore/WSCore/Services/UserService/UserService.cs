@@ -176,7 +176,7 @@ namespace WSCore.Services.UserService
                 List<JSDeserializeObject> objs = JsonConvert.DeserializeObject<List<JSDeserializeObject>>(editUserDto.Modules);
 
                 // userModuleActs
-                List<UserModuleAct> userModuleActs = UserModuleActs(GetUserId());
+                List<UserModuleAct> userModuleActs = UserModuleActs(editUserDto.UserId);
 
                 List<UserModuleAct> lsNew = new List<UserModuleAct>();
                 List<UserModuleAct> lsUpdate = new List<UserModuleAct>();
@@ -191,7 +191,7 @@ namespace WSCore.Services.UserService
                         {
                             UserModuleAct userModuleAct = new UserModuleAct
                             {
-                                UserId = GetUserId(),
+                                UserId = editUserDto.UserId,
                                 ModuleId = obj.ModuleId,
                                 PackageId = obj.PackageId,
                                 MemberRole = "Client",
@@ -204,7 +204,6 @@ namespace WSCore.Services.UserService
                         }
                         else
                         {
-                            userModuleAct1.UserId = GetUserId();
                             userModuleAct1.Limit = obj.Limit;
                             userModuleAct1.Acts = obj.Acts;
                             userModuleAct1.LastSavedUserId = GetUserId();
@@ -288,6 +287,7 @@ namespace WSCore.Services.UserService
         {
             try
             {
+                List<Module> modules = _uow.GetRepository<Module>().GetEntities(m => m.IsActive).ToList();
                 List<UserModuleAct> userModuleActs = _uow.GetRepository<UserModuleAct>().GetEntities(ua => ua.UserId == userId).ToList();
 
                 var rs = (
@@ -301,6 +301,7 @@ namespace WSCore.Services.UserService
                          select new EditUserVM
                          {
                              User = u,
+                             Modules = modules,
                              UserProfile = us,
                              UserModuleActs = userModuleActs
                          }
@@ -384,9 +385,8 @@ namespace WSCore.Services.UserService
             }
 
             // clientAdminModuleActs
-            List<UserModuleAct> userModuleActs = UserModuleActs(GetUserId());
+            List<UserModuleAct> userModuleActs = UserModuleActs(userId);
             
-
             // ClientActVM
             string[] otherAdminActs = {}; // List module will effect acts
             ClientActVM clientAct = new ClientActVM
@@ -532,6 +532,7 @@ namespace WSCore.Services.UserService
     public class EditUserVM
     {
         public User User { get; set; }
+        public List<Module> Modules { get; set; }
         public UserProfile UserProfile { get; set; }
         public List<UserModuleAct> UserModuleActs { get; set; }
     }

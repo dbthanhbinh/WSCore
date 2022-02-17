@@ -1,6 +1,7 @@
 import {Form, Input, TextArea} from 'semantic-ui-react'
 import _ from 'lodash'
 import {BuildField} from '../../form/fields/field'
+import SeoForm from '../seo'
 
 const CategoryForm = (props) => {
     let {
@@ -24,17 +25,6 @@ const CategoryForm = (props) => {
                 onShowFieldError = {onShowFieldError}
                 onShowFieldErrorRemain = {onShowFieldErrorRemain}
             />
-
-            {/* <Form.Field>
-                <label>{_.get(model, 'title')?.label}</label>
-                <Input name={'title'}
-                error={showFieldError(_.get(model, 'title'))}
-                disabled={!!isLoading}
-                value={_.get(model, 'title').value || ''}
-                onChange={handleChange} placeholder={`${_.get(model, 'title')?.label} ...`} />
-                
-                {onShowFieldErrorRemain(_.get(model, 'title'), customErrorRemain, isLoading)}
-            </Form.Field> */}
             <Form.Field>
                 <label>{_.get(model, 'alias')?.label}</label>
                 <Input name={'alias'}
@@ -65,36 +55,13 @@ const CategoryForm = (props) => {
                 {/* Error remain */}
                 {onShowFieldErrorRemain(_.get(model, 'excerpt'), customErrorRemain, isLoading)}
             </Form.Field>
-            <Form.Field>
-                <label>{_.get(model, 'seoTitle')?.label}</label>
-                <Input name={'seoTitle'}
-                error={onShowFieldError(_.get(model, 'seoTitle'))}
-                disabled={!!isLoading}
-                value={_.get(model, 'seoTitle').value || ''}
-                onChange={handleChange} placeholder={`${_.get(model, 'seoTitle')?.label} ...`} />
-                {/* Error remain */}
-                {onShowFieldErrorRemain(_.get(model, 'seoTitle'), customErrorRemain, isLoading)}
-            </Form.Field>
-            <Form.Field>
-                <label>{_.get(model, 'seoContent')?.label}</label>
-                <TextArea name={'seoContent'}
-                className={onShowFieldError(_.get(model, 'seoContent')) ? 'error' : ''}
-                disabled={!!isLoading}
-                value={_.get(model, 'seoContent')?.value || ''}
-                onChange={handleChange} placeholder={`${_.get(model, 'seoContent')?.label} ...`} />
-                {/* Error remain */}
-                {onShowFieldErrorRemain(_.get(model, 'seoContent'), customErrorRemain, isLoading)}
-            </Form.Field>
-            <Form.Field>
-                <label>{_.get(model, 'seoKeyWord')?.label}</label>
-                <TextArea name={'seoKeyWord'}
-                className={onShowFieldError(_.get(model, 'seoKeyWord')) ? 'error' : ''}
-                disabled={!!isLoading}
-                value={_.get(model, 'seoKeyWord')?.value || ''}
-                onChange={handleChange} placeholder={`${_.get(model, 'seoKeyWord')?.label} ...`} />
-                {/* Error remain */}
-                {onShowFieldErrorRemain(_.get(model, 'seoKeyWord'), customErrorRemain, isLoading)}
-            </Form.Field>
+            <SeoForm model={model}
+                onShowFieldError={onShowFieldError}
+                onShowFieldErrorRemain={onShowFieldErrorRemain}
+                customErrorRemain={customErrorRemain}
+                isLoading={isLoading}
+                handleChange={handleChange}
+            />
         </Form>
     )
 }

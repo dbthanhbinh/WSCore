@@ -39,6 +39,7 @@ class Category extends Component {
         // get list category all
         this.getCategories()
         this.userModuleActs = getModuleActPermissions(objectDefault.CATEGORY)
+        console.log('=====this.userModuleActs:', this.userModuleActs)
     }
 
     async getCategories(){

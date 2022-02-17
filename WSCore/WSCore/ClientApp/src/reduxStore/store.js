@@ -7,6 +7,7 @@ import ArticleReducer from './reducers/article.reducers'
 import ObjectTagReducer from './reducers/objecttag.reducers'
 import AuthenReducer from './reducers/authen.reducers'
 import ConfigReducer from './reducers/config.reducers'
+import MenuReducer from './reducers/menu.reducers'
 
 const store = configureStore({
     reducer: {
@@ -16,7 +17,8 @@ const store = configureStore({
         tag: TagReducer,
         article: ArticleReducer,
         objecttag: ObjectTagReducer,
-        config: ConfigReducer
+        config: ConfigReducer,
+        menu: MenuReducer
     }
 })
 

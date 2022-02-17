@@ -6,6 +6,7 @@ export const controlled = {
     ARTICLES: 'articles',
     CATEGORIES: 'categories',
     TAGS: 'tags',
+    MENUS: 'menus',
     MEDIAS: 'medias',
     USERS: 'users',
     AUTHEN: 'authen'
@@ -13,7 +14,8 @@ export const controlled = {
 
 export const objectDefault = {
     ARTICLE: 'post',
-    CATEGORY: 'category'
+    CATEGORY: 'category',
+    MENU: 'primary'
 }
 
 export const actions = {

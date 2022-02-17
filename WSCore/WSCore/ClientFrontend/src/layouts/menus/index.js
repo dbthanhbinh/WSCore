@@ -1,4 +1,5 @@
 import {Container, Grid, Dropdown, Menu} from 'semantic-ui-react'
+import {Link} from 'react-router-dom'
 import {menuData} from '../../data/menuData'
 import { Fragment } from 'react'
 
@@ -60,6 +61,8 @@ const renderSubmenu = (currentList, currentId, parentId, level) => {
                 </Menu.Item>
               : <Menu.Item
                   name={item.name}
+                  as={Link}
+                  to={`../${item.url}`}
                   active={activeItem === item.slug}
                 />
         }

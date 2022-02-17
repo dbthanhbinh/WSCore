@@ -12,6 +12,8 @@ import Register from './containers/members/register'
 import EditUser from './containers/members/editUser'
 import Category from './containers/category'
 import CategoryEdit from './containers/category/edit'
+import Menu from './containers/menu'
+import EditMenu from './containers/menu/edit'
 import Tag from './containers/tag'
 import TagEdit from './containers/tag/edit'
 import AddArticle from './containers/article/add'
@@ -21,7 +23,6 @@ import ArticleEdit from './containers/article/edit'
 function App() {
   const cookies = new Cookies().get(cookiesDefault.key)
   const isAuthenticated = _.get(cookies, 'isAuthenticated')
-  console.log('=====isAuthenticated: ', isAuthenticated)
   return (
     <div className="app-main">
         <BrowserRouter>
@@ -32,6 +33,9 @@ function App() {
             <PrivateRoute exact authed={isAuthenticated} path='/' component={Category} />
             <PrivateRoute exact authed={isAuthenticated} path="/categories/:type" component={Category} />
             <PrivateRoute exact authed={isAuthenticated} path="/categories/edit/:id" component={CategoryEdit} />
+
+            <PrivateRoute exact authed={isAuthenticated} path="/menus" component={Menu} />
+            <PrivateRoute exact authed={isAuthenticated} path="/menus/edit/:id" component={EditMenu} />
 
             <PrivateRoute exact authed={isAuthenticated} path="/tags" component={Tag} />
             <PrivateRoute exact authed={isAuthenticated} path="/tags/edit/:id" component={TagEdit} />

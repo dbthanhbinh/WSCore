@@ -9,7 +9,7 @@ class CookiesData {
 
 export const getModuleActPermissions =  (moduleName) => {
     const cookies = new Cookies().get(cookiesDefault.key)
-
+console.log('=====cookies:', cookies)
     if(cookies) {
         const packageModules = _.get(cookies, 'userData.loggedPermissions.packageModules')
         const loggedProfile = _.get(cookies, 'userData.loggedProfile')

@@ -21,15 +21,15 @@ const ImageItems = [
 
 function ImageWidget(){
     return (
-        <Fragment>
-            <Card.Group itemsPerRow={1}>
+        <div className='widget-section'>
+            <Card.Group className='images-container' itemsPerRow={1}>
                 {
                     ImageItems && ImageItems.length > 0 && ImageItems.map(elm => {
                         return elm && elm.thumb && <Card key={`${elm.id.toString()}`} image={`${elm.thumb}`} />
                     })
                 }
             </Card.Group>
-        </Fragment>
+        </div>
     )
 }
 

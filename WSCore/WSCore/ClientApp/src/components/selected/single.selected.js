@@ -17,14 +17,14 @@ const SingleSelected = (props) => {
 
     return (
         <Dropdown
-        options={options}
-        placeholder='Choose item'
-        search
-        selection
-        fluid
-        value={currentValue}
-        onChange={handleChange}
-      />
+            options={options}
+            placeholder='Choose item'
+            search
+            selection
+            fluid
+            value={currentValue}
+            onChange={handleChange}
+        />
     )
 }
 

@@ -7,7 +7,7 @@ function RightLayout(props) {
             <Container>
                 <Grid columns={1}>
                     <Grid.Row>
-                        <Grid columns={1} divided>
+                        <Grid columns={1}>
                             <Grid.Column width={layoutColumnsWidth.MAIN_BODY_W}>
                                 {props.mainbody}
                             </Grid.Column>
