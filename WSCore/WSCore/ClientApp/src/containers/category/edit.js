@@ -215,12 +215,12 @@ class Category extends Component {
 }
 
 const mapStateToProps = (state) => {
-    let {category, tag} = state
+    let {categoryStore, tagStore} = state
     return {
-        currentCategory: category.currentCategory,
-        currentCategories: category.currentCategories,
-        currentTags: tag.currentTags,
-        isLoading: category.isLoading
+        currentCategory: categoryStore.currentCategory,
+        currentCategories: categoryStore.currentCategories,
+        currentTags: tagStore.currentTags,
+        isLoading: categoryStore.isLoading
     }
 }
 

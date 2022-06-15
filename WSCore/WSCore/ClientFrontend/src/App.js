@@ -26,8 +26,8 @@ function App() {
             {/* Category */}
             <Route exact path='/:type/:slug' component={ArchiveContainer} />
 
-            {/* <Route path="/contact" component={Contact} />
-            <Route component={NotFound}/> */}
+            {/* <Route path="/contact" component={Contact} /> */}
+            <Route path='*' component={() => 'Notfound!'}/>
           </Switch>
         </BrowserRouter>
         {/* <EditUser /> */}

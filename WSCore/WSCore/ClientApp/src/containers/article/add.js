@@ -216,12 +216,12 @@ class AddArticle extends Component {
 }
 
 const mapStateToProps = (state) => {
-    let {tag, category, article, objecttag} = state
+    let {tagStore, categoryStore, articleStore, objecttagStore} = state
     return {
-        currentCategories: category.currentCategories,
-        currentTags: tag.currentTags,
-        currentObjectTags: objecttag.currentObjectTags,
-        isLoading: article.isLoading
+        currentCategories: categoryStore.currentCategories,
+        currentTags: tagStore.currentTags,
+        currentObjectTags: objecttagStore.currentObjectTags,
+        isLoading: articleStore.isLoading
     }
 }
 

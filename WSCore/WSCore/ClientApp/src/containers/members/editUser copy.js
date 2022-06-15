@@ -12,7 +12,7 @@ import {setFieldValue} from '../../form/common'
 import {
     getDetailUser,
     setCurrentUser,
-    getUserPermission,
+    getUserPermissions,
     updateUser
 } from '../../reduxStore/actions/member.actions'
 
@@ -39,7 +39,7 @@ class EditUser extends Component{
         unwrapResult(await this.props.getDetailUser(payload))
 
         // Permissions for Modules and Actions
-        unwrapResult(await this.props.getUserPermission(payload))
+        unwrapResult(await this.props.getUserPermissions(payload))
     }
 
     handleUpdateUserModules = (listModule = []) => {
@@ -74,8 +74,8 @@ class EditUser extends Component{
     }
 
     render(){
-        const {userPermission} = this.props
-        let userModuleActs = _.get(userPermission, "userModuleActs")
+        const {userPermissions} = this.props
+        let userModuleActs = _.get(userPermissions, "userModuleActs")
         return(
             <Fragment>
                 <Form>
@@ -83,7 +83,7 @@ class EditUser extends Component{
                         {
                             userModuleActs && <ListModule
                                 handleOnChange={this.handleUpdateUserModules}
-                                items={_.get(userPermission, "packageModules")}
+                                items={_.get(userPermissions, "packageModules")}
                                 userPackageModuleActs={userModuleActs}
                             />
                         }
@@ -96,17 +96,17 @@ class EditUser extends Component{
 }
 
 const mapStateToProps = (state) => {
-    const {user} = state
+    const {userStore} = state
     return {
-        currentUser: user.currentUser,
-        userPermission: user.userPermission
+        currentUser: userStore.currentUser,
+        userPermissions: userStore.userPermissions
     }
 }
   
 const mapDispatchToProps = {
     getDetailUser,
     setCurrentUser,
-    getUserPermission,
+    getUserPermissions,
     updateUser
 }
 

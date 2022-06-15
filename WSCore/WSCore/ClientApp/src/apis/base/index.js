@@ -16,7 +16,7 @@ class BaseAPI {
     constructor (conf) {
         this.apiResources = apiResources
         const cookies = new Cookies().get(cookiesDefault.key)
-        this.bearerToken = `Bearer ${(cookies && cookies.userData && cookies.userData.token) ? cookies.userData.token : ''}`
+        this.bearerToken = `Bearer ${(cookies && cookies.loggedData && cookies.loggedData.token) ? cookies.loggedData.token : ''}`
 
         this.headers = { 
             'Access-Control-Allow-Origin': '*',

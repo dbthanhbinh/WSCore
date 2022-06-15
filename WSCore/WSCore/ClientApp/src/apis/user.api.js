@@ -10,7 +10,7 @@ class UserAPI extends BaseAPI {
     return await this.getFrom(payload)
   }
 
-  async getUserPermission (payload) {
+  async getUserPermissions (payload) {
     return await this.getFrom(payload)
   }
 

@@ -13,7 +13,7 @@ import {setFieldValue} from '../../form/common'
 import {
     getDetailUser,
     setCurrentUser,
-    getUserPermission,
+    getUserPermissions,
     updateUser
 } from '../../reduxStore/actions/member.actions'
 
@@ -45,11 +45,11 @@ class EditUser extends Component{
         if(error) return false
         if(result) {
             // Permissions for Modules and Actions
-            unwrapResult(await this.props.getUserPermission(payload))
+            unwrapResult(await this.props.getUserPermissions(payload))
 
-            let {currentUser, userPermission} = this.props
-            let userModuleActs = _.get(userPermission, "userModuleActs")
-            let packageModules = _.get(userPermission, "packageModules")
+            let {currentUser, userPermissions} = this.props
+            let userModuleActs = _.get(userPermissions, "userModuleActs")
+            let packageModules = _.get(userPermissions, "packageModules")
             let modules = _.get(currentUser, "modules")
             
             const ListModules = this.setModuleCheckedList(modules, packageModules, userModuleActs)
@@ -123,7 +123,7 @@ class EditUser extends Component{
             isLoading,
             isFormValid,
             currentUser,
-            userPermission
+            userPermissions
         } = this.props
 
         let {ListModules} = this.state
@@ -167,17 +167,17 @@ class EditUser extends Component{
 }
 
 const mapStateToProps = (state) => {
-    const {user} = state
+    const {userStore} = state
     return {
-        currentUser: user.currentUser,
-        userPermission: user.userPermission
+        currentUser: userStore.currentUser,
+        userPermissions: userStore.userPermissions
     }
 }
   
 const mapDispatchToProps = {
     getDetailUser,
     setCurrentUser,
-    getUserPermission,
+    getUserPermissions,
     updateUser
 }
 

@@ -11,14 +11,14 @@ import MenuReducer from './reducers/menu.reducers'
 
 const store = configureStore({
     reducer: {
-        authen: AuthenReducer,
-        user: UserReducer,
-        category: CategoryReducer,
-        tag: TagReducer,
-        article: ArticleReducer,
-        objecttag: ObjectTagReducer,
-        config: ConfigReducer,
-        menu: MenuReducer
+        authenStore: AuthenReducer,
+        userStore: UserReducer,
+        categoryStore: CategoryReducer,
+        tagStore: TagReducer,
+        articleStore: ArticleReducer,
+        objecttagStore: ObjectTagReducer,
+        configStore: ConfigReducer,
+        menuStore: MenuReducer
     }
 })
 

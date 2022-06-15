@@ -2,7 +2,7 @@ import './App.css'
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 
 import PrivateRoute from './routes'
-import { Cookies } from 'react-cookie'
+import { useCookies } from 'react-cookie'
 import {cookiesDefault} from './data/enums'
 import _ from 'lodash'
 
@@ -21,12 +21,14 @@ import Article from './containers/article'
 import ArticleEdit from './containers/article/edit'
 
 function App() {
-  const cookies = new Cookies().get(cookiesDefault.key)
-  const isAuthenticated = _.get(cookies, 'isAuthenticated')
+  const [cookies] = useCookies([cookiesDefault.key])
+  console.log('======cookies:', cookies)
+  const isAuthenticated = _.get(cookies, cookiesDefault.key + '.isAuthenticated')
   return (
     <div className="app-main">
         <BrowserRouter>
           <Switch>
+            {/* <Route exact path="/" component={()=>"Home page"} /> */}
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
 
@@ -45,6 +47,7 @@ function App() {
             <PrivateRoute exact authed={isAuthenticated} path="/users" component={Users} />
             <PrivateRoute exact authed={isAuthenticated} path="/users/add" component={Register} />
             <PrivateRoute exact authed={isAuthenticated} path="/users/edit/:id" component={EditUser} />
+
             {/* <Route path="/contact" component={Contact} />
             <Route component={NotFound}/> */}
           </Switch>

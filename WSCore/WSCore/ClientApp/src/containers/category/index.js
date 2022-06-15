@@ -35,11 +35,9 @@ class Category extends Component {
         this.handleChangeSingleSelected = this.handleChangeSingleSelected.bind(this)
     }
 
-    async componentDidMount(){
-        // get list category all
+    async componentDidMount() {
+        // Get list category all
         this.getCategories()
-        this.userModuleActs = getModuleActPermissions(objectDefault.CATEGORY)
-        console.log('=====this.userModuleActs:', this.userModuleActs)
     }
 
     async getCategories(){
@@ -48,14 +46,14 @@ class Category extends Component {
             this.posttype = type
 
         let catOptions = null
-        let catRes = unwrapResult(await this.props.getListCategories({url: `${controlled.CATEGORIES}/${this.posttype}`}))
+        let {result, error} = unwrapResult(await this.props.getListCategories({url: `${controlled.CATEGORIES}/${this.posttype}`}))
         
-        if(catRes && catRes.result?.length >0){
-            catOptions = this.buildOptions(catRes.result)
-        }
+        // if(catRes && catRes.result?.length >0){
+        //     catOptions = this.buildOptions(catRes.result)
+        // }
 
         this.setState({
-            allCategoryList: catOptions
+            allCategoryList: ''
         })
     }
     
@@ -118,6 +116,8 @@ class Category extends Component {
     }
     
     render(){
+        
+        const {userStore} = this.props
         let {model, allCategoryList} = this.state
         let {
             showFieldError,
@@ -127,7 +127,8 @@ class Category extends Component {
             isLoading,
             isFormValid
         } = this.props
-        
+
+        const userModuleActs = _.get(userStore, 'userPermissions.userModuleActs')
         let currentId = null
         // let sortList = this.buildMultipleLevel(currentCategories)
         // // 84: d842ad48, 82: c31d82dd, 73: f5c1a66c, 71: a2409702
@@ -153,7 +154,7 @@ class Category extends Component {
                                 onShowFieldError = { showFieldError }
                                 onShowFieldErrorRemain = { showFieldErrorRemain }
                                 onHandleChange = {this.handleChangeSingleSelected}
-                                hasPermission={checkHasPermission(this.userModuleActs, actions.ADD)}
+                                hasPermission={checkHasPermission(userModuleActs, actions.ADD)}
                             />
                         </Grid.Column>
                         <Grid.Column width={11}>
@@ -162,7 +163,7 @@ class Category extends Component {
                                 isLoading={isLoading}
                                 currentId={this.currentId}
                                 onDeleteCategoryBy = {this.deleteCategoryBy}
-                                userModuleActs = {this.userModuleActs}
+                                userModuleActs = {userModuleActs}
                                 controlled = {controlled.CATEGORIES}
                                 actions = {actions}
                             />
@@ -175,11 +176,12 @@ class Category extends Component {
 }
 
 const mapStateToProps = (state) => {
-    let {category} = state
+    let {categoryStore, userStore} = state
     return {
-        currentCategory: category.currentCategory,
-        currentCategories: category.currentCategories,
-        isLoading: category.isLoading
+        currentCategory: categoryStore.currentCategory,
+        currentCategories: categoryStore.currentCategories,
+        isLoading: categoryStore.isLoading,
+        userStore: userStore
     }
 }
 

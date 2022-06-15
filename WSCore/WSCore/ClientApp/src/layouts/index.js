@@ -6,8 +6,12 @@ import {connect} from 'react-redux'
 import { Link } from "react-router-dom"
 import {getAppConfigs, setCurrentPermissions} from '../reduxStore/actions/config.actions'
 import {cookiesDefault} from '../data/enums'
-import { withCookies } from 'react-cookie'
+import { Cookies, withCookies } from 'react-cookie'
 import TransitionFlash from '../components/flash'
+import {
+  getUserPermissions
+} from '../reduxStore/actions/member.actions'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 class MainLayout extends Component {
   constructor(props){
@@ -19,7 +23,11 @@ class MainLayout extends Component {
   }
 
   async componentDidMount(){
-    this.props.setCurrentPermissions({})
+    let cookies = new Cookies().get(cookiesDefault.key)
+    const userId = _.get(cookies, 'loggedData.loggedProfile.userId') // Get userId from cookie after logged in
+    unwrapResult(await this.props.getUserPermissions({
+      userId: userId
+    }))
 
     // Notification when add item success
     eventEmitter.on('item-actions-notification', this.transitionFlash)
@@ -98,17 +106,18 @@ class MainLayout extends Component {
 }
 
 const mapStateToProps = (state) => {
-  let {config} = state
+  let {configStore} = state
   return {
-      currentConfigs: config.currentConfigs,
-      currentPermissions: config.currentPermissions,
-      isLoading: config.isLoading
+      currentConfigs: configStore.currentConfigs,
+      currentPermissions: configStore.currentPermissions,
+      isLoading: configStore.isLoading
   }
 }
 
 const mapDispatchToProps = {
   getAppConfigs,
-  setCurrentPermissions
+  setCurrentPermissions,
+  getUserPermissions
 }
 
 export default connect(

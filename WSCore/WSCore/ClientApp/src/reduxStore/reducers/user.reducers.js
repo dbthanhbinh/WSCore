@@ -1,10 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {getDetailUser, getUserPermission, getListUsers} from '../actions/member.actions'
+import {getDetailUser, getUserPermissions, getListUsers} from '../actions/member.actions'
 
 const initialState = {
     currentUser: {},
     currentUsers: [],
-    userPermission: {}
+    userPermissions: {}
 }
 
 const userSlice = createSlice({
@@ -17,8 +17,8 @@ const userSlice = createSlice({
         setCurrentUsers: (state, action) => {
             state.currentUsers = action.payload
         },
-        setUserPermission: (state, action) => {
-            state.userPermission = action.payload
+        setUserPermissions: (state, action) => {
+            state.userPermissions = action.payload
         }
     },
     extraReducers: {
@@ -26,8 +26,8 @@ const userSlice = createSlice({
         [getDetailUser.fulfilled]: (state, action) => {
             state.currentUser = action?.payload?.result
         },
-        [getUserPermission.fulfilled]: (state, action) => {
-            state.userPermission = action?.payload?.result
+        [getUserPermissions.fulfilled]: (state, action) => {
+            state.userPermissions = action?.payload?.result
         },
         [getListUsers.fulfilled]: (state, action) => {
             state.currentUsers = action?.payload?.result

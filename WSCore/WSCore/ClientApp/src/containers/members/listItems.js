@@ -98,10 +98,10 @@ class ListItems extends Component{
 }
 
 const mapStateToProps = (state) => {
-    let {user} = state
+    let {userStore} = state
     return {
-        currentUsers: user.currentUsers,
-        isLoading: user.isLoading
+        currentUsers: userStore.currentUsers,
+        isLoading: userStore.isLoading
     }
 }
 

@@ -2,7 +2,7 @@ import { Component } from "react"
 import _ from 'lodash'
 import {unwrapResult} from '@reduxjs/toolkit'
 import {connect} from 'react-redux'
-import { Grid, Form, Button, Input, Header, Image, Message, Segment } from 'semantic-ui-react'
+import { Grid, Form, Button, Header, Image, Message, Segment } from 'semantic-ui-react'
 import { withCookies } from 'react-cookie'
 import {cookiesDefault} from '../../data/enums'
 
@@ -37,6 +37,7 @@ class Login extends Component{
             url: `login`,
             body: payload
         }))
+
         if(error) {
             let loggedCookies = {}
             loggedCookies.loggedData = null
@@ -46,12 +47,15 @@ class Login extends Component{
         }
 
         if(result){
-          // set user profile after logged in success
-          let loggedCookies = {}
-          loggedCookies.userData = result
-          loggedCookies.isAuthenticated = true
-          cookies.set(cookiesDefault.key, loggedCookies, { path: '/' })
-          window.location.href = '/'
+            // Set user profile after logged in success
+            let loggedCookies = {}
+            loggedCookies.loggedData = {
+                token: result.token,
+                loggedProfile: result.loggedProfile
+            }
+            loggedCookies.isAuthenticated = true
+            cookies.set(cookiesDefault.key, loggedCookies, { path: '/' })
+            window.location.href = '/'
         }
     }
 
@@ -109,10 +113,10 @@ class Login extends Component{
 }
 
 const mapStateToProps = (state) => {
-    let {authen} = state
+    let {authenStore} = state
     return {
-        currentAuthen: authen.currentAuthen,
-        isLoading: authen.isLoading
+        currentAuthen: authenStore.currentAuthen,
+        isLoading: authenStore.isLoading
     }
 }
 

@@ -125,11 +125,11 @@ class Tag extends Component{
 }
 
 const mapStateToProps = (state) => {
-    let {tag} = state
+    let {tagStore} = state
     return {
-        currentTag: tag.currentTag,
-        currentTags: tag.currentTags,
-        isLoading: tag.isLoading
+        currentTag: tagStore.currentTag,
+        currentTags: tagStore.currentTags,
+        isLoading: tagStore.isLoading
     }
 }
 

@@ -33,11 +33,11 @@ class Users extends Component{
 }
 
 const mapStateToProps = (state) => {
-    let {user} = state
+    let {userStore} = state
     return {
-        currentUsers: user.currentUsers,
-        currentUser: user.currentUser,
-        isLoading: user.isLoading
+        currentUsers: userStore.currentUsers,
+        currentUser: userStore.currentUser,
+        isLoading: userStore.isLoading
     }
 }
 

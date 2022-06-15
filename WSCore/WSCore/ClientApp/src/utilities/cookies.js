@@ -11,9 +11,9 @@ export const getModuleActPermissions =  (moduleName) => {
     const cookies = new Cookies().get(cookiesDefault.key)
 console.log('=====cookies:', cookies)
     if(cookies) {
-        const packageModules = _.get(cookies, 'userData.loggedPermissions.packageModules')
-        const loggedProfile = _.get(cookies, 'userData.loggedProfile')
-        const userModuleActs = _.get(cookies, 'userData.loggedPermissions.userModuleActs')
+        const packageModules = _.get(cookies, 'loggedData.loggedPermissions.packageModules')
+        const loggedProfile = _.get(cookies, 'loggedData.loggedProfile')
+        const userModuleActs = _.get(cookies, 'loggedData.loggedPermissions.userModuleActs')
         
         const packageModuleItem = packageModules?.find(
                 elm => elm.moduleAlias === moduleName &&

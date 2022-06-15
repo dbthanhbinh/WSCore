@@ -3,7 +3,7 @@ import {UserApi} from '../../apis'
 
 export const setCurrentUser = createAction('user/setCurrentUser')
 export const setCurrentUsers = createAction('user/setCurrentUsers')
-export const setUserPermission = createAction('user/setUserPermission')
+export const setUserPermissions = createAction('user/setUserPermissions')
 
 const preFixAction = 'user'
 
@@ -24,11 +24,11 @@ export const getDetailUser = createAsyncThunk(
     }
 )
 
-export const getUserPermission = createAsyncThunk(
-    `${preFixAction}/getUserPermission`,
+export const getUserPermissions = createAsyncThunk(
+    `${preFixAction}/getUserPermissions`,
     async (payload) => {
         payload.url = `${preFixAction}/permissions/${payload.userId}`
-        const response = await UserApi.getUserPermission(payload)
+        const response = await UserApi.getUserPermissions(payload)
         return response
     }
 )
