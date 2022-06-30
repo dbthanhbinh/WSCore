@@ -24,14 +24,14 @@ namespace WSCore.Infrastructure.Repository
             await DbSet.AddAsync(entity);
         }
 
-        public async Task AddRangeAsync(List<T> ts)
+        public async Task AddRangeAsync(List<T> entitys)
         {
-            await DbSet.AddRangeAsync(ts);
+            await DbSet.AddRangeAsync(entitys);
         }
 
-        public void AddRange(List<T> ts)
+        public void AddRange(List<T> entitys)
         {
-            DbSet.AddRange(ts);
+            DbSet.AddRange(entitys);
         }
         #endregion Create
 
@@ -53,16 +53,19 @@ namespace WSCore.Infrastructure.Repository
         #endregion Update
 
         #region Get
-        public async Task<T> GetByIdAsync(string id)
-        {
-            return await DbSet.FindAsync(id);
-        }
-
         public T GetById(string id)
         {
             return DbSet.Find(id);
         }
 
+        public async Task<T> GetByIdAsync(string id)
+        {
+            return await DbSet.FindAsync(id);
+        }
+
+        /*
+         * Return query
+         */
         public IQueryable<T> GetEntities(Expression<Func<T, bool>> condition = null,
         Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
         string includeProperties = "")
@@ -87,6 +90,9 @@ namespace WSCore.Infrastructure.Repository
             return query;
         }
 
+        /*
+         * Return query.toList()
+         */
         public async virtual Task<IEnumerable<T>> GetByAsync(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>,IOrderedQueryable<T>> orderBy = null,

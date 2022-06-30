@@ -17,25 +17,25 @@ namespace WSCore.Controllers.V1
 
         #region Create
         [HttpPost("tags")]
-        public async Task<ActionResult> CreateTagLogic([FromBody] TagDto tagDto)
+        public async Task<ActionResult> CreateTag([FromBody] TagDto tagDto)
         {
             if (tagDto == null)
                 return BadRequest();
-            var rs = await _tagService.AddTagLogicAsync(tagDto);
+            var rs = await _tagService.CreateTagAsync(tagDto);
             return Ok(new ApiResponse(rs));
         }
         #endregion Create
 
         #region Update
         [HttpPut("tags/{tagId}")]
-        public async Task<ActionResult> UpdateTagLogic([FromBody] UpdateTagModel updateTagModel, string tagId)
+        public async Task<ActionResult> UpdateTag([FromBody] UpdateTagModel updateTagModel, string tagId)
         {
             if (updateTagModel == null)
                 return BadRequest();
 
             object rs = null;
             if (ModelState.IsValid) {
-                rs = await _tagService.UpdateTagLogicAsync(updateTagModel, tagId);
+                rs = await _tagService.UpdateTagAsync(updateTagModel, tagId);
             }
             return Ok(new ApiResponse(rs));
         }
@@ -52,9 +52,9 @@ namespace WSCore.Controllers.V1
 
         #region Get
         [HttpGet("tags")]
-        public async Task<ActionResult> GetListTags()
+        public async Task<ActionResult> GetTags()
         {
-            var rs = await _tagService.GetListTagsAsync();
+            var rs = await _tagService.GetTagsAsync();
             return Ok(new ApiResponse(rs));
         }
 

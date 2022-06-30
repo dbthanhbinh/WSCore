@@ -24,27 +24,12 @@ namespace WSCore.Services.TagService
         }
 
         #region Create
-        public async Task<Tag> AddTagAsync(Tag tagEntity)
-        {
-            try
-            {
-                Tag newEntity = new Tag();
-
-                return newEntity;
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         /// <summary>
-        /// Create Tag by logic
+        /// Create new Tag
         /// </summary>
         /// <param name="tagDto"></param>
         /// <returns></returns>
-        public async Task<Tag> AddTagLogicAsync(TagDto tagDto)
+        public async Task<Tag> CreateTagAsync(TagDto tagDto)
         {
             try
             {
@@ -53,7 +38,6 @@ namespace WSCore.Services.TagService
 
                 // Clean Obj
                 CleanObjecAndBuildtTitleAndAliasDto(ref title, ref alias, false);
-
                 Tag newEntity = new Tag
                 {
                     Title = title,
@@ -65,7 +49,6 @@ namespace WSCore.Services.TagService
                 await _uow.GetRepository<Tag>().AddAsync(newEntity);
                 _uow.SaveChanges();
                 return newEntity;
-
             }
             catch (Exception ex)
             {
@@ -75,7 +58,7 @@ namespace WSCore.Services.TagService
         #endregion Create
 
         #region Update
-        public async Task<UpdateTagVM> UpdateTagLogicAsync(UpdateTagModel updateTagModel, string tagId)
+        public async Task<UpdateTagVM> UpdateTagAsync(UpdateTagModel updateTagModel, string tagId)
         {
             try
             {
@@ -110,14 +93,15 @@ namespace WSCore.Services.TagService
         #endregion Update
 
         #region Get
-
-        public async Task<List<Tag>> GetListTagsAsync()
+        public async Task<List<Tag>> GetTagsAsync()
         {
             try
             {
                 List<Tag> tags = new List<Tag>();
-                var dbContext = _uow.GetRepository<Tag>();
-                var rs = await dbContext.GetByAsync(q => q.IsActive == true, orderBy: o => o.OrderByDescending(v => v.CreatedTime));
+                var rs = await _uow.GetRepository<Tag>().GetByAsync(
+                        q => q.IsActive == true,
+                        orderBy: o => o.OrderByDescending(v => v.CreatedTime)
+                    );
                 return tags = rs?.ToList();
             }
             catch (Exception ex)
