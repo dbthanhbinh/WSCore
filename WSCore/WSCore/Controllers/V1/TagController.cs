@@ -21,7 +21,7 @@ namespace WSCore.Controllers.V1
         {
             if (tagDto == null)
                 return BadRequest();
-            var rs = await _tagService.CreateTagAsync(tagDto);
+            var rs = await _tagService.CreateTagWithSP(tagDto);
             return Ok(new ApiResponse(rs));
         }
         #endregion Create

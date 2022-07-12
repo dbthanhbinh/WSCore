@@ -66,9 +66,11 @@ namespace WSCore.Infrastructure.Repository
         /*
          * Return query
          */
-        public IQueryable<T> GetEntities(Expression<Func<T, bool>> condition = null,
-        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-        string includeProperties = "")
+        public IQueryable<T> GetEntities(
+            Expression<Func<T, bool>> condition = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = ""
+        )
         {
             IQueryable<T> query = DbSet;
 

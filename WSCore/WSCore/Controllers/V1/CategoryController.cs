@@ -8,7 +8,7 @@ using WSCore.Services.CategoryService;
 namespace WSCore.Controllers.V1
 {
     [Route("v1/[controller]")]
-    [Authorize]
+    // [Authorize]
     [ApiController]
     public class CategoryController : BaseController
     {

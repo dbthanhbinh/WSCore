@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using WSCore.Common;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Model;
+using WSCore.Models;
 using WSCore.Models.Dto;
 using WSCore.Models.VM;
 using WSCore.Services.ObjectTagService;
@@ -16,6 +19,7 @@ namespace WSCore.Services.TagService
     public class TagService : BasicService<Tag>, ITagService
     {
         private readonly IObjectTagService _objectTagService;
+        public readonly WSContext _dbContext;
         public TagService(
             IUnitOfWork uow,
             IObjectTagService objectTagService
@@ -55,6 +59,59 @@ namespace WSCore.Services.TagService
                 throw ex;
             }
         }
+
+        // SP
+        public async Task<Tag> CreateTagWithSP(TagDto tagDto)
+        {
+            try
+            {
+                string title = tagDto.Title;
+                string alias = StringHelper.GenerateSlug(tagDto.Title);
+
+                // Clean Obj
+                CleanObjecAndBuildtTitleAndAliasDto(ref title, ref alias, false);
+                Tag newEntity = new Tag
+                {
+                    Title = title,
+                    Alias = alias,
+                    CreatedUserId = GetUserId(),
+                    LastSavedUserId = GetUserId()
+                };
+
+                //await _uow.GetRepository<Tag>().AddAsync(newEntity);
+                //_uow.SaveChanges();
+
+                SqlConnection sqlCon = null;
+                String SqlconString = "server=BINHTRINH;database=WSCore;trusted_connection=true;";
+                using (sqlCon = new SqlConnection(SqlconString))
+                {
+                    sqlCon.Open();
+                    SqlCommand sql_cmnd = new SqlCommand("usp_insertTag", sqlCon);
+                    sql_cmnd.Parameters.Add("@id", SqlDbType.VarChar).Value = newEntity.Id;
+                    sql_cmnd.Parameters.Add("@title", SqlDbType.VarChar).Value = newEntity.Title;
+                    sql_cmnd.Parameters.Add("@alias", SqlDbType.VarChar).Value = newEntity.Alias;
+                    sql_cmnd.Parameters.Add("@createdUserId", SqlDbType.VarChar).Value = newEntity.CreatedUserId;
+                    sql_cmnd.Parameters.Add("@lastSavedUserId", SqlDbType.VarChar).Value = newEntity.LastSavedUserId;
+                    sql_cmnd.Parameters.Add("@isActive", SqlDbType.VarChar).Value = newEntity.IsActive;
+                    sql_cmnd.Parameters.Add("@isDelete", SqlDbType.VarChar).Value = newEntity.IsDelete;
+                    sql_cmnd.Parameters.Add("@status", SqlDbType.VarChar).Value = newEntity.Status;
+                    sql_cmnd.Parameters.Add("@seoTitle", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.Add("@seoContent", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.Add("@seoKeyWord", SqlDbType.VarChar).Value = "";
+
+                    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                    sql_cmnd.ExecuteNonQuery();
+                    sqlCon.Close();
+                }
+
+                return newEntity;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion Create
 
         #region Update
@@ -94,15 +151,52 @@ namespace WSCore.Services.TagService
 
         #region Get
         public async Task<List<Tag>> GetTagsAsync()
-        {
+        {   
             try
             {
+                //List<Tag> rs = new List<Tag>();
+                //SqlConnection sqlCon = null;
+                //String SqlconString = "server=BINHTRINH;database=WSCore;trusted_connection=true;";
+                //using (sqlCon = new SqlConnection(SqlconString))
+                //{
+                //    sqlCon.Open();
+                //    SqlCommand sql_cmnd = new SqlCommand("stpGetAllMembers", sqlCon);
+                //    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                //    // sql_cmnd.ExecuteNonQuery();
+
+                //    using (var reader = sql_cmnd.ExecuteReader(CommandBehavior.Default))
+                //    {
+                //        if (reader.HasRows)
+                //        {
+                //            while (reader.Read())
+                //            {
+                //                rs.Add(new Tag
+                //                {
+                //                    Title = Convert.ToString(reader["Title"]),
+                //                    Alias = Convert.ToString(reader["alias"])
+                //                });
+                //            }
+
+
+
+                //        }
+
+                //    }
+
+
+                //    sqlCon.Close();
+                //}
+
                 List<Tag> tags = new List<Tag>();
                 var rs = await _uow.GetRepository<Tag>().GetByAsync(
                         q => q.IsActive == true,
                         orderBy: o => o.OrderByDescending(v => v.CreatedTime)
                     );
                 return tags = rs?.ToList();
+
+
+
+                // return rs;
             }
             catch (Exception ex)
             {
