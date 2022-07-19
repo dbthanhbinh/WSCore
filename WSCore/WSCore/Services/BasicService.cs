@@ -93,24 +93,24 @@ namespace WSCore.Services
         protected bool CheckPermission(string moduleName, string action)
         {
             // Check user permissions
-            ClientActVM userPermissions = _userService.GetUserPermissions(userId);
-            if (userPermissions != null)
-            {
-                var packageModuleItem = userPermissions?.PackageModules.Find(
-                        s => s.UserId == userId &&
-                            s.ModuleAlias == moduleName
-                    );
-                var userModuleActItem = userPermissions?.UserModuleActs.Find(
-                        s1 => s1.UserId == userId &&
-                                s1.ModuleId == packageModuleItem.ModuleId &&
-                                s1.PackageId == packageModuleItem.PackageId
-                    );
+            //ClientActVM userPermissions = _userService.GetPermissionsById(userId);
+            //if (userPermissions != null)
+            //{
+            //    var packageModuleItem = userPermissions?.PackageModules.Find(
+            //            s => s.UserId == userId &&
+            //                s.ModuleAlias == moduleName
+            //        );
+            //    var userModuleActItem = userPermissions?.UserModuleActs.Find(
+            //            s1 => s1.UserId == userId &&
+            //                    s1.ModuleId == packageModuleItem.ModuleId &&
+            //                    s1.PackageId == packageModuleItem.PackageId
+            //        );
 
-                var acts = userModuleActItem?.Acts;
-                var act = acts?.Split(',');
-                return act.Contains(action);
-            }
-            else
+            //    var acts = userModuleActItem?.Acts;
+            //    var act = acts?.Split(',');
+            //    return act.Contains(action);
+            //}
+            //else
                 return false;
         }
 

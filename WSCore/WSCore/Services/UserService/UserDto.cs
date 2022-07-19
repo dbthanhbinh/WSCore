@@ -24,6 +24,7 @@ namespace WSCore.Services.UserService
 
         [Required]
         public bool Iagree { set; get; }
+        public bool Asagent { set; get; }
     }
 
     public class EditUserDto

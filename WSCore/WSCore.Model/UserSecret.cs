@@ -15,9 +15,6 @@ namespace WSCore.Model
         [StringLength(300)]
         public string Token { set; get; }
 
-        [StringLength(10)]
-        public string SmsCode { set; get; }
-
         [Required]
         public string UserId { set; get; }
     }

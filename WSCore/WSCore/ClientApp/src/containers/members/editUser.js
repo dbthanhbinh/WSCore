@@ -46,13 +46,17 @@ class EditUser extends Component{
         if(result) {
             // Permissions for Modules and Actions
             unwrapResult(await this.props.getUserPermissions(payload))
+            const {userPermissions} = this.props
+            const modules = _.get(userPermissions, "modules")
+            const moduleActiveIds = _.get(userPermissions, "moduleActiveIds")
 
-            let {currentUser, userPermissions} = this.props
-            let userModuleActs = _.get(userPermissions, "userModuleActs")
-            let packageModules = _.get(userPermissions, "packageModules")
-            let modules = _.get(currentUser, "modules")
+            console.log('=====modules:', modules)
             
-            const ListModules = this.setModuleCheckedList(modules, packageModules, userModuleActs)
+            // let userModuleActs = _.get(userPermissions, "userModuleActs")
+            // let packageModules = _.get(userPermissions, "packageModules")
+            
+            
+            const ListModules = this.setModuleCheckedList(modules, moduleActiveIds)
             this.setState({ListModules})
         }
     }
@@ -90,26 +94,23 @@ class EditUser extends Component{
     }
 
     // Set init default
-    setModuleCheckedList = (modules, packageModules, userModuleActs) => {
+    setModuleCheckedList = (modules) => {
         let ListModules = []
         
         modules && modules.length > 0 && modules.forEach((elm, i) => {
-            let moduleItem = userModuleActs && userModuleActs.length > 0
-                && userModuleActs.find((ch) => ch.moduleId === elm.id)
-            let acts = typeof moduleItem !== 'undefined' ? ((moduleItem.acts && moduleItem.acts.length > 0) ? moduleItem.acts.split(',') : []) : []
-            const packageModule = packageModules?.find(f => f.moduleId === elm.id)
-
+            let acts = []
+            acts = (elm && elm.userModuleActs && elm.userModuleActs.length > 0) ? elm.userModuleActs.split(',') : []
             ListModules.push({
                 itemId: elm.id,
                 moduleId: elm.id,
                 moduleTitle: elm.title,
-                packageId: packageModule?.packageId,
-                isChecked: (typeof moduleItem !== 'undefined' || (acts && acts.length)) > 0 ? true : false,
+                packageId: elm.packageId,
+                isChecked: (acts && acts.length) > 0 ? true : false,
                 acts: acts,
                 hasActs: (acts && acts.length) > 0 ? true : false,
-                limit: typeof moduleItem !== 'undefined' ? moduleItem.limit : 0,
+                limit: 0,
                 itemReadonly: false,
-                actsReadonly: (typeof moduleItem !== 'undefined' || (acts && acts.length)) > 0 ? false : true,
+                actsReadonly: false,
             })
         })
         return ListModules

@@ -24,10 +24,10 @@ class MainLayout extends Component {
 
   async componentDidMount(){
     let cookies = new Cookies().get(cookiesDefault.key)
-    const userId = _.get(cookies, 'loggedData.loggedProfile.userId') // Get userId from cookie after logged in
-    unwrapResult(await this.props.getUserPermissions({
-      userId: userId
-    }))
+    // const userId = _.get(cookies, 'loggedData.loggedProfile.userId') // Get userId from cookie after logged in
+    // unwrapResult(await this.props.getUserPermissions({
+    //   userId: userId
+    // }))
 
     // Notification when add item success
     eventEmitter.on('item-actions-notification', this.transitionFlash)

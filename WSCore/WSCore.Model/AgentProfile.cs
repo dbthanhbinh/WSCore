@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WSCore.Model
 {
-    public class UserProfile : BaseEntity
+    public class AgentProfile : BaseEntity
     {
         public string FullName { set; get; }
         public string Address { set; get; }
@@ -20,6 +20,7 @@ namespace WSCore.Model
         [Required]
         public string RoleId { set; get; }
         [Required]
-        public string Group { set; get; }
+        public string PackageId { set; get; }
+        public string ParentId { set; get; }
     }
 }

@@ -18,6 +18,9 @@ namespace WSCore.Services.Constants
 
     public class UserConstants
     {
+        public static readonly string AGENT = "agent";
+        public static readonly string MEMBER = "member";
+
         public static string[] ManageLevel = { "SupperAdmin", "Admin", "Editor" }; // Site permission
         public static string[] MemberLevel = { "Agency", "Member" };
         public static string[] AgencyLevel = { "Client" };

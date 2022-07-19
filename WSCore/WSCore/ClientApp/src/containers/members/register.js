@@ -30,7 +30,8 @@ class Register extends Component{
             Phone: _.get(model, 'phone')?.value,
             Password: _.get(model, 'password')?.value,
             Repassword: _.get(model, 'repassword')?.value,
-            Iagree: true
+            Iagree: true,
+            Asagent: true
         }
 
         let {error, result } = unwrapResult(await this.props.createUser({
@@ -89,6 +90,11 @@ class Register extends Component{
                                 <Checkbox name='iagree'
                                     onChange={handleChange}
                                     label='I agree to the Terms and Conditions' />
+                            </Form.Field>
+                            <Form.Field>
+                                <Checkbox name='asagent'
+                                    onChange={handleChange}
+                                    label='As Agent' />
                             </Form.Field>
                             <Button
                                 disabled={!isFormValid || !!isLoading}

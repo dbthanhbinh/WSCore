@@ -21,9 +21,10 @@ export const objectDefault = {
 export const actions = {
     ADD: 'Add',
     EDIT: 'Edit',
-    UPDATE: 'Update',
     DELETE: 'Delete',
-    READONLY: 'Readonly'
+    READONLY: 'Readonly',
+    ONLYME: 'onlyme',
+    OTHER: 'other'
 }
 
 
@@ -45,14 +46,19 @@ export const userActions = [
         label: actions.EDIT
     },
     {
-        name: actions.UPDATE,
-        key: actions.UPDATE,
-        label: actions.UPDATE
-    },
-    {
         name: actions.DELETE,
         key: actions.DELETE,
         label: actions.DELETE
+    },
+    {
+        name: actions.ONLYME,
+        key: actions.ONLYME,
+        label: actions.ONLYME
+    },
+    {
+        name: actions.OTHER,
+        key: actions.OTHER,
+        label: actions.OTHER
     }
 ]
 

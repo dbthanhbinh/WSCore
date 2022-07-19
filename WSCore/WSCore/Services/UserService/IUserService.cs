@@ -12,14 +12,14 @@ namespace WSCore.Services.UserService
         /// </summary>
         /// <param name="userDto"></param>
         /// <returns></returns>
-        Task CreateUserAsync(UserDto userDto);
+        Task CreateAsync(UserDto userDto);
 
         #region Get
         Task<List<User>> GetUsersAsync();
-        EditUserVM GetEditUserByIdAsync(string userId);
-        ExistedUserPermissionVM GetExistedUserById(string userId);
+        EditUserVM GetDetailByIdAsync(string userId);
+        ExistedUserPermissionVM GetExistedById(string userId);
 
-        ClientActVM GetUserPermissions(string userId);
+        ClientActVM GetPermissionsById(string userId);
 
         #endregion Get
 

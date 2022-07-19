@@ -18,14 +18,14 @@ namespace WSCore.Controllers.V1
         }
 
         [HttpPost("users")]
-        public ActionResult CreateUser([FromBody] UserDto userDto)
+        public ActionResult Create([FromBody] UserDto userDto)
         {
             if (userDto == null)
                 return BadRequest();
             object rs = null;
             if (ModelState.IsValid)
             {
-                rs = _userService.CreateUserAsync(userDto);
+                rs = _userService.CreateAsync(userDto);
             }
             return Ok(new ApiResponse(rs));
         }
@@ -53,22 +53,23 @@ namespace WSCore.Controllers.V1
         }
 
         [HttpGet("users/{userId}")]
-        public ActionResult GetDetailUser(string userId)
+        public ActionResult GetDetailById(string userId)
         {
             if (userId == null)
                 return BadRequest();
             object rs = null;
-            rs = _userService.GetEditUserByIdAsync(userId);
+
+            rs = _userService.GetDetailByIdAsync(userId);
             return Ok(new ApiResponse(rs));
         }
 
         [HttpGet("permissions/{userId}")]
-        public ActionResult GetUserPermission(string userId)
+        public ActionResult GetPermissionById(string userId)
         {
             if (userId == null)
                 return BadRequest();
             object rs = null;
-            rs = _userService.GetUserPermissions(userId);
+            rs = _userService.GetPermissionsById(userId);
             return Ok(new ApiResponse(rs));
         }
         #endregion Get

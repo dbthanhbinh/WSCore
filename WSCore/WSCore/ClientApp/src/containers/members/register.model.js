@@ -56,6 +56,12 @@ var InitModel = {
           label: 'I agree',
           value: true,
           validators: []
+        },
+        asagent: {
+          name: 'asagent',
+          label: 'As Agent',
+          value: true,
+          validators: []
         }
       }
       return fields

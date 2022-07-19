@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WSCore.Infrastructure.UnitOfWork;
 using WSCore.Model;
+using WSCore.Services.Constants;
 
 namespace WSCore.Services.UserService
 {
@@ -23,7 +24,7 @@ namespace WSCore.Services.UserService
         /// </summary>
         /// <param name="userDto"></param>
         /// <returns></returns>
-        public async Task CreateUserAsync(UserDto userDto)
+        public async Task CreateAsync(UserDto userDto)
         {
             try
             {
@@ -39,10 +40,10 @@ namespace WSCore.Services.UserService
                 User userEntity = new User
                 {
                     Phone = userDto.Phone,
-                    Email = "email",
+                    Email = "email@gmail.com",
                     LoginName = userDto.Phone,
-                    CreatedUserId = "469cf3e1",
-                    LastSavedUserId = "469cf3e1"
+                    CreatedUserId = GetUserId(),
+                    LastSavedUserId = GetUserId()
                 };
 
                 UserSecret userSecret = new UserSecret
@@ -50,22 +51,38 @@ namespace WSCore.Services.UserService
                     Password = hashedPassword,
                     Token = "",
                     UserId = userEntity.Id,
-                    CreatedUserId = "469cf3e1",
-                    LastSavedUserId = "469cf3e1"
+                    CreatedUserId = GetUserId(),
+                    LastSavedUserId = GetUserId()
                 };
 
                 UserProfile userProfile = new UserProfile
                 {
                     UserId = userEntity.Id,
-                    CreatedUserId = "469cf3e1",
-                    LastSavedUserId = "469cf3e1",
-                    RoleId = "469cf3e1",
-                    RoleType = "Member"
+                    CreatedUserId = GetUserId(),
+                    LastSavedUserId = GetUserId(),
+                    Group = GetAgentOrMember(userDto.Asagent),
+                    RoleId = GetRoleId()
                 };
 
                 await _uow.GetRepository<User>().AddAsync(userEntity);
                 await _uow.GetRepository<UserSecret>().AddAsync(userSecret);
                 await _uow.GetRepository<UserProfile>().AddAsync(userProfile);
+
+                // If is Agent => add info to AgentProfiles
+                if (userDto.Asagent)
+                {
+                    AgentProfile agentProfile = new AgentProfile
+                    {
+                        UserId = userEntity.Id,
+                        PackageId = "56412100",
+                        ParentId = null,
+                        RoleId = GetRoleId(),
+                        CreatedUserId = GetUserId(),
+                        LastSavedUserId = GetUserId()
+                    };
+
+                    await _uow.GetRepository<AgentProfile>().AddAsync(agentProfile);
+                }
 
                 _uow.SaveChanges();
             }
@@ -283,13 +300,11 @@ namespace WSCore.Services.UserService
             }
         }
 
-        public EditUserVM GetEditUserByIdAsync(string userId)
+        public EditUserVM GetDetailByIdAsync(string userId)
         {
             try
             {
-                List<Module> modules = _uow.GetRepository<Module>().GetEntities(m => m.IsActive).ToList();
-                List<UserModuleAct> userModuleActs = _uow.GetRepository<UserModuleAct>().GetEntities(ua => ua.UserId == userId).ToList();
-
+                // Get User Infomation: user, userProfile
                 var rs = (
                         from u in _uow.GetRepository<User>().GetEntities(
                             x => x.Id == userId && x.IsActive == true
@@ -301,11 +316,14 @@ namespace WSCore.Services.UserService
                          select new EditUserVM
                          {
                              User = u,
-                             Modules = modules,
-                             UserProfile = us,
-                             UserModuleActs = userModuleActs
+                             UserProfile = us
                          }
                      ).FirstOrDefault();
+                
+                if (rs?.UserProfile.Group == UserConstants.AGENT)
+                {
+                    rs.AgentProfile = _uow.GetRepository<AgentProfile>().GetEntities(a => a.UserId == userId).FirstOrDefault();
+                }
 
                 return rs;
             }
@@ -315,21 +333,20 @@ namespace WSCore.Services.UserService
             }
         }
 
-        public ExistedUserPermissionVM GetExistedUserById(string userId)
+        public ExistedUserPermissionVM GetExistedById(string userId)
         {
             try
             {
                 var x = (from u in _uow.GetRepository<User>().GetEntities(x => x.Id == userId && x.IsActive == true).Select(s => new { s.Id, s.Email, s.Phone })
                          join
-                            us in _uow.GetRepository<UserProfile>().GetEntities().Select(s => new { s.RoleId, s.PackageId, s.UserId }) on u.Id equals us.UserId
+                            us in _uow.GetRepository<UserProfile>().GetEntities().Select(s => new { s.RoleId, s.UserId }) on u.Id equals us.UserId
                          where u.Id == userId
                          select new ExistedUserPermissionVM
                          {
                              Phone = u.Phone,
                              Email = u.Email,
                              UserId = us.UserId,
-                             RoleId = us.RoleId,
-                             PackageId = us.PackageId
+                             RoleId = us.RoleId
                          }
                      ).FirstOrDefault();
 
@@ -347,7 +364,7 @@ namespace WSCore.Services.UserService
             {
                 var x = (from u in _uow.GetRepository<PackageModule>()
                          .GetEntities(x => x.PackageId == packageId && x.IsActive == true)
-                         .Select(s => new { s.Id, s.PackageId, s.ModuleId, s.UserId })
+                         .Select(s => new { s.Id, s.PackageId, s.ModuleId})
                          join
                             us in _uow.GetRepository<Module>()
                             .GetEntities()
@@ -359,8 +376,7 @@ namespace WSCore.Services.UserService
                              ModuleId = u.ModuleId,
                              PackageId = u.PackageId,
                              ModuleTitle = us.Title,
-                             ModuleAlias = us.Alias,
-                             UserId = u.UserId
+                             ModuleAlias = us.Alias
                          }
                      ).ToList();
 
@@ -373,30 +389,51 @@ namespace WSCore.Services.UserService
         }
         #endregion Get
 
-        public ClientActVM GetUserPermissions(string userId)
+        private string GetAgentOrMember(bool asAgent)
         {
-            ExistedUserPermissionVM existedUserPermissionVM = GetExistedUserById(userId);
+            return asAgent ? UserConstants.AGENT : UserConstants.MEMBER;
+        }
 
-            List<ModulesWithPackageIdVM> modulesWithPackageIds = new List<ModulesWithPackageIdVM>();
-
-            if (existedUserPermissionVM != null)
+        public ClientActVM GetPermissionsById(string userId)
+        {
+            try
             {
-                modulesWithPackageIds = GetModulesWithPackageId(existedUserPermissionVM.PackageId);
+                EditUserVM userDetail = GetDetailByIdAsync(userId);
+                ClientActVM clientAct = new ClientActVM();
+                if (userDetail != null)
+                {
+                    // List modules by packageId
+                    var pks = (
+                            from pk in _uow.GetRepository<PackageModule>().GetEntities(
+                                    pk => pk.PackageId == userDetail.AgentProfile.PackageId
+                                )
+                            join
+                                md in _uow.GetRepository<Module>().GetEntities()
+                                on pk.ModuleId equals md.Id
+                            join uma in _uow.GetRepository<UserModuleAct>().GetEntities()
+                                on pk.ModuleId equals uma.ModuleId into group1
+
+                            from g1 in group1.DefaultIfEmpty()
+                            select new ModuleVM
+                            {
+                                Id = md.Id,
+                                Title = md.Title,
+                                Alias = md.Alias,
+                                PackageId = pk.PackageId,
+                                UserModuleActiveId = g1 != null ? g1.ModuleId : null,
+                                UserModuleActs = g1 != null ? g1.Acts : null
+                            }
+
+                        ).ToList();
+                    clientAct.Modules = pks;
+                }
+
+                return clientAct;
             }
-
-            // clientAdminModuleActs
-            List<UserModuleAct> userModuleActs = UserModuleActs(userId);
-            
-            // ClientActVM
-            string[] otherAdminActs = {}; // List module will effect acts
-            ClientActVM clientAct = new ClientActVM
+            catch (Exception ex)
             {
-                PackageModules = modulesWithPackageIds,
-                ClientTypeRole = existedUserPermissionVM?.PackageId,
-                UserModuleActs = userModuleActs,
-                ClientOtherActs = otherAdminActs
-            };
-            return clientAct;
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -489,15 +526,29 @@ namespace WSCore.Services.UserService
                 throw ex;
             }
         }
+
+        private string GetRoleId()
+        {
+            return "1786a5ae";
+        }
     }
 
 
     public class ClientActVM
-    {
-        public List<ModulesWithPackageIdVM> PackageModules { get; set; }
-        public string ClientTypeRole { get; set; } // clien/admin-client
+    {   
+        public List<ModuleVM> Modules { get; set; }
+        public List<string> ModuleActiveIds { get; set; } = null;
         public List<UserModuleAct> UserModuleActs { get; set; }
-        public string[] ClientOtherActs { get; set; }
+    }
+
+    public class ModuleVM
+    {
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string Alias { get; set; }
+        public string PackageId { get; set; }
+        public string UserModuleActiveId { get; set; }
+        public string UserModuleActs { get; set; }
     }
 
     public class UserLoggedInVM
@@ -532,9 +583,8 @@ namespace WSCore.Services.UserService
     public class EditUserVM
     {
         public User User { get; set; }
-        public List<Module> Modules { get; set; }
         public UserProfile UserProfile { get; set; }
-        public List<UserModuleAct> UserModuleActs { get; set; }
+        public AgentProfile AgentProfile { get; set; }
     }
 
     public class ModulesWithPackageIdVM
@@ -547,5 +597,27 @@ namespace WSCore.Services.UserService
 
         public string PackageId { get; set; }
         public string UserId { get; set; }
+    }
+
+    public class UserProfileVM : BaseEntity
+    {
+        public string FullName { set; get; }
+        public string Address { set; get; }
+        public string Ward { set; get; }
+        public string District { set; get; }
+        public string City { set; get; }
+        public string Descriptions { set; get; }
+        public string Avatar { set; get; }
+        public string Banner { set; get; }
+        public string UserId { set; get; }
+        public string RoleId { set; get; }
+        public string RoleType { set; get; }
+        public string PackageId { set; get; }
+        public string GroupId { set; get; }
+
+        public UserProfileVM(UserProfile userProfile)
+        {
+
+        }
     }
 }

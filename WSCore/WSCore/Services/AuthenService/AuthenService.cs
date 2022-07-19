@@ -66,8 +66,8 @@ namespace WSCore.Services.AuthorService
                     user.Password = null;
 
                     // Get user permissions
-                    ClientActVM userPermissions = _userService.GetUserPermissions(user?.UserId);
-
+                    // ClientActVM userPermissions = _userService.GetUserPermissions(user?.UserId);
+                    ClientActVM userPermissions = new ClientActVM();
                     return new UserResVM
                     {
                         LoggedProfile = user,
@@ -112,8 +112,7 @@ namespace WSCore.Services.AuthorService
                 {
                     s3.FullName,
                     s3.UserId,
-                    s3.Address,
-                    s3.RoleType
+                    s3.Address
                 }) on us.Id equals usp.UserId into group2
                 from g2 in group2.DefaultIfEmpty()
                 select new AuthenVM
@@ -125,7 +124,6 @@ namespace WSCore.Services.AuthorService
                     IsConfirmed = us.IsConfirmed,
                     FullName = g2.FullName,
                     Address = g2.Address,
-                    RoleType = g2.RoleType,
                     Password = g1.Password
                 };
                 var re = user?.FirstOrDefault();

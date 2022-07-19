@@ -25,5 +25,6 @@ namespace WSCore.Models
         DbSet<UserModuleAct> UserModuleActs { get; set; }
         DbSet<Seo> Seos { set; get; }
         DbSet<Menu> Menus { set; get; }
+        DbSet<AgentProfile> AgentProfiles { set; get; }
     }
 }
